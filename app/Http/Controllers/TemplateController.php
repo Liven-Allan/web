@@ -8,6 +8,8 @@ use App\Models\Task;
 use App\Models\ActiveTask;
 use App\Models\CompletedTask;
 use Illuminate\Support\Facades\DB;  // Import the DB facade
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TaskAssignmentNotification;
 
 class TemplateController extends Controller
 {
@@ -39,7 +41,7 @@ class TemplateController extends Controller
         ]);
 
         // Save the task in the database
-        Task::create([
+        $task = Task::create([
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'assigned_to' => $validated['assigned_to'],
@@ -48,6 +50,26 @@ class TemplateController extends Controller
             'status' => $validated['status'],
             'due_date' => $validated['due_date'],
         ]);
+
+
+          // Fetch the assigned user
+    $assistant = User::find($validated['assigned_to']);
+
+    if ($assistant) {
+        // Prepare email data
+        $emailData = [
+            'name' => $assistant->name,
+            'email' => $assistant->email,
+            'task_title' => $task->title,
+            'task_description' => $task->description ?? 'No description provided.',
+            'priority' => ucfirst($task->priority),
+            'due_date' => $task->due_date->format('Y-m-d'),
+            'assigned_by' => auth()->user()->name, 
+        ];
+
+        // Send email
+        Mail::to($assistant->email)->send(new TaskAssignmentNotification($emailData));
+    }
 
          // Redirect based on the role of the user
     $role = auth()->user()->role;

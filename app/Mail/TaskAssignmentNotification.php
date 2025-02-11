@@ -1,12 +1,13 @@
 <?php
 
+
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ParticipantNotification extends Mailable
+class TaskAssignmentNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -25,11 +26,10 @@ class ParticipantNotification extends Mailable
      */
     public function build()
     {
-        return $this->subject('Welcome to the System')
-                    ->view('emails.registration-notification')
-                    ->with(['emailData' => $this->emailData]); // Ensure it's passed correctly
-
-                    
+        return $this->subject('New Task Assigned to You')
+                    ->view('emails.task-assigned')
+                    ->with(['emailData' => $this->emailData]);
     }
-    
 }
+
+
