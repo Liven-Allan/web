@@ -3,6 +3,7 @@ use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\AdminController; 
 use App\Http\Controllers\PatronController; 
 use App\Http\Controllers\ResearchAssistantController; 
+use App\Mail\ParticipantNotification;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
