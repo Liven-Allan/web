@@ -42,26 +42,30 @@ class ActiveTask extends Model
     }
 
     protected static function booted()
-{
-    static::updated(function ($activeTask) {
-        $task = $activeTask->task;
-
-        if ($task) {
-            $progress = $activeTask->progress;
-
-            if ($progress >= 0 && $progress <= 49) {
-                $task->status = 'pending'; // Use lowercase ENUM value
-            } elseif ($progress >= 50 && $progress <= 94) {
-                $task->status = 'in_progress'; // Use lowercase ENUM value
-            } elseif ($progress >= 95 && $progress <= 100) {
-                $task->status = 'completed'; // Use lowercase ENUM value
+    {
+        static::updated(function ($activeTask) {
+            $task = $activeTask->task;
+    
+            if ($task) {
+                $progress = $activeTask->progress;
+    
+                if ($progress >= 0 && $progress <= 49) {
+                    $task->status = 'pending';
+                } elseif ($progress >= 50 && $progress <= 94) {
+                    $task->status = 'in_progress';  
+                } elseif ($progress >= 95 && $progress <= 100) {
+                    $task->status = 'completed';
+                }
+    
+                // Debugging: Log the status before saving
+                \Log::info("Updating task ID {$task->id} status to: {$task->status}");
+    
+                // Save the task
+                $task->save();
             }
-
-            // Save the task with the updated status
-            $task->save();
-        }
-    });
-}
+        });
+    }
+    
 
     
 

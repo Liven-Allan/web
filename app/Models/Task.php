@@ -54,7 +54,7 @@ class Task extends Model
             if ($progress >= 0 && $progress <= 49) {
                 return 'Pending';
             } elseif ($progress >= 50 && $progress <= 94) {
-                return 'In Progress';
+                return 'In_Progress';
             } elseif ($progress >= 95 && $progress <= 100) {
                 return 'Completed';
             }
@@ -74,7 +74,7 @@ class Task extends Model
             if ($progress >= 0 && $progress <= 49) {
                 $task->status = 'Pending';
             } elseif ($progress >= 50 && $progress <= 94) {
-                $task->status = 'In Progress';
+                $task->status = 'In_Progress';
             } elseif ($progress >= 95 && $progress <= 100) {
                 $task->status = 'Completed';
             }
