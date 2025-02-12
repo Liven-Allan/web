@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Mail\ParticipantNotification;
+use Illuminate\Support\Facades\Mail;
 
 class PatronController extends Controller
 {
@@ -24,25 +26,46 @@ class PatronController extends Controller
       }
       
       public function registerUser(Request $request)
-      {
-          $validated = $request->validate([
-              'name' => 'required|string|max:255',
-              'email' => 'required|email|unique:users,email',
-              'password' => 'required|min:6',
-              'role' => 'required|in:admin,patron,research_assistant',
-          ]);
-      
-          // Explicitly set the role to avoid accidental overriding
-          $user = new User();
-          $user->name = $validated['name'];
-          $user->email = $validated['email'];
-          $user->password = Hash::make($validated['password']);
-          $user->role = $validated['role']; // Ensure this is stored correctly
-          $user->save();
-      
-          // Redirect to the user list page with a success message
-          return redirect()->route('patron.users.list')->with('success', 'User registered successfully.');
-      }
+{
+    try {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'role' => 'required|in:admin,patron,research_assistant',
+        ]);
+
+    
+
+        $user = new User();
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->password = Hash::make($validated['password']);
+        $user->role = $validated['role'];
+        $user->save();
+
+       
+
+        $emailData = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => $validated['password'],
+            'registered_by' => auth()->user()->name,
+        ];
+
+       
+
+        Mail::to($user->email)->send(new ParticipantNotification($emailData));
+
+       
+
+        return redirect()->route('patron.users.list')->with('success', 'User registered successfully.');
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+
+
         
       public function listUsers()
       {
