@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-
+use App\Mail\ParticipantNotification;
+use Illuminate\Support\Facades\Mail;
 class AdminController extends Controller
 {
     public function dashboard(){
@@ -23,7 +24,8 @@ class AdminController extends Controller
           return view('admin.register_user', compact('roles'));
       }
       
-      public function registerUser(Request $request)
+
+public function registerUser(Request $request)
 {
     $validated = $request->validate([
         'name' => 'required|string|max:255',
@@ -40,6 +42,18 @@ class AdminController extends Controller
     $user->role = $validated['role']; // Ensure this is stored correctly
     $user->save();
 
+
+ 
+    $emailData = [
+        'name' => $user->name,
+        'email' => $user->email,
+        'password' => $validated['password'], // Correct key here
+        'registered_by' => auth()->user()->name,
+    ];
+    
+    Mail::to($user->email)->send(new ParticipantNotification($emailData));
+    
+    // Redirect to the user list page with a success message
     return redirect()->route('admin.users.list')->with('success', 'User registered successfully.');
 }
 
