@@ -21,7 +21,7 @@ class PatronController extends Controller
 
       public function showRegisterUserForm()
       {
-          $roles = ['patron', 'research_assistant'];
+          $roles = ['research_assistant'];
           return view('patron.register_user', compact('roles'));
       }
       

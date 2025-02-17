@@ -20,7 +20,7 @@ class AdminController extends Controller
 
       public function showRegisterUserForm()
       {
-          $roles = ['admin', 'patron', 'research_assistant'];
+          $roles = ['patron', 'research_assistant'];
           return view('admin.register_user', compact('roles'));
       }
       

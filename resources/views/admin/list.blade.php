@@ -59,6 +59,8 @@
             <tr>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Contact</th>
+                <th>Profile Picture</th>
                 <th>Role</th>
                 <th>Actions</th>
             </tr>
@@ -68,6 +70,13 @@
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
+                    <td>{{ $user->contact }}</td>
+                    <td class="text-center">
+                        <img src="{{ $user->profile_picture ? asset($user->profile_picture) : asset('img/undraw_profile.svg') }}" 
+                             alt="Profile Picture" 
+                             class="rounded-circle" 
+                             width="50" height="50">
+                    </td>
                     <td>{{ ucfirst($user->role) }}</td>
                     <td>
                         <!-- Delete Button with Modal Trigger -->

@@ -17,9 +17,9 @@
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper" class="d-flex flex-column" style="margin-left: 225px;">
             <!-- Main Content -->
-            <div id="content">
+            <div id="content" style="padding-top: 75px;">
                 <!-- Topbar -->
                 @include('layouts.topbar')
                 <!-- End of Topbar -->

@@ -13,7 +13,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
@@ -22,6 +22,13 @@
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
+
+        <div>
+            <x-input-label for="contact" :value="__('Contact')" />
+            <x-text-input id="contact" name="contact" type="text" class="mt-1 block w-full" :value="old('contact', $user->contact)" autocomplete="contact" />
+            <x-input-error class="mt-2" :messages="$errors->get('contact')" />
+        </div>
+
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
@@ -47,7 +54,26 @@
             @endif
         </div>
 
-        <div class="flex items-center gap-4">
+        <div>
+    <x-input-label for="profile_picture" :value="__('Profile Picture')" />
+
+    <div class="mb-3 text-center">
+        <!-- Display existing profile picture -->
+        <img id="preview" 
+             src="{{ auth()->user()->profile_picture ? asset(auth()->user()->profile_picture) : asset('img/default-profile.png') }}" 
+             alt="Profile Picture" 
+             class="rounded-circle mb-2" width="120" height="120">
+    </div>
+
+    <!-- Profile Picture Upload -->
+    <input id="profile_picture" name="profile_picture" type="file" class="mt-1 block w-full"
+           accept="image/*" onchange="previewImage(event)">
+
+    <x-input-error class="mt-2" :messages="$errors->get('profile_picture')" />
+</div>
+
+        <?php echo"<br/>";?>
+        <div class="flex items-center gap-4 ">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')
@@ -61,4 +87,15 @@
             @endif
         </div>
     </form>
+
+    <script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('preview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>    
 </section>
