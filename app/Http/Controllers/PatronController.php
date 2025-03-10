@@ -8,11 +8,21 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Mail\ParticipantNotification;
 use Illuminate\Support\Facades\Mail;
+use App\Models\DescriptionText;
+use Illuminate\Support\Facades\Auth; // ✅ Import Authuse Illuminate\Support\Facades\Mail;
 
 class PatronController extends Controller
 {
     public function dashboard(){
-        return view('patron.dashboard');
+        // Check if user needs to change password
+        $user = auth()->user();
+
+        // Assuming you have a column 'password_changed' in your users table
+        // If the user is new or hasn't changed their password yet, send a flag
+        $needsPasswordChange = !$user->password_changed; // Or check other criteria like password reset flag
+
+        return view('patron.dashboard', compact('needsPasswordChange'));
+    
     }
 
     public function createTask()
@@ -89,4 +99,41 @@ class PatronController extends Controller
 
         return redirect()->route('patron.users.list')->with('success', 'User deleted successfully.');
     }
+ 
+    public function changePassword(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'new-password' => 'required|min:6|confirmed', // Validation
+        ]);
+
+        // Update the password
+        $user->password = Hash::make($request->input('new-password'));
+        $user->password_changed = true; // Update the flag
+        $user->save();
+
+        return redirect()->route('patron.dashboard')->with('success', 'Password changed successfully.');
+    }
+
+    public function updateDescriptionText(Request $request)
+    {
+        $request->validate([
+            'content' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+
+        // Check if the user already has a hero text entry
+        DescriptionText::updateOrCreate(
+            ['user_id' => $user->id],
+            ['content' => $request->content]
+        );
+
+        
+        return redirect()->route('patron.dashboard')->with('success', 'text updated successfully!.');
+
+    }
 }
+
+

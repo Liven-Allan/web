@@ -46,5 +46,7 @@
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
-</body>
+     @yield('scripts')  <!-- This ensures the JavaScript from the child view is loaded -->
+    </body>
 </html>
+

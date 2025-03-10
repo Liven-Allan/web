@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\AdminController; 
 use App\Http\Controllers\PatronController; 
@@ -23,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::get('/',[TemplateController::class,'index']);
+
+Route::get('/', [GuestController::class, 'showDescription']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -59,15 +62,31 @@ Route::middleware(['auth','role:admin'])->group(function () {
       // View Active Tasks for Admin
     Route::get('/admin/active-tasks', [TemplateController::class, 'listAdminActiveTasks'])->name('admin.active_tasks');
     Route::post('/admin/active-tasks/{id}/comment', [TemplateController::class, 'addComment'])->name('admin.add_comment');
+
     Route::post('/admin/active-tasks/{id}/confirm', [TemplateController::class, 'confirmTaskCompletion'])->name('admin.confirm_task');
+    Route::get('/admin/update-description', function () {
+        return view('admin.editDescription'); // Ensure this file exists in resources/views/patron/
+    })->name('admin.editDescription');
+    Route::post('/admin/update-description-text', [AdminController::class, 'updateDescription'])->name('admin.updateDescription');
+
+    
+
 });
+
     //patron route
     Route::middleware(['auth','role:patron'])->group(function () {
     Route::get('/patron/dashboard',[PatronController::class,'dashboard'])->name('patron.dashboard');
     Route::get('/patron/task/create', [TemplateController::class, 'createTask'])->name('patron.task.create'); // GET route for form
     Route::post('/patron/task/create', [TemplateController::class, 'storeTask'])->name('patron.task.store'); 
     Route::get('/patron/tasks', [TemplateController::class, 'listTasks'])->name('patron.task.list');
+    //editing the description on the landing page
+    Route::post('/patron/update-description-text', [PatronController::class, 'updateDescriptionText'])->name('patron.updateDescriptionText');
+    Route::post('/patron/change-password', [PatronController::class, 'changePassword'])->name('patron.change-password');
 
+    Route::get('/patron/update-description', function () {
+        return view('patron.editDescription'); // Ensure this file exists in resources/views/patron/
+    })->name('patron.editDescription'); // 
+    
     // Add Edit Task route for patron
     Route::get('/patron/task/{task}/edit', [TemplateController::class, 'edit'])->name('patron.task.edit');
     Route::put('/patron/task/{task}', [TemplateController::class, 'update'])->name('patron.task.update');
@@ -98,6 +117,7 @@ Route::middleware(['auth','role:research_assistant'])->group(function () {
     Route::get('/research-assistant/active-tasks', [TemplateController::class, 'listActiveTasks'])->name('research_assistant.active_tasks');
     Route::get('/research-assistant/tasks/{id}/record-progress', [TemplateController::class, 'recordProgress'])->name('research_assistant.task.record_progress');
     Route::patch('/research-assistant/tasks/{id}/update-progress', [TemplateController::class, 'updateProgress'])->name('research_assistant.task.update_progress');
+    Route::post( '/research-assistant/change-password', [ResearchAssistantController::class, 'changePassword'])->name('research-assistant.change-password');
 
 });
 

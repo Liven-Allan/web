@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Mail\ParticipantNotification;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use App\Models\DescriptionText;
+use Illuminate\Support\Facades\Auth;
 class AdminController extends Controller
 {
     public function dashboard(){
@@ -59,7 +61,7 @@ class AdminController extends Controller
               // Send the password via email
               Mail::to($user->email)->send(new ParticipantNotification($emailData));
   
-              return redirect()->route('patron.users.list')->with('success', 'User registered successfully. Password sent via email.');
+              return redirect()->route('admin.users.list')->with('success', 'User registered successfully. Password sent via email.');
           } catch (\Exception $e) {
               return response()->json(['error' => $e->getMessage()], 500);
           }
@@ -89,6 +91,22 @@ public function deleteUser($id)
     return redirect()->route('admin.users.list')->with('success', 'User deleted successfully');
 }
 
+public function updateDescription(Request $request)
+{
+    $request->validate([
+        'content' => 'required|string',
+    ]);
 
+    $user = Auth::user();
+    
+    // Check if the user already has a hero text entry
+    DescriptionText::updateOrCreate(
+        ['user_id' => $user->id],
+        ['content' => $request->content]
+    );
+
+    
+    return redirect()->back()->with('success', 'Text updated successfully!');
+}
         
 }
