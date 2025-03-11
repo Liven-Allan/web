@@ -7,6 +7,11 @@ use App\Mail\ParticipantNotification;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+
+use App\Http\Controllers\TextImageController;
+Route::get('/icon/{id}.svg', [TextImageController::class, 'generateSvg']);
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes

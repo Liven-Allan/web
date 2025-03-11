@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Task;
+use App\Models\Word; //textsvg
 use App\Models\ActiveTask;
 use App\Models\CompletedTask;
 use Illuminate\Support\Facades\DB;  // Import the DB facade
@@ -15,8 +16,12 @@ class TemplateController extends Controller
 {
     public function index()
     {
-        return view('frontend.home');
+        $words = Word::all(); // Fetch words from database
+        return view('frontend.home', compact('words')); // Pass words to the view
+        //return view('frontend.home');
     }
+
+
 
     public function createTask()
     {

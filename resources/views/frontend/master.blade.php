@@ -568,7 +568,21 @@ body {
             <div class="project-card">
                 <div class="card-image">
                     <!-- Replace with your project icon -->
-                    <img src="{{ asset('images/project1-icon.svg') }}" alt="Project 1">
+                     <!-- ef... imagevestor -->
+                     @foreach($words as $word)
+    <img class="card-img-top project-image rounded" src="{{ url(path: '/svgs/' . $word->id . '.svg') }}" alt="Icon">
+@endforeach
+@if(isset($words) && count($words) > 0)
+    @foreach($words as $word)
+        <img class="card-img-top project-image rounded" src="{{ url('/icon/' . $word->id . '.svg') }}" alt="{{ $word->text }}">
+    @endforeach
+@else
+    <p>No words found.</p>
+@endif
+
+
+
+                    <!-- <img src="{{ asset('images/project1-icon.svg') }}" alt="Project 1"> -->
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Data Mining & Analytics</h3>
