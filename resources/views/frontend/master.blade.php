@@ -247,34 +247,49 @@ body {
     margin: 0 auto;
 }
 
-.project-card {
+/* .project-card {
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.3s ease;
     height: 100%;
-}
+} */
 
 .project-card:hover {
     transform: translateY(-5px);
 }
 
 .card-image {
-    width: 100%;
-    padding-top: 75%;
-    position: relative;
-    background-color: var(--primary-color);
+    
+    display: grid; /* Enable Grid */
+    place-items:center; /* Center both vertically and horizontally */
+    text-align:start; /* Ensure text is centered */
+
+    width: 200px !important;
+    padding-left: 10px ;  /* Increased width */  
+    padding-top: 100px;
+    padding-right: 10px; 
+    padding-bottom: 50px;
+    margin-left: 2px;
+    height: 300px;
+    /* padding-right: 25% ;   */
+    /* position: relative; */
+    background-color:rgb(163, 233, 148);
+    border-radius: 10px; /* Added border radius */
+  
+
+    
 }
 
-.card-image img {
+/* .card-image img {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     max-width: 60%;
     max-height: 60%;
-}
+} */
 
 .card-content {
     padding: 1.5rem;
@@ -523,6 +538,67 @@ body {
 .nav-arrow {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+.projects-container {
+    display: flex;
+    /* flex-wrap: wrap; Allow cards to wrap to the next line */
+    justify-content: flex-start; /* Align items to the start of the container */
+    gap: 20px; /* Adjust spacing between cards */
+    padding: 20px;
+
+    
+}
+
+.project-card {
+  
+    /* background-color: red;
+    /* color: white; */
+    text-align: center;
+    /*padding: 10px;
+    width: 700px;
+    color: #1a1a1a;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    /*overflow: hidden; */
+    /*transition: transform 0.3sease;
+    /*height: 100%;*/
+    /*height: auto; */
+
+    
+    text-align: center;
+    padding: 10px;
+    width: 30%;
+    /* color: #1a1a1a; */
+    display: contents; /* Use inline-flex for horizontal layout */
+    box-sizing: border-box;
+    background:rgb(15, 42, 19);
+    /* border: 1px solid #d20707; */
+    /* border-radius: 10px; */
+    /* overflow: hidden; */
+    transition: transform 0.3sease;
+    /* height: 100%; */
+    height: auto;
+    background: #fff;
+    /* border: 1px solid #ddd; */
+    /* border-radius: 8px; */
+    /* overflow: hidden; */
+    transition: transform 0.3sease;
+
+}
+
+h3 {
+    margin-bottom: 10px; /* Add some space between MLL and the link */
+    word-wrap: break-word; /* Prevent long words from overflowing */
+}
+
+a {
+    word-wrap: break-word; /* Prevent long URLs from overflowing */
+    color:rgb(46, 83, 218); /* Example link color */
+}
+
+
     </style>
    
 </head>
@@ -565,25 +641,45 @@ body {
 
         </div>
         <div class="card-grid">
+       
             <div class="project-card">
-                <div class="card-image">
-                    <!-- Replace with your project icon -->
-                     <!-- ef... imagevestor -->
-                     @foreach($words as $word)
-    <img class="card-img-top project-image rounded" src="{{ url(path: '/svgs/' . $word->id . '.svg') }}" alt="Icon">
-@endforeach
-@if(isset($words) && count($words) > 0)
-    @foreach($words as $word)
-        <img class="card-img-top project-image rounded" src="{{ url('/icon/' . $word->id . '.svg') }}" alt="{{ $word->text }}">
+                <!-- <div class="card-image"> -->
+                    
+                     <!-- efr... imagevestor -->
+
+        <!-- Inside frontend/master.blade.php -->
+                <!-- <h2>Top Publications</h2> -->
+                <!-- <ul>
+                    @if(isset($publications) && count($publications) > 0)
+                        @foreach ($publications as $publication)
+                            <li>{{ strtoupper(substr($publication->title, 0, 3)) }} - {{ $publication->title }}</li>
+                        @endforeach
+                    @else
+                        <li>No publications available.</li>
+                    @endif
+                </ul> -->
+
+
+
+<!-- projects according to priority -->
+            <div class="projects-container">
+                
+            @foreach($publications as $project)
+        <div class="project-card">
+            <div class="card-image">
+            <img src="{{ asset('images/project2-icon.svg') }}" alt="Project 2">
+                <h3>{{ $project->title }}</h3>
+                <a href="{{ $project->url }}" target="_blank">
+                    {{ $project->url }}
+                </a>
+                <p>{{ $project->description }}</p>
+            </div>
+        </div>
     @endforeach
-@else
-    <p>No words found.</p>
-@endif
 
+            </div></div>
 
-
-                    <!-- <img src="{{ asset('images/project1-icon.svg') }}" alt="Project 1"> -->
-                </div>
+                <!-- </div>
                 <div class="card-content">
                     <h3 class="card-title">Data Mining & Analytics</h3>
                     <p class="card-description">Advanced pattern recognition in big data</p>
@@ -616,7 +712,7 @@ body {
                     <p class="card-description">Future-focused data analysis</p>
                 </div>
             </div>
-        </div>
+        </div> -->
     </section>
     <!-- Add this section before the footer -->
 <section class="news-events-section">

@@ -8,6 +8,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
+use App\Http\Controllers\PublicationController;
+
+
+
 use App\Http\Controllers\TextImageController;
 Route::get('/icon/{id}.svg', [TextImageController::class, 'generateSvg']);
 
@@ -27,7 +31,17 @@ Route::get('/icon/{id}.svg', [TextImageController::class, 'generateSvg']);
 //    return view('welcome');
 //});
 
+//Route::get('/',[TemplateController::class,'index']);
 Route::get('/',[TemplateController::class,'index']);
+Route::get('/publications', [PatronController::class, 'publications']);
+// Route::get('/publications', [PatronController::class, 'index']);
+
+// Route::get('/publications', [PatronController::class, 'publications']);
+// Route::get('/publications/create', [PatronController::class, 'create']);
+// Route::get('/patron/createpublications', [PatronController::class, 'createPublication'])->name('publications.create');
+
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -72,6 +86,18 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/patron/task/create', [TemplateController::class, 'createTask'])->name('patron.task.create'); // GET route for form
     Route::post('/patron/task/create', [TemplateController::class, 'storeTask'])->name('patron.task.store'); 
     Route::get('/patron/tasks', [TemplateController::class, 'listTasks'])->name('patron.task.list');
+    Route::get('/patron/publications', [PatronController::class, 'publications']);
+
+    Route::get('/patron/createpublications', [PatronController::class, 'createPublication'])->name('patron.createPublication');
+   // Route::post('/patron/storepublications', [PatronController::class, 'storePublication'])->name('patron.storepublication');
+
+    //Route::post('/patron/storepublications', [PatronController::class, 'storePublication'])->name('publications.store');
+    
+    
+    // Route for storing publications (you may already have this)
+    Route::post('/storepublications', [PatronController::class, 'storePublication'])->name('publications.store');
+   // Route::get('/publications', [PatronController::class, 'publications'])->name('publications');
+   Route::get('/publications', [PatronController::class, 'publications'])->name('publications');
 
     // Add Edit Task route for patron
     Route::get('/patron/task/{task}/edit', [TemplateController::class, 'edit'])->name('patron.task.edit');

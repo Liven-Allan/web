@@ -11,13 +11,17 @@ use App\Models\CompletedTask;
 use Illuminate\Support\Facades\DB;  // Import the DB facade
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TaskAssignmentNotification;
-
+use App\Models\Publication;
 class TemplateController extends Controller
 {
     public function index()
     {
-        $words = Word::all(); // Fetch words from database
-        return view('frontend.home', compact('words')); // Pass words to the view
+ 
+    $publications = Publication::orderBy('priority', 'desc')->get(); // Fetch publications
+    return view('frontend.master', compact('publications'));
+
+        // $words = Word::all(); // Fetch words from database
+        // return view('frontend.home', compact('words')); // Pass words to the view
         //return view('frontend.home');
     }
 
