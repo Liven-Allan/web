@@ -17,19 +17,21 @@
     background-color: #009900;
     z-index: 1000;
     display: flex;
-    justify-content: center; /* Center the nav container */
+    justify-content: space-between; /* Separate logo and nav */
+    align-items: center; /* Vertically center items */
+    padding: 0 20px; /* Add some padding to the sides */
     font-family: Arial, sans-serif;
 }
 
 .logo-section {
     display: flex;
     align-items: center;
-    padding-left: 0; /* Remove left padding since container has padding */
+    padding-left: 0; 
     height: 100%;
 }
 .bdal-logo {
-    height: 24px;
-    margin-right: 10px;
+    height: 80px;
+    margin-right: 5px;
 }
 
 .nav-container {
@@ -510,7 +512,13 @@ body {
     }
     
     .logo-section {
-        padding-left: 20px;
+        padding-left: 0px;
+        display: flex;
+    justify-content: flex-start; /* Aligns the logo to the start */
+    align-items: center; /* Vertically centers the logo */
+    padding-left: 0; /* Ensures no left padding */
+    margin-left: 0; /* Ensures no left margin */
+    
     }
 }
 
@@ -588,6 +596,26 @@ body {
 
 }
 
+.project-card img {
+    max-width: 100%; /* Ensures the image doesn't exceed the card's width */
+    height: auto; /* Maintains the image's aspect ratio */
+    border-radius: 8px; /* Matches the card's border radius */
+    display: block; /* Ensures the image behaves as a block element */
+    margin: 0 auto; /* Centers the image horizontally */
+}
+
+.card-image {
+    padding-top: 10px; /* Adjust this value to reduce the height at the top */
+    overflow: hidden; /* Ensures the image doesn't overflow */
+}
+
+.card-image img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
 h3 {
     margin-bottom: 10px; /* Add some space between MLL and the link */
     word-wrap: break-word; /* Prevent long words from overflowing */
@@ -607,7 +635,7 @@ a {
 
     <div class="nav-container">
             <div class="logo-section">
-            <img src="{{ asset('images/cmu-logo.png') }}" alt="Big Data Analytics Lab" class="bdal-logo">
+            <img src="{{ asset('assets/images/bigdata.png') }}" alt="Big Data Analytics Lab" class="bdal-logo">Big Data Analytics Lab
             </div>
         <nav class="nav-links">
             <a href="people.blade.php">People</a>
@@ -664,7 +692,7 @@ a {
 <!-- projects according to priority -->
             <div class="projects-container">
                 
-            @foreach($publications as $project)
+            <!-- @foreach($publications as $project)
         <div class="project-card">
             <div class="card-image">
             <img src="{{ asset('images/project2-icon.svg') }}" alt="Project 2">
@@ -675,7 +703,24 @@ a {
                 <p>{{ $project->description }}</p>
             </div>
         </div>
-    @endforeach
+    @endforeach -->
+
+    @foreach($publications as $publication)
+    <div class="project-card">
+        <div class="card-image">
+            @if($publication->image)
+                <img src="{{ asset('storage/' . $publication->image) }}" alt="{{ $publication->title }}">
+            @else
+                <img src="{{ asset('images/default-publication.png') }}" alt="Default Image">
+            @endif
+            <h3>{{ $publication->title }}</h3>
+            <a href="{{ $publication->url }}" target="_blank">{{ $publication->url }}</a>
+            <p>{{ $publication->description }}</p>
+            
+        </div>
+    </div>
+@endforeach
+
 
             </div></div>
 

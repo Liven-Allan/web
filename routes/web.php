@@ -12,8 +12,7 @@ use App\Http\Controllers\PublicationController;
 
 
 
-use App\Http\Controllers\TextImageController;
-Route::get('/icon/{id}.svg', [TextImageController::class, 'generateSvg']);
+
 
 
 /*

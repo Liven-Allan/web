@@ -39,18 +39,29 @@ class PatronController extends Controller
     $validatedData = $request->validate([
         'title' => 'required|string|max:255',
         'description' => 'nullable|string',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'url' => 'nullable|url',
         'priority' => 'required|integer|in:1,2,3',
         'patron_id' => 'required|integer',
+       
+        
     ]);
+    $imagePath = null;
+
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('publications', 'public');
+    }
 
     // Save the publication
     $publication = new Publication();
     $publication->title = $validatedData['title'];
     $publication->description = $validatedData['description'] ?? null;
+    $imagePath = $request->file('image')->store('publications', 'public');
+    $publication->image = $imagePath; 
     $publication->url = $validatedData['url'] ?? null;
     $publication->priority = $validatedData['priority'];
     $publication->patron_id = $validatedData['patron_id'];
+   
 
     $publication->save(); // Save the publication
 
