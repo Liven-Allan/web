@@ -17,12 +17,16 @@ class TemplateController extends Controller
     public function index()
     {
  
-    $projects = Project::orderBy('priority', 'desc')->get(); // Fetch projects
-    return view('frontend.master', compact('projects'));
+    // $projects = Project::orderBy('priority', 'desc')->get(); // Fetch projects
+    // return view('frontend.master', compact('projects'));
 
-        // $words = Word::all(); // Fetch words from database
-        // return view('frontend.home', compact('words')); // Pass words to the view
-        //return view('frontend.home');
+       
+         // Fetch the top 4 projects, ordered by priority (highest first)
+    $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
+
+    // Return the projects view with the data
+    return view('frontend.master', compact('projects'));
+    
     }
 
 

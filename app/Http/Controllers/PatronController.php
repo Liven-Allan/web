@@ -19,6 +19,7 @@ class PatronController extends Controller
 
         // Pass projects data to the view
         return view('patron.dashboard', compact('projects'));
+        
     }
     
 
@@ -69,6 +70,7 @@ class PatronController extends Controller
     return redirect()->route('projects')->with('success', 'Project added successfully');
 }
 
+
         public function index()
     {
         $projects = Project::all(); // Fetch all projects
@@ -87,12 +89,14 @@ class PatronController extends Controller
     public function projects()
     {
         
-
-        // Fetch the top 4 projects, ordered by priority (highest first)
-    $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
-
-    // Return the projects view with the data
+         $projects = Project::orderBy('priority', 'desc')->get(); // Fetch projects
     return view('frontend.master', compact('projects'));
+
+    //     // Fetch the top 4 projects, ordered by priority (highest first)
+    // $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
+
+    // // Return the projects view with the data
+    // return view('frontend.master', compact('projects'));
     }
 
     

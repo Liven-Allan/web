@@ -6,7 +6,7 @@ use App\Http\Controllers\ResearchAssistantController;
 use App\Mail\ParticipantNotification;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AllProjectsController;
 
 
 /*
@@ -77,7 +77,10 @@ Route::middleware(['auth','role:admin'])->group(function () {
 
     Route::get('/patron/createprojects', [PatronController::class, 'createProject'])->name('patron.createProject');
  
-    
+    Route::get('/projects', [PatronController::class, 'index'])->name('projects');
+  
+
+    Route::get('/projects', [AllProjectsController::class, 'index'])->name('projects');
     // Route for storing projects
     Route::post('/storeprojects', [PatronController::class, 'storeProject'])->name('projects.store');
  

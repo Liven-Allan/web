@@ -548,52 +548,25 @@ body {
 }
 
 .projects-container {
-    display: flex;
-    /* flex-wrap: wrap; Allow cards to wrap to the next line */
-    justify-content: flex-start; /* Align items to the start of the container */
-    gap: 20px; /* Adjust spacing between cards */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 20px; /* Space between grid items */
     padding: 20px;
-
-    
 }
 
 .project-card {
-  
-    /* background-color: red;
-    /* color: white; */
-    text-align: center;
-    /*padding: 10px;
-    width: 700px;
-    color: #1a1a1a;
-    box-sizing: border-box;
-    background: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    /*overflow: hidden; */
-    /*transition: transform 0.3sease;
-    /*height: 100%;*/
-    /*height: auto; */
-
-    
     text-align: center;
     padding: 10px;
-    width: 30%;
-    /* color: #1a1a1a; */
-    display: contents; /* Use inline-flex for horizontal layout */
     box-sizing: border-box;
-    background:rgb(15, 42, 19);
-    /* border: 1px solid #d20707; */
-    /* border-radius: 10px; */
-    /* overflow: hidden; */
-    transition: transform 0.3sease;
-    /* height: 100%; */
-    height: auto;
     background: #fff;
-    /* border: 1px solid #ddd; */
-    /* border-radius: 8px; */
-    /* overflow: hidden; */
-    transition: transform 0.3sease;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
 
+.project-card:hover {
+    transform: scale(1.05); /* Add a hover effect */
 }
 
 .project-card img {
@@ -623,14 +596,32 @@ h3 {
 
 a {
     word-wrap: break-word; /* Prevent long URLs from overflowing */
-    color:rgb(46, 83, 218); /* Example link color */
+    color: rgb(46, 83, 218); /* Example link color */
 }
 
+/* Responsive Grid */
+@media (max-width: 1200px) {
+    .projects-container {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns for medium screens */
+    }
+}
 
-    </style>
+@media (max-width: 992px) {
+    .projects-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .projects-container {
+        grid-template-columns: 1fr; /* 1 column for mobile */
+    }
+}
+</style>
    
 </head>
 <body>
+<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
      <header class="main-header">
 
     <div class="nav-container">
@@ -639,7 +630,8 @@ a {
             </div>
         <nav class="nav-links">
             <a href="people.blade.php">People</a>
-            <a href="projects.blade.php">Projects</a>
+            <!-- <a href="projects.blade.php">Projects</a> -->
+            <a href="{{ route('projects') }}">Projects</a>
             <a href="publications.blade.php">Publications</a>
             <a href="courses.blade.php">Courses</a>
             <a href="news.blade.php">News</a>
@@ -672,12 +664,8 @@ a {
        
             <div class="project-card">
 
-
-
-
 <!-- projects according to priority -->
             <div class="projects-container">
-       
     @foreach($projects as $project)
     <div class="project-card">
         <div class="card-image">
