@@ -33,12 +33,6 @@ use App\Http\Controllers\PublicationController;
 //Route::get('/',[TemplateController::class,'index']);
 Route::get('/',[TemplateController::class,'index']);
 Route::get('/publications', [PatronController::class, 'publications']);
-// Route::get('/publications', [PatronController::class, 'index']);
-
-// Route::get('/publications', [PatronController::class, 'publications']);
-// Route::get('/publications/create', [PatronController::class, 'create']);
-// Route::get('/patron/createpublications', [PatronController::class, 'createPublication'])->name('publications.create');
-
 
 
 
@@ -88,12 +82,9 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/patron/publications', [PatronController::class, 'publications']);
 
     Route::get('/patron/createpublications', [PatronController::class, 'createPublication'])->name('patron.createPublication');
-   // Route::post('/patron/storepublications', [PatronController::class, 'storePublication'])->name('patron.storepublication');
-
-    //Route::post('/patron/storepublications', [PatronController::class, 'storePublication'])->name('publications.store');
+ 
     
-    
-    // Route for storing publications (you may already have this)
+    // Route for storing publications
     Route::post('/storepublications', [PatronController::class, 'storePublication'])->name('publications.store');
    // Route::get('/publications', [PatronController::class, 'publications'])->name('publications');
    Route::get('/publications', [PatronController::class, 'publications'])->name('publications');
