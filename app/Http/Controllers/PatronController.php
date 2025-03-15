@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Publication;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -14,11 +14,11 @@ class PatronController extends Controller
 {
     public function dashboard()
     {
-        // Retrieve publications from the database
-        $publications = Publication::orderBy('priority', 'desc')->get();
+        // Retrieve projects from the database
+        $projects = Project::orderBy('priority', 'desc')->get();
 
-        // Pass publications data to the view
-        return view('patron.dashboard', compact('publications'));
+        // Pass projects data to the view
+        return view('patron.dashboard', compact('projects'));
     }
     
 
@@ -27,13 +27,13 @@ class PatronController extends Controller
     //     return view('patron.dashboard');
     // }
 
-    // Method to show the create publication form
-    public function createPublication()
+    // Method to show the create projects form
+    public function createProject()
     {
-        return view('publications.create'); // Render the create.blade.php view
+        return view('projects.create'); // Render the create.blade.php view
     }
 
-    public function storePublication(Request $request)
+    public function storeProject(Request $request)
 {
     // Validate the incoming request
     $validatedData = $request->validate([
@@ -49,54 +49,50 @@ class PatronController extends Controller
     $imagePath = null;
 
     if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('publications', 'public');
+        $imagePath = $request->file('image')->store('projects', 'public');
     }
 
-    // Save the publication
-    $publication = new Publication();
-    $publication->title = $validatedData['title'];
-    $publication->description = $validatedData['description'] ?? null;
-    $imagePath = $request->file('image')->store('publications', 'public');
-    $publication->image = $imagePath; 
-    $publication->url = $validatedData['url'] ?? null;
-    $publication->priority = $validatedData['priority'];
-    $publication->patron_id = $validatedData['patron_id'];
+    // Save the project
+    $project = new Project();
+    $project->title = $validatedData['title'];
+    $project->description = $validatedData['description'] ?? null;
+    // $imagePath = $request->file('image')->store('projects', 'public');
+    $project->image = $imagePath; 
+    $project->url = $validatedData['url'] ?? null;
+    $project->priority = $validatedData['priority'];
+    $project->patron_id = $validatedData['patron_id'];
    
 
-    $publication->save(); // Save the publication
+    $project->save(); // Save the project
 
-    // Redirect to the publications route after saving the publication
-    return redirect()->route('publications')->with('success', 'Publication added successfully');
+    // Redirect to the projects route after saving the project
+    return redirect()->route('projects')->with('success', 'Project added successfully');
 }
 
         public function index()
     {
-        $publications = Publication::all(); // Fetch all publications
-    return view('publications.index', compact('publications'));
+        $projects = Project::all(); // Fetch all projects
+    return view('projects.index', compact('projects'));
     }
 
     public function Pubdashboard()
     {
-        // Retrieve publications from the database
-        $publications = Publication::orderBy('priority', 'desc')->get();
+        // Retrieve projects from the database
+        $projects = Project::orderBy('priority', 'desc')->get();
 
-        // Pass publications data to the view
-        return view('frontend.master', compact('publications'));
+        // Pass projects data to the view
+        return view('frontend.master', compact('projects'));
     }
 
-    public function publications()
+    public function projects()
     {
-        // // Fetch the publications and pass them to the view
-        // $publications = Publication::orderBy('priority', 'desc')->get();
+        
 
-        // // Return the publications view
-        // return view('frontend.master', compact('publications'));
+        // Fetch the top 4 projects, ordered by priority (highest first)
+    $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
 
-        // Fetch the top 4 publications, ordered by priority (highest first)
-    $publications = Publication::orderBy('priority', 'desc')->limit(4)->get();
-
-    // Return the publications view with the data
-    return view('frontend.master', compact('publications'));
+    // Return the projects view with the data
+    return view('frontend.master', compact('projects'));
     }
 
     

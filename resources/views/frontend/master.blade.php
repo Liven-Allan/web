@@ -671,51 +671,24 @@ a {
         <div class="card-grid">
        
             <div class="project-card">
-                <!-- <div class="card-image"> -->
-                    
-                     <!-- efr... imagevestor -->
 
-        <!-- Inside frontend/master.blade.php -->
-                <!-- <h2>Top Publications</h2> -->
-                <!-- <ul>
-                    @if(isset($publications) && count($publications) > 0)
-                        @foreach ($publications as $publication)
-                            <li>{{ strtoupper(substr($publication->title, 0, 3)) }} - {{ $publication->title }}</li>
-                        @endforeach
-                    @else
-                        <li>No publications available.</li>
-                    @endif
-                </ul> -->
 
 
 
 <!-- projects according to priority -->
             <div class="projects-container">
-                
-            <!-- @foreach($publications as $project)
-        <div class="project-card">
-            <div class="card-image">
-            <img src="{{ asset('images/project2-icon.svg') }}" alt="Project 2">
-                <h3>{{ $project->title }}</h3>
-                <a href="{{ $project->url }}" target="_blank">
-                    {{ $project->url }}
-                </a>
-                <p>{{ $project->description }}</p>
-            </div>
-        </div>
-    @endforeach -->
-
-    @foreach($publications as $publication)
+       
+    @foreach($projects as $project)
     <div class="project-card">
         <div class="card-image">
-            @if($publication->image)
-                <img src="{{ asset('storage/' . $publication->image) }}" alt="{{ $publication->title }}">
+            @if($project->image)
+                <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
             @else
-                <img src="{{ asset('images/default-publication.png') }}" alt="Default Image">
+                <img src="{{ asset('images/default-project.png') }}" alt="Default Image">
             @endif
-            <h3>{{ $publication->title }}</h3>
-            <a href="{{ $publication->url }}" target="_blank">{{ $publication->url }}</a>
-            <p>{{ $publication->description }}</p>
+            <h3>{{ $project->title }}</h3>
+            <a href="{{ $project->url }}" target="_blank">{{ $project->url }}</a>
+            <p>{{ $project->description }}</p>
             
         </div>
     </div>

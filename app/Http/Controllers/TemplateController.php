@@ -11,14 +11,14 @@ use App\Models\CompletedTask;
 use Illuminate\Support\Facades\DB;  // Import the DB facade
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TaskAssignmentNotification;
-use App\Models\Publication;
+use App\Models\Project;
 class TemplateController extends Controller
 {
     public function index()
     {
  
-    $publications = Publication::orderBy('priority', 'desc')->get(); // Fetch publications
-    return view('frontend.master', compact('publications'));
+    $projects = Project::orderBy('priority', 'desc')->get(); // Fetch projects
+    return view('frontend.master', compact('projects'));
 
         // $words = Word::all(); // Fetch words from database
         // return view('frontend.home', compact('words')); // Pass words to the view
@@ -110,7 +110,7 @@ class TemplateController extends Controller
 
     public function update(Request $request, Task $task)
     {
-        \Log::info($request->all()); // Log request data
+        // \Log::info($request->all()); // Log request data
         $role = auth()->user()->role;
 
         // Ensure only allowed roles can update tasks

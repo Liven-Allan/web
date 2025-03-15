@@ -94,6 +94,16 @@
         </a>
     </li>
     @endif
+
+     <!-- Create Project Link -->
+     @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('patron') || auth()->user()->hasRole('research_assistant'))
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('patron.createProject') }}">
+                <i class="fas fa-fw fa-plus-circle"></i>
+                <span>Create Project</span>
+            </a>
+        </li>
+    @endif
   
 
 

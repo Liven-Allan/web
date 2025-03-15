@@ -7,14 +7,14 @@
     <p>You're logged in as a Patron.</p>
 
     <!-- Inside frontend/master.blade.php -->
-    <h2>BDL Publications</h2>
+    <h2>BDL Projects</h2>
                 <ul>
-                    @if(isset($publications) && count($publications) > 0)
-                        @foreach ($publications as $publication)
-                            <li>{{ strtoupper(substr($publication->title, 0, 3)) }} - {{ $publication->title }}</li>
+                    @if(isset($projects) && count($projects) > 0)
+                        @foreach ($projects as $project)
+                            <li>{{ strtoupper(substr($project->title, 0, 3)) }} - {{ $project->title }}</li>
                         @endforeach
                     @else
-                        <li>No publications available.</li>
+                        <li>No projects available.</li>
                     @endif
                 </ul>
 @endsection

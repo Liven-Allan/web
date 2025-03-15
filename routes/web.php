@@ -8,12 +8,6 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
-use App\Http\Controllers\PublicationController;
-
-
-
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +26,7 @@ use App\Http\Controllers\PublicationController;
 
 //Route::get('/',[TemplateController::class,'index']);
 Route::get('/',[TemplateController::class,'index']);
-Route::get('/publications', [PatronController::class, 'publications']);
+Route::get('/projects', [PatronController::class, 'projects']);
 
 
 
@@ -79,15 +73,15 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/patron/task/create', [TemplateController::class, 'createTask'])->name('patron.task.create'); // GET route for form
     Route::post('/patron/task/create', [TemplateController::class, 'storeTask'])->name('patron.task.store'); 
     Route::get('/patron/tasks', [TemplateController::class, 'listTasks'])->name('patron.task.list');
-    Route::get('/patron/publications', [PatronController::class, 'publications']);
+    Route::get('/patron/projects', [PatronController::class, 'projects']);
 
-    Route::get('/patron/createpublications', [PatronController::class, 'createPublication'])->name('patron.createPublication');
+    Route::get('/patron/createprojects', [PatronController::class, 'createProject'])->name('patron.createProject');
  
     
-    // Route for storing publications
-    Route::post('/storepublications', [PatronController::class, 'storePublication'])->name('publications.store');
-   // Route::get('/publications', [PatronController::class, 'publications'])->name('publications');
-   Route::get('/publications', [PatronController::class, 'publications'])->name('publications');
+    // Route for storing projects
+    Route::post('/storeprojects', [PatronController::class, 'storeProject'])->name('projects.store');
+ 
+   Route::get('/projects', [PatronController::class, 'projects'])->name('projects');
 
     // Add Edit Task route for patron
     Route::get('/patron/task/{task}/edit', [TemplateController::class, 'edit'])->name('patron.task.edit');
