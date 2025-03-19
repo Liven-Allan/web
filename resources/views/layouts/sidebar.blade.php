@@ -105,8 +105,46 @@
         </li>
     @endif
   
+    @endif
+
+    @if(auth()->user()->hasRole('admin'))
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.editDescription') }}">
+            <i class="fas fa-fw fa-tasks"></i>
+            <span>Edit Page Description</span>
+        </a>
+    </li>
+@elseif(auth()->user()->hasRole('patron'))
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('patron.editDescription') }}">
+            <i class="fas fa-fw fa-tasks"></i>
+            <span>Edit Page Description</span>
+        </a>
+    </li>
 
 
+@endif
+
+
+
+
+    @if(auth()->user()->hasRole('admin'))
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.editDescription') }}">
+            <i class="fas fa-fw fa-tasks"></i>
+            <span>Edit Page Description</span>
+        </a>
+    </li>
+@elseif(auth()->user()->hasRole('patron'))
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('patron.editDescription') }}">
+            <i class="fas fa-fw fa-tasks"></i>
+            <span>Edit Page Description</span>
+        </a>
+    </li>
+
+
+@endif
 
 
 </ul>

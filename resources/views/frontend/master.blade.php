@@ -646,7 +646,7 @@ a {
     <div class="hero-content">
         <h1 class="hero-title">BIG DATA ANALYTICS LAB</h1>
         <p class="hero-text">
-            {{ $heroText->content ?? 'The Big Data Analytics Lab is a cutting-edge research facility focused on developing innovative solutions.' }}
+    {{ $descriptionText->content ?? 'No description available' }}
         </p>
     </div>
 </div>
