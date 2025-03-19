@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;  // Import the DB facade
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TaskAssignmentNotification;
 use App\Models\Project;
+use App\Models\DescriptionText;
+
 class TemplateController extends Controller
 {
     public function index()
@@ -20,12 +22,15 @@ class TemplateController extends Controller
     // $projects = Project::orderBy('priority', 'desc')->get(); // Fetch projects
     // return view('frontend.master', compact('projects'));
 
-       
+    $descriptionText = DescriptionText::latest()->first(); // Get the latest description
+
          // Fetch the top 4 projects, ordered by priority (highest first)
     $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
 
     // Return the projects view with the data
-    return view('frontend.master', compact('projects'));
+    
+    return view('frontend.master', compact('projects', 'descriptionText'));
+
     
     }
 

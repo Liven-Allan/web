@@ -28,7 +28,7 @@ use App\Http\Controllers\AllProjectsController;
 //Route::get('/',[TemplateController::class,'index']);
 Route::get('/',[TemplateController::class,'index']);
 Route::get('/projects', [PatronController::class, 'projects']);
-Route::get('/', [PatronController::class, 'showDescription']);
+Route::get('/description', [PatronController::class, 'showDescription'])->name('description');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
