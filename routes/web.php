@@ -28,10 +28,7 @@ use App\Http\Controllers\AllProjectsController;
 //Route::get('/',[TemplateController::class,'index']);
 Route::get('/',[TemplateController::class,'index']);
 Route::get('/projects', [PatronController::class, 'projects']);
-
-
-
-Route::get('/', [GuestController::class, 'showDescription']);
+Route::get('/', [PatronController::class, 'showDescription']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -85,11 +82,10 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/patron/task/create', [TemplateController::class, 'createTask'])->name('patron.task.create'); // GET route for form
     Route::post('/patron/task/create', [TemplateController::class, 'storeTask'])->name('patron.task.store'); 
     Route::get('/patron/tasks', [TemplateController::class, 'listTasks'])->name('patron.task.list');
-<<<<<<< HEAD
+
     //editing the description on the landing page
     Route::post('/patron/update-description-text', [PatronController::class, 'updateDescriptionText'])->name('patron.updateDescriptionText');
-    Route::post('/patron/change-password', [PatronController::class, 'changePassword'])->name('patron.change-password');
-=======
+
     Route::get('/patron/projects', [PatronController::class, 'projects']);
 
     Route::get('/patron/createprojects', [PatronController::class, 'createProject'])->name('patron.createProject');
@@ -102,7 +98,7 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::post('/storeprojects', [PatronController::class, 'storeProject'])->name('projects.store');
  
    Route::get('/projects', [PatronController::class, 'projects'])->name('projects');
->>>>>>> main
+
 
     Route::get('/patron/update-description', function () {
         return view('patron.editDescription'); // Ensure this file exists in resources/views/patron/
