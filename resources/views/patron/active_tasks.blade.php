@@ -69,6 +69,7 @@
                         <div class="progress" style="height: 30px;">
                             <div class="progress-bar" role="progressbar" style="width: {{ $activeTask->progress }}%; height: 30px;" aria-valuenow="{{ $activeTask->progress }}" aria-valuemin="0" aria-valuemax="100">
                                 {{ $activeTask->progress }}%
+                                
                             </div>
                         </div>
                     </td>

@@ -5,18 +5,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Task;
+use App\Models\Word; //textsvg
 use App\Models\ActiveTask;
 use App\Models\CompletedTask;
 use Illuminate\Support\Facades\DB;  // Import the DB facade
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TaskAssignmentNotification;
-
+use App\Models\Project;
 class TemplateController extends Controller
 {
     public function index()
     {
-        return view('frontend.home');
+ 
+    // $projects = Project::orderBy('priority', 'desc')->get(); // Fetch projects
+    // return view('frontend.master', compact('projects'));
+
+       
+         // Fetch the top 4 projects, ordered by priority (highest first)
+    $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
+
+    // Return the projects view with the data
+    return view('frontend.master', compact('projects'));
+    
     }
+
+
 
     public function createTask()
     {
@@ -101,7 +114,7 @@ class TemplateController extends Controller
 
     public function update(Request $request, Task $task)
     {
-        \Log::info($request->all()); // Log request data
+        // \Log::info($request->all()); // Log request data
         $role = auth()->user()->role;
 
         // Ensure only allowed roles can update tasks

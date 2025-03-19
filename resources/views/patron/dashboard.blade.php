@@ -27,42 +27,16 @@
     @endif
 
     <p>You're logged in as a Patron.</p>
-    
-@endsection
 
-@section('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const modal = document.getElementById('passwordModal');
-            const passwordForm = document.getElementById('passwordForm');
-            const newPasswordInput = document.getElementById('new-password');
-            const confirmPasswordInput = document.getElementById('confirm-password');
-
-            // Ensure the modal is displayed when needed
-            if (modal) {
-                modal.style.display = "block";
-            }
-
-            // Function to close the modal
-            function closeModal() {
-                if (modal) modal.style.display = "none";
-            }
-
-            // Validate password form submission
-            if (passwordForm) {
-                passwordForm.addEventListener('submit', function (event) {
-                    event.preventDefault();
-
-                    const newPassword = newPasswordInput.value;
-                    const confirmPassword = confirmPasswordInput.value;
-
-                    if (newPassword === confirmPassword) {
-                        passwordForm.submit();
-                    } else {
-                        alert("Passwords do not match. Please try again.");
-                    }
-                });
-            }
-        });
-    </script>
+    <!-- Inside frontend/master.blade.php -->
+    <h2>BDL Projects</h2>
+                <ul>
+                    @if(isset($projects) && count($projects) > 0)
+                        @foreach ($projects as $project)
+                            <li>{{ strtoupper(substr($project->title, 0, 3)) }} - {{ $project->title }}</li>
+                        @endforeach
+                    @else
+                        <li>No projects available.</li>
+                    @endif
+                </ul>
 @endsection

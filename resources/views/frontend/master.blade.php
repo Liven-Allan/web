@@ -17,19 +17,21 @@
     background-color: #009900;
     z-index: 1000;
     display: flex;
-    justify-content: center; /* Center the nav container */
+    justify-content: space-between; /* Separate logo and nav */
+    align-items: center; /* Vertically center items */
+    padding: 0 20px; /* Add some padding to the sides */
     font-family: Arial, sans-serif;
 }
 
 .logo-section {
     display: flex;
     align-items: center;
-    padding-left: 0; /* Remove left padding since container has padding */
+    padding-left: 0; 
     height: 100%;
 }
 .bdal-logo {
-    height: 24px;
-    margin-right: 10px;
+    height: 80px;
+    margin-right: 5px;
 }
 
 .nav-container {
@@ -247,34 +249,49 @@ body {
     margin: 0 auto;
 }
 
-.project-card {
+/* .project-card {
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.3s ease;
     height: 100%;
-}
+} */
 
 .project-card:hover {
     transform: translateY(-5px);
 }
 
 .card-image {
-    width: 100%;
-    padding-top: 75%;
-    position: relative;
-    background-color: var(--primary-color);
+    
+    display: grid; /* Enable Grid */
+    place-items:center; /* Center both vertically and horizontally */
+    text-align:start; /* Ensure text is centered */
+
+    width: 200px !important;
+    padding-left: 10px ;  /* Increased width */  
+    padding-top: 100px;
+    padding-right: 10px; 
+    padding-bottom: 50px;
+    margin-left: 2px;
+    height: 300px;
+    /* padding-right: 25% ;   */
+    /* position: relative; */
+    background-color:rgb(163, 233, 148);
+    border-radius: 10px; /* Added border radius */
+  
+
+    
 }
 
-.card-image img {
+/* .card-image img {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     max-width: 60%;
     max-height: 60%;
-}
+} */
 
 .card-content {
     padding: 1.5rem;
@@ -495,7 +512,13 @@ body {
     }
     
     .logo-section {
-        padding-left: 20px;
+        padding-left: 0px;
+        display: flex;
+    justify-content: flex-start; /* Aligns the logo to the start */
+    align-items: center; /* Vertically centers the logo */
+    padding-left: 0; /* Ensures no left padding */
+    margin-left: 0; /* Ensures no left margin */
+    
     }
 }
 
@@ -523,19 +546,92 @@ body {
 .nav-arrow {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-    </style>
+
+.projects-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 20px; /* Space between grid items */
+    padding: 20px;
+}
+
+.project-card {
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+    transform: scale(1.05); /* Add a hover effect */
+}
+
+.project-card img {
+    max-width: 100%; /* Ensures the image doesn't exceed the card's width */
+    height: auto; /* Maintains the image's aspect ratio */
+    border-radius: 8px; /* Matches the card's border radius */
+    display: block; /* Ensures the image behaves as a block element */
+    margin: 0 auto; /* Centers the image horizontally */
+}
+
+.card-image {
+    padding-top: 10px; /* Adjust this value to reduce the height at the top */
+    overflow: hidden; /* Ensures the image doesn't overflow */
+}
+
+.card-image img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+h3 {
+    margin-bottom: 10px; /* Add some space between MLL and the link */
+    word-wrap: break-word; /* Prevent long words from overflowing */
+}
+
+a {
+    word-wrap: break-word; /* Prevent long URLs from overflowing */
+    color: rgb(46, 83, 218); /* Example link color */
+}
+
+/* Responsive Grid */
+@media (max-width: 1200px) {
+    .projects-container {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns for medium screens */
+    }
+}
+
+@media (max-width: 992px) {
+    .projects-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .projects-container {
+        grid-template-columns: 1fr; /* 1 column for mobile */
+    }
+}
+</style>
    
 </head>
 <body>
+<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
      <header class="main-header">
 
     <div class="nav-container">
             <div class="logo-section">
-            <img src="{{ asset('images/cmu-logo.png') }}" alt="Big Data Analytics Lab" class="bdal-logo">
+            <img src="{{ asset('assets/images/bigdata.png') }}" alt="Big Data Analytics Lab" class="bdal-logo">Big Data Analytics Lab
             </div>
         <nav class="nav-links">
             <a href="people.blade.php">People</a>
-            <a href="projects.blade.php">Projects</a>
+            <!-- <a href="projects.blade.php">Projects</a> -->
+            <a href="{{ route('projects') }}">Projects</a>
             <a href="publications.blade.php">Publications</a>
             <a href="courses.blade.php">Courses</a>
             <a href="news.blade.php">News</a>
@@ -565,11 +661,31 @@ body {
 
         </div>
         <div class="card-grid">
+       
             <div class="project-card">
-                <div class="card-image">
-                    <!-- Replace with your project icon -->
-                    <img src="{{ asset('images/project1-icon.svg') }}" alt="Project 1">
-                </div>
+
+<!-- projects according to priority -->
+            <div class="projects-container">
+    @foreach($projects as $project)
+    <div class="project-card">
+        <div class="card-image">
+            @if($project->image)
+                <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
+            @else
+                <img src="{{ asset('images/default-project.png') }}" alt="Default Image">
+            @endif
+            <h3>{{ $project->title }}</h3>
+            <a href="{{ $project->url }}" target="_blank">{{ $project->url }}</a>
+            <p>{{ $project->description }}</p>
+            
+        </div>
+    </div>
+@endforeach
+
+
+            </div></div>
+
+                <!-- </div>
                 <div class="card-content">
                     <h3 class="card-title">Data Mining & Analytics</h3>
                     <p class="card-description">Advanced pattern recognition in big data</p>
@@ -602,7 +718,7 @@ body {
                     <p class="card-description">Future-focused data analysis</p>
                 </div>
             </div>
-        </div>
+        </div> -->
     </section>
     <!-- Add this section before the footer -->
 <section class="news-events-section">
