@@ -19,4 +19,6 @@
                         <li>No projects available.</li>
                     @endif
                 </ul>
+                <a href="{{ url('/') }}" class="back-to-home-btn">Back to Home</a>
+
 @endsection

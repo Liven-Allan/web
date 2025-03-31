@@ -119,12 +119,17 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+      
         }
 
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             padding-top: 100px;
+            max-width: 100%;
+            overflow-x: hidden;
+            
+
         }
 
         /* Hero Section */
@@ -215,7 +220,7 @@
 
         /* Projects Section */
         .projects {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 3rem 2rem;
         }
@@ -257,6 +262,7 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 2rem;
             margin: 0 auto;
+            
         }
 
         /* .project-card {
@@ -576,13 +582,15 @@
             gap: 20px;
             /* Space between grid items */
             padding: 20px;
+            
+            
         }
 
         .project-card {
             text-align: center;
             padding: 10px;
             box-sizing: border-box;
-            background: #fff;
+            background:rgb(107, 241, 116);
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -608,10 +616,21 @@
         }
 
         .card-image {
+            background-color: transparent;
             padding-top: 10px;
             /* Adjust this value to reduce the height at the top */
             overflow: hidden;
-            /* Ensures the image doesn't overflow */
+            display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 100%; /* Take full width of card */
+    height: 180px; /* Fixed height */
+    
+    /* background-color: rgb(163, 233, 148); */
+    border-radius: 8px;
+    margin: 0 auto; /* Center the div itself */
+    padding: 10px; /* Optional padding */
+    overflow: hidden; /* Prevent content from overflowing */
         }
 
         .card-image img {
@@ -619,8 +638,108 @@
             height: auto;
             display: block;
             margin: 0 auto;
+            max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Maintain aspect ratio */
+    display: block; /* Remove extra space under image */
+    margin: 0 auto; /* Center the image within the green div */
         }
 
+        /* Button container styling */
+.project-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+/* Base button styling */
+.edit-btn, .delete-btn {
+    padding: 6px 12px; /* Slightly adjusted padding */
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: none;
+    height: 30px;
+    min-width: 70px; /* Ensures both buttons have same minimum width */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box; /* Includes padding in width/height */
+}
+
+/* Edit button specific styling */
+.edit-btn {
+    background-color:rgb(52, 220, 88); /* Blue similar to your header */
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color:rgb(13, 14, 14);
+    transform: translateY(-1px);
+}
+
+/* Delete button specific styling */
+.delete-btn {
+    background-color: #e3342f; /* Red for delete actions */
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color:rgb(40, 34, 34);
+    transform: translateY(-1px);
+}
+
+/* Form styling to maintain consistency */
+.project-actions form {
+    margin: 0;
+}
+
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.user-btn {
+    padding: 8px 16px;
+    background-color: #38c172;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a, .dropdown-content button {
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #333;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content a:hover, .dropdown-content button:hover {
+    background-color: #f1f1f1;
+}
+
+.user-dropdown:hover .dropdown-content {
+    display: block;
+}
         h3 {
             margin-bottom: 10px;
             /* Add some space between MLL and the link */
@@ -678,8 +797,25 @@
                 <a href="news.blade.php">News</a>
                 <a href="events.blade.php">Events</a>
             </nav>
-            <div class="login-btn">
-                <a href="{{ route('login') }}" class="btn-login">LOG IN</a>
+            <!-- <div class="login-btn"> -->
+                <!-- <a href="{{ route('login') }}" class="btn-login">LOG IN</a> -->
+                @auth
+    <div class="user-dropdown">
+        <button class="user-btn">
+            {{ Auth::user()->name }} ▼
+        </button>
+        <div class="dropdown-content">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/profile">Profile</a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit">Log Out</button>
+            </form>
+        </div>
+    </div>
+@else
+    <a href="{{ route('login') }}" class="login-btn">LOG IN</a>
+@endauth
             </div>
         </div>
     </header>
@@ -692,39 +828,66 @@
         </div>
     </div>
 
-    <section class="projects">
+    <!-- <section class="projects">
         <div class="section-title">
             <h2>CURRENT RESEARCH PROJECTS</h2>
             <div class="view-all-btn">
                 VIEW ALL <span class="next-icon">▶</span>
-            </div>
+            </div> -->
 
+            <section class="projects">
+        <div class="section-title">
+            <h2>CURRENT RESEARCH PROJECTS</h2>
+ <!-- Check if the current route is the main page and display the 'VIEW ALL' button -->
+ @if(Route::currentRouteName() == '') <!-- Assuming the main page is named 'home' -->
+         
+            <a href="{{ route('projects') }}" class="view-all-btn"> <!-- Add link to projects page -->
+                VIEW ALL <span class="next-icon">▶</span>
+            </a>
+           
+        @endif
 
         </div>
-        <div class="card-grid">
+<div class="card-grid">
+    <!-- Loop through each project -->
+    @foreach($projects as $project)
+        <div class="project-card">
+            <div class="card-image">
+                <!-- Display the project image -->
+                @if($project->image)
+                    <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
+                @else
+                    <img src="{{ asset('images/default-project.png') }}" alt="Default Image">
+                @endif
+            </div>
+            <div class="card-content">
+                <h3>{{ $project->title }}</h3>
+                <a href="{{ $project->url }}" target="_blank">{{ $project->url }}</a>
+                <p>{{ $project->description }}</p>
 
-            <div class="project-card">
+                <!-- Display edit and delete buttons only if user is the owner -->
+                @if(auth()->check() && $project->patron_id === auth()->id())
+                    <div class="project-actions">
+                        <!-- Edit button -->
+                        <a href="{{ route('projects.edit', $project->id) }}" class="edit-btn">Edit</a>
 
-                <!-- projects according to priority -->
-                <div class="projects-container">
-                    @foreach($projects as $project)
-                        <div class="project-card">
-                            <div class="card-image">
-                                @if($project->image)
-                                    <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
-                                @else
-                                    <img src="{{ asset('images/default-project.png') }}" alt="Default Image">
-                                @endif
-                                <h3>{{ $project->title }}</h3>
-                                <a href="{{ $project->url }}" target="_blank">{{ $project->url }}</a>
-                                <p>{{ $project->description }}</p>
-
-                            </div>
-                        </div>
-                    @endforeach
+                        <!-- Delete button inside a form -->
+                        <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="delete-btn">Delete</button>
+                        </form>
+                    </div>
+                @endif
+            </div>
+        </div>
+    @endforeach
+</div>
 
 
-                </div>
+
+                </div><a href="{{ url('/') }}" class="back-to-home-btn">Back to Home</a>
+
             </div>
 
             <!-- </div>

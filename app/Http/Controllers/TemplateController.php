@@ -25,7 +25,11 @@ class TemplateController extends Controller
     $descriptionText = DescriptionText::latest()->first(); // Get the latest description
 
          // Fetch the top 4 projects, ordered by priority (highest first)
-    $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
+    // $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
+    $projects = Project::orderBy('priority', 'asc')   // Order by priority in ascending order (lowest first)
+    ->orderBy('created_at', 'desc')  // Then, order by creation date in ascending order (oldest first)
+    ->limit(4)  
+    ->get();
 
     // Return the projects view with the data
     
