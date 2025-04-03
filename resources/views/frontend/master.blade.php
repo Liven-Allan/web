@@ -775,6 +775,43 @@
                 /* 1 column for mobile */
             }
         }
+
+    .pagination-container {
+    padding: 20px 0; /* Adds space above and below the pagination */
+    display: flex;
+    justify-content: center;
+}    
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Spacing between numbers */
+    padding: 10px;
+}
+
+.pagination li {
+    list-style: none;
+    display: inline-block;
+}
+
+.pagination a,
+.pagination span {
+    padding: 8px 12px;
+    text-decoration: none;
+    color: black;
+    border-radius: 4px;
+}
+
+.pagination .active span {
+    font-weight: bold;
+    background: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+
     </style>
 
 </head>
@@ -878,7 +915,7 @@
 
         </div>
 
-        <div class="card-grid">
+        <div class="pagination-container">
              <!-- Pagination Container -->
              @if(isset($projects) && $projects instanceof \Illuminate\Pagination\LengthAwarePaginator)
                <div class="flex justify-center mt-6">
