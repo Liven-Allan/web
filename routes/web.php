@@ -29,9 +29,10 @@ use App\Http\Controllers\AllProjectsController;
 Route::get('/',[TemplateController::class,'index']);
 Route::get('/projects', [PatronController::class, 'projects']);
 Route::get('/description', [PatronController::class, 'showDescription'])->name('description');
+Route::get('/projectDetails',[TemplateController::class,'displayProjectdetails']);
 
 Route::get('/dashboard', function () {
-   // return view('dashboard');
+   return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProjectsDetails;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Task;
@@ -32,6 +33,11 @@ class TemplateController extends Controller
     return view('frontend.master', compact('projects', 'descriptionText'));
 
     
+    }
+    public function displayProjectdetails()
+    {
+        $ProjectsDetails = ProjectsDetails::first(); // Fetch the first project (modify as needed)
+        return view('frontend.projects', compact ('ProjectsDetails'));
     }
 
 
