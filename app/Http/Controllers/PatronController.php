@@ -95,17 +95,11 @@ public function index()
     }
 
     public function projects()
-    {
-        
-         $projects = Project::orderBy('priority', 'desc')->get(); // Fetch projects
+{
+    $projects = Project::orderBy('priority', 'desc')->paginate(8); // Fetch 6 projects per page
     return view('frontend.master', compact('projects'));
+}
 
-    //     // Fetch the top 4 projects, ordered by priority (highest first)
-    // $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
-
-    // // Return the projects view with the data
-    // return view('frontend.master', compact('projects'));
-    }
 
     public function edit(Project $project)
 {

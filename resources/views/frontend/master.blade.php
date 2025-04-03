@@ -828,103 +828,76 @@
         </div>
     </div>
 
-    <!-- <section class="projects">
+    <section class="projects">
         <div class="section-title">
             <h2>CURRENT RESEARCH PROJECTS</h2>
-            <div class="view-all-btn">
-                VIEW ALL <span class="next-icon">▶</span>
-            </div> -->
-
-            <section class="projects">
-        <div class="section-title">
-            <h2>CURRENT RESEARCH PROJECTS</h2>
- <!-- Check if the current route is the main page and display the 'VIEW ALL' button -->
- @if(Route::currentRouteName() == '') <!-- Assuming the main page is named 'home' -->
+                <!-- Check if the current route is the main page and display the 'VIEW ALL' button -->
+                @if(Route::currentRouteName() == '') <!-- Assuming the main page is named 'home' -->
          
-            <a href="{{ route('projects') }}" class="view-all-btn"> <!-- Add link to projects page -->
-                VIEW ALL <span class="next-icon">▶</span>
-            </a>
-           
-        @endif
+                    <a href="{{ route('projects') }}" class="view-all-btn"> <!-- Add link to projects page -->
+                    VIEW ALL <span class="next-icon">▶</span>
+                    </a>
+                @endif
 
         </div>
-<div class="card-grid">
-    <!-- Loop through each project -->
-    @foreach($projects as $project)
-        <div class="project-card">
-            <div class="card-image">
-                <!-- Display the project image -->
-                @if($project->image)
-                    <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
-                @else
-                    <img src="{{ asset('images/default-project.png') }}" alt="Default Image">
-                @endif
-            </div>
-            <div class="card-content">
-                <h3>{{ $project->title }}</h3>
-                <a href="{{ $project->url }}" target="_blank">{{ $project->url }}</a>
-                <p>{{ $project->description }}</p>
+        <div class="card-grid">
+             <!-- Loop through each project -->
+            @foreach($projects as $project)
+                <div class="project-card">
+                    <div class="card-image">
+                       <!-- Display the project image -->
+                       @if($project->image)
+                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
+                       @else
+                        <img src="{{ asset('images/default-project.png') }}" alt="Default Image">
+                       @endif
+                    </div>
+                 <div class="card-content">
+                    <h3>{{ $project->title }}</h3>
+                    <a href="{{ $project->url }}" target="_blank">{{ $project->url }}</a>
+                    <p>{{ $project->description }}</p>
 
-                <!-- Display edit and delete buttons only if user is the owner -->
-                @if(auth()->check() && $project->patron_id === auth()->id())
-                    <div class="project-actions">
-                        <!-- Edit button -->
-                        <a href="{{ route('projects.edit', $project->id) }}" class="edit-btn">Edit</a>
+                    <!-- Display edit and delete buttons only if user is the owner -->
+                    @if(auth()->check() && $project->patron_id === auth()->id())
+                       <div class="project-actions">
+                          <!-- Edit button -->
+                          <a href="{{ route('projects.edit', $project->id) }}" class="edit-btn">Edit</a>
 
-                        <!-- Delete button inside a form -->
-                        <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display:inline;">
+                          <!-- Delete button inside a form -->
+                          <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="delete-btn">Delete</button>
-                        </form>
-                    </div>
-                @endif
-            </div>
-        </div>
-    @endforeach
-</div>
+                          </form>
+                        </div>
+                    @endif
+                 </div>
+                </div>
+            @endforeach
 
+
+        </div>
+
+        <div class="card-grid">
+             <!-- Pagination Container -->
+             @if(isset($projects) && $projects instanceof \Illuminate\Pagination\LengthAwarePaginator)
+               <div class="flex justify-center mt-6">
+                 <div class="pagination bg-white shadow-md rounded-lg p-4">
+                   {{ $projects->links() }}
+                 </div>
+               </div>
+              @endif
+        </div>
+       
 
 
                 </div><a href="{{ url('/') }}" class="back-to-home-btn">Back to Home</a>
 
             </div>
-
-            <!-- </div>
-                <div class="card-content">
-                    <h3 class="card-title">Data Mining & Analytics</h3>
-                    <p class="card-description">Advanced pattern recognition in big data</p>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="card-image">
-                    <img src="{{ asset('images/project2-icon.svg') }}" alt="Project 2">
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Machine Learning Systems</h3>
-                    <p class="card-description">Scalable ML infrastructure</p>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="card-image">
-                    <img src="{{ asset('images/project3-icon.svg') }}" alt="Project 3">
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Real-time Analytics</h3>
-                    <p class="card-description">Stream processing frameworks</p>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="card-image">
-                    <img src="{{ asset('images/project4-icon.svg') }}" alt="Project 4">
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Predictive Modeling</h3>
-                    <p class="card-description">Future-focused data analysis</p>
-                </div>
-            </div>
-        </div> -->
     </section>
+ 
+
+
     <!-- Add this section before the footer -->
     <section class="news-events-section">
         <div class="news-events-container">
