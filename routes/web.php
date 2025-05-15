@@ -105,6 +105,15 @@ Route::middleware(['auth', 'role:patron'])->group(function () {
 
     Route::get('/projects', [PatronController::class, 'projects'])->name('projects');
 
+   // Show edit form for a project
+Route::get('projects/{project}/edit', [PatronController::class, 'edit'])->name('projects.edit');
+
+// Update project
+Route::put('projects/{project}', [PatronController::class, 'update'])->name('projects.update');
+
+// Delete project
+Route::delete('projects/{project}', [PatronController::class, 'destroy'])->name('projects.destroy');
+//Route::get('/projects', [PatronController::class, 'index'])->name('projects.index');
 
     Route::get('/patron/update-description', function () {
         return view('patron.editDescription'); // Ensure this file exists in resources/views/patron/
@@ -130,6 +139,9 @@ Route::middleware(['auth', 'role:patron'])->group(function () {
     Route::post('/patron/active-tasks/{id}/comment', [TemplateController::class, 'addComment'])->name('patron.add_comment');
     Route::post('/patron/active-tasks/{id}/confirm', [TemplateController::class, 'confirmTaskCompletion'])->name('patron.confirm_task');
 });
+
+
+
 //research_assistant route
 Route::middleware(['auth', 'role:research_assistant'])->group(function () {
     Route::get('/research_assistant/dashboard', [ResearchAssistantController::class, 'dashboard'])->name('research_assistant.dashboard');

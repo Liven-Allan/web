@@ -1,4 +1,13 @@
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
+<style>.back-to-home-btn {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+}
+
+.back-to-home-btn:hover {
+    background-color: white;
+    color: black;
+}</style><ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
     style="position: fixed; top: 0; left: 0; width: 250px; height: 100vh; overflow-y: auto; overflow-x: hidden; z-index: 1050;">
 
     <!-- Sidebar content here -->
@@ -140,10 +149,11 @@
             <a class="nav-link" href="{{ route('patron.createProject') }}">
                 <i class="fas fa-fw fa-plus-circle"></i>
                 <span>Create Project</span>
+                
             </a>
         </li>
     @endif
-  
+    <a href="{{ url('/') }}" class="back-to-home-btn">Back to Home</a>
 
 
 

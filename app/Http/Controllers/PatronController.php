@@ -20,6 +20,7 @@ class PatronController extends Controller
     {
         // Retrieve projects from the database
         $projects = Project::orderBy('priority', 'desc')->get();
+        
 
         // Pass projects data to the view
         return view('patron.dashboard', compact('projects'));
@@ -88,6 +89,7 @@ class PatronController extends Controller
     {
         // Retrieve projects from the database
         $projects = Project::orderBy('priority', 'desc')->get();
+        
 
         // Pass projects data to the view
         return view('frontend.master', compact('projects'));
@@ -95,18 +97,80 @@ class PatronController extends Controller
 
     public function projects()
     {
-        $descriptionText = DescriptionText::latest()->first(); // Get the latest description
-        $projects = Project::orderBy('priority', 'desc')->get(); // Fetch projects
+        // Get the latest description
+        $descriptionText = DescriptionText::latest()->first(); 
+        // Fetch 6 projects per page
+        $projects = Project::orderBy('priority', 'desc')->paginate(8); 
         return view('frontend.master', compact('projects' , 'descriptionText'));
-
-        //     // Fetch the top 4 projects, ordered by priority (highest first)
-        // $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
-
-        // // Return the projects view with the data
-        // return view('frontend.master', compact('projects'));
     }
 
 
+
+    public function edit(Project $project)
+{
+    // Check if the current user is the patron of the project
+    if ($project->patron_id !== auth()->id()) {
+        return redirect()->route('projects.index')->with('error', 'You are not authorized to edit this project.');
+    }
+
+    return view('projects.edit', compact('project'));
+}
+
+public function update(Request $request, Project $project)
+{
+    // Check if the current user is the patron of the project
+    if ($project->patron_id !== auth()->id()) {
+        return redirect()->route('projects.index')->with('error', 'You are not authorized to update this project.');
+    }
+
+    // Validate incoming request data
+    $validatedData = $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'url' => 'nullable|url',
+        'priority' => 'required|integer|in:1,2,3',
+    ]);
+
+    // If image is uploaded, store it
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('projects', 'public');
+        $project->image = $imagePath;
+    }
+
+    // Update project fields
+    $project->title = $validatedData['title'];
+    $project->description = $validatedData['description'];
+    $project->url = $validatedData['url'] ?? null;
+    $project->priority = $validatedData['priority'];
+
+    // Save changes
+    $project->save();
+
+    // Redirect back to the projects index with success message
+    // return redirect()->route('projects.index')->with('success', 'Project updated successfully!');
+    return redirect('/projects')->with('success', 'Project updated successfully.');
+
+}
+
+public function destroy(Project $project)
+{
+    // Check if the current user is the patron of the project
+    if ($project->patron_id !== auth()->id()) {
+        return redirect()->route('projects.index')->with('error', 'You are not authorized to delete this project.');
+    }
+
+    // Delete the project
+    $project->delete();
+
+    // Redirect back with success message
+    // return redirect()->route('projects.index')->with('success', 'Project deleted successfully!');
+    return redirect('/projects')->with('success', 'Project updated successfully.');
+
+}
+
+
+    
 
     public function createTask()
     {

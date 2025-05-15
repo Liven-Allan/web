@@ -196,43 +196,101 @@
         </div>
     </nav>
 
-    <!-- Add margin-top to account for fixed navbar -->
-    
-        <div class="hero">
-            <div class="hero-content">
-                <h1 class="hero-title">BIG DATA ANALYTICS LAB</h1>
-                <p class="hero-text">
-                    {{ $descriptionText->content ?? 'Noooooo description available' }}
-                </p>
-            </div>
+    <section class="projects">
+        <div class="section-title">
+            <h2>CURRENT RESEARCH PROJECTS</h2>
+                <!-- Check if the current route is the main page and display the 'VIEW ALL' button -->
+                @if(Route::currentRouteName() == '') <!-- Assuming the main page is named 'home' -->
+         
+                    <a href="{{ route('projects') }}" class="view-all-btn"> <!-- Add link to projects page -->
+                    VIEW ALL <span class="next-icon">▶</span>
+                    </a>
+                @endif
+
+        </div>
+        <div class="card-grid">
+             <!-- Loop through each project -->
+            @foreach($projects as $project)
+                <div class="project-card">
+                    <div class="card-image">
+                       <!-- Display the project image -->
+                       @if($project->image)
+                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
+                       @else
+                        <img src="{{ asset('images/default-project.png') }}" alt="Default Image">
+                       @endif
+                    </div>
+                 <div class="card-content">
+                    <h3>{{ $project->title }}</h3>
+                    <a href="{{ $project->url }}" target="_blank">{{ $project->url }}</a>
+                    <p>{{ $project->description }}</p>
+
+                    <!-- Display edit and delete buttons only if user is the owner -->
+                    @if(auth()->check() && $project->patron_id === auth()->id())
+                       <div class="project-actions">
+                          <!-- Edit button -->
+                          <a href="{{ route('projects.edit', $project->id) }}" class="edit-btn">Edit</a>
+
+                          <!-- Delete button inside a form -->
+                          <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="delete-btn">Delete</button>
+                          </form>
+                        </div>
+                    @endif
+                 </div>
+                </div>
+            @endforeach
+
+
         </div>
 
-        <!-- Projects Section -->
-        <section class="projects">
-            <div class="section-title">
-                <h2>CURRENT RESEARCH PROJECTS</h2>
-                <!-- <div class="view-all-btn">
-                    VIEW ALL <span class="next-icon">▶</span>
-                </div> -->
+        <div class="pagination-container">
+             <!-- Pagination Container -->
+             @if(isset($projects) && $projects instanceof \Illuminate\Pagination\LengthAwarePaginator)
+               <div class="flex justify-center mt-6">
+                 <div class="pagination bg-white shadow-md rounded-lg p-4">
+                   {{ $projects->links() }}
+                 </div>
+               </div>
+              @endif
+        </div>
+       
+
+
+                </div><a href="{{ url('/') }}" class="back-to-home-btn">Back to Home</a>
+
             </div>
-            <div class="card-grid">
-                <div class="project-card">
-                    <!-- Projects according to priority -->
-                    <div class="projects-container">
-                        @foreach($projects as $project)
-                            <div class="project-card">
-                                <div class="card-image">
-                                    @if($project->image)
-                                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
-                                    @else
-                                        <img src="{{ asset('images/default-project.png') }}" alt="Default Image">
-                                    @endif
-                                    <h3>{{ $project->title }}</h3>
-                                    <a href="{{ $project->url }}" target="_blank">{{ $project->url }}</a>
-                                    <p>{{ $project->description }}</p>
-                                </div>
-                            </div>
-                        @endforeach
+    </section>
+ 
+
+
+    <!-- Add this section before the footer -->
+    <section class="news-events-section">
+        <div class="news-events-container">
+            <!-- Left Column - Featured Event -->
+            <div class="featured-event">
+                <h2>News & Upcoming Events</h2>
+                <img src="{{ asset('assets/images/calculator-image.png') }}" alt="SQL OR DEATH" class="featured-image">
+                <div class="date">January 30, 2025</div>
+                <h3>SQL OR DEATH SEMINAR SERIES – SPRING 2025</h3>
+                <p>Pittsburgh, PA — The Carnegie Mellon University Database Research Group is pleased to announce the
+                    spring semester of our database systems seminar series...</p>
+                <a href="#" class="read-more">READ MORE ›</a>
+            </div>
+
+            <!-- Right Column - News and Events Lists -->
+            <div class="news-events-lists">
+                <!-- Recent News Section -->
+                <div class="news-section">
+                    <div class="section-header">
+                        <h2>Recent News</h2>
+                        <div class="view-all">
+                            <a href="#" class="nav-arrow">◀</a>
+                            <a href="#" class="nav-arrow">▶</a>
+
+                        </div>
                     </div>
                 </div>
             </div>

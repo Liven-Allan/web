@@ -19,18 +19,18 @@ class TemplateController extends Controller
 {
     public function index()
     {
+        // Get the latest description
+        $descriptionText = DescriptionText::latest()->first(); 
 
-        // $projects = Project::orderBy('priority', 'desc')->get(); // Fetch projects
-        // return view('frontend.master', compact('projects'));
+         // Fetch the top 4 projects, ordered by priority (highest first)
+    // $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
+    $projects = Project::orderBy('priority', 'asc')   // Order by priority in ascending order (lowest first)
+    ->orderBy('created_at', 'desc')  // Then, order by creation date in ascending order (oldest first)
+    ->limit(4)  
+    ->get();
 
-        $descriptionText = DescriptionText::latest()->first(); // Get the latest description
+     return view('frontend.master', compact('projects', 'descriptionText'));
 
-        // Fetch the top 4 projects, ordered by priority (highest first)
-        $projects = Project::orderBy('priority', 'desc')->limit(4)->get();
-
-        // Return the projects view with the data
-
-        return view('frontend.master', compact('projects', 'descriptionText'));
 
 
     }
