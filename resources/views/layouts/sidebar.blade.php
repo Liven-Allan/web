@@ -7,6 +7,25 @@
     </a>
     <hr class="sidebar-divider my-0">
     <!-- Dashboard Link -->
+     <li class="nav-item">
+        @if(auth()->user()->hasRole('admin'))
+            <a class="nav-link" href="{{ route('home') }}">
+              <i class="fas fa-sign-out-alt me-2"></i>
+                <span>Home</span>
+            </a>
+        @elseif(auth()->user()->hasRole('patron'))
+            <a class="nav-link" href="{{ route('home') }}">
+             <i class="fas fa-sign-out-alt me-2"></i>
+                <span>Home</span>
+            </a>
+        @elseif(auth()->user()->hasRole('research_assistant'))
+            <a class="nav-link" href="{{ route('home') }}">
+               <i class="fas fa-sign-out-alt me-2"></i>
+                <span>Home</span>
+            </a>
+        @endif
+    </li>
+
     <li class="nav-item">
         @if(auth()->user()->hasRole('admin'))
             <a class="nav-link" href="{{ route('admin.dashboard') }}">
@@ -25,6 +44,8 @@
             </a>
         @endif
     </li>
+
+    
     
      <!-- View users -->
 @if(auth()->user()->hasRole('admin'))
