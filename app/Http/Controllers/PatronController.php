@@ -72,7 +72,7 @@ class PatronController extends Controller
         $project->save(); // Save the project
 
         // Redirect to the projects route after saving the project
-        return redirect()->route('projects')->with('success', 'Project added successfully');
+        return redirect()->route('Allprojects')->with('success', 'Project added successfully');
     }
 
 
@@ -95,13 +95,13 @@ class PatronController extends Controller
         return view('frontend.master', compact('projects'));
     }
 
-    public function projects()
+    public function Allprojects()
     {
         // Get the latest description
         $descriptionText = DescriptionText::latest()->first(); 
         // Fetch 6 projects per page
         $projects = Project::orderBy('priority', 'desc')->paginate(8); 
-        return view('frontend.master', compact('projects' , 'descriptionText'));
+        return view('frontend.projectspage', compact('projects' , 'descriptionText'));
     }
 
 

@@ -38,7 +38,7 @@
     width: 100%;
     max-width: 1000px;
     /* Match other sections */
-    padding: 0 2rem;
+    padding: 2rem 2rem;
     /* Match other sections' padding */
 }
 
@@ -126,11 +126,11 @@ body {
     background-position: center;
     color: #ffffff;
     font-weight: bold;
-    font-size: 30px;
+    /* font-size: 30px; */
     padding: 0px;
     display: flex;
     justify-content: center;
-
+    margin-top: -10;
     position: relative;
 }
 
@@ -149,7 +149,7 @@ body {
 
 .hero-title {
 
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: var(--text-light);
     background-color: var(--primary-color);
     padding: 1rem;

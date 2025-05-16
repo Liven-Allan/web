@@ -11,18 +11,13 @@ class Project extends Model
     protected $fillable = [
         'title',
         'description',
-        'image',
         'url',
-        'priority',  
+        'image',
         'patron_id'
-      
     ];
-  
 
-
-    // Define the relationship to the Patron model (if exists)
     public function patron()
     {
-        return $this->belongsTo(Patron::class);
+        return $this->belongsTo(User::class, 'patron_id');
     }
 }

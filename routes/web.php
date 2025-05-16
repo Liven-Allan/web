@@ -28,7 +28,7 @@ use App\Http\Controllers\AllProjectsController;
 //Route::get('/',[TemplateController::class,'index']);
 Route::get('/', [TemplateController::class, 'index'])->name('home');
 Route::get('/people', [TemplateController::class, 'people'])->name('people');
-Route::get('/projects', [PatronController::class, 'projects'])->name('projects');
+Route::get('/Allprojects', [PatronController::class, 'Allprojects'])->name('Allprojects');
 Route::get('/publications', [TemplateController::class, 'publications'])->name('publications');
 Route::get('/courses', [TemplateController::class, 'courses'])->name('courses');
 Route::get('/news', [TemplateController::class, 'news'])->name('news');

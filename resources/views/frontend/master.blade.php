@@ -91,208 +91,184 @@
         }
 
         /* Adjust the margin-top for the content below navbar */
-      
+        .content-wrapper {
+            margin-top: -10px;
+        }
+
+        /* Projects Section Styling */
+        .projects {
+            padding: 2rem 0;
+        }
+
+        .projects .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            justify-content: center;
+            margin: 2rem auto;
+            max-width: 1400px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+            width: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.25rem;
+        }
+
+        .card-content h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .card-content a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-content p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .edit-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            text-decoration: none;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+        }
+
+        .edit-btn:hover {
+            background: #218838;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
     </style>
 </head>
 
 <body>
+       @include('components.navbar')
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm">
-        <div class="container">
-            <!-- Logo and Brand -->
-            <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
-                <img src="{{ asset('assets/images/bigdata.png') }}" alt="Big Data Analytics Lab" class="bdal-logo me-2"
-                    style="height: 35px;">
-                <span>Big Data Analytics Lab</span>
-            </a>
+   
 
-            <!-- Mobile Toggle Button -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <!-- Navigation Links -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('people') ? 'active' : '' }}"
-                            href="{{ route('people') }}">
-                            People
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('projects') ? 'active' : '' }}"
-                            href="{{ route('projects') }}">
-                            Projects
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('publications') ? 'active' : '' }}"
-                            href="{{ route('publications') }}">
-                            Publications
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('courses') ? 'active' : '' }}"
-                            href="{{ route('courses') }}">
-                            Courses
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('news') ? 'active' : '' }}" href="{{ route('news') }}">
-                            News
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}"
-                            href="{{ route('events') }}">
-                            Events
-                        </a>
-                    </li>
-                </ul>
-
-                <!-- Login Button -->
-                <div class="nav-item">
-                    @auth
-                        <div class="dropdown">
-                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user me-1"></i>{{ Auth::user()->name }}
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">
-                                        <i class="fas fa-user-cog me-2"></i>Profile
-                                    </a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                            
-                               <li>
-                                    <a class="dropdown-item" href="{{ route(Auth::user()->role . '.dashboard') }}">
-                                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
-                                    </a>
-                                </li>
-
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item text-danger">
-                                            <i class="fas fa-sign-out-alt me-2"></i>Logout
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-primary">
-                            <i class="fas fa-sign-in-alt me-1"></i>LOG IN
-                        </a>
-                    @endauth
-                </div>
+    <!-- Add margin-top to account for fixed navbar -->
+    <div class="content-wrapper">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">BIG DATA ANALYTICS LAB</h1>
+                <p class="hero-text">
+                    {{ $descriptionText->content ?? 'No description available' }}
+                </p>
             </div>
         </div>
-    </nav>
 
-    <section class="projects">
-        <div class="section-title">
-            <h2>CURRENT RESEARCH PROJECTS</h2>
-                <!-- Check if the current route is the main page and display the 'VIEW ALL' button -->
-                @if(Route::currentRouteName() == '') <!-- Assuming the main page is named 'home' -->
-         
-                    <a href="{{ route('projects') }}" class="view-all-btn"> <!-- Add link to projects page -->
-                    VIEW ALL <span class="next-icon">▶</span>
-                    </a>
-                @endif
-
-        </div>
-        <div class="card-grid">
-             <!-- Loop through each project -->
-            @foreach($projects as $project)
-                <div class="project-card">
-                    <div class="card-image">
-                       <!-- Display the project image -->
-                       @if($project->image)
-                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
-                       @else
-                        <img src="{{ asset('images/default-project.png') }}" alt="Default Image">
-                       @endif
-                    </div>
-                 <div class="card-content">
-                    <h3>{{ $project->title }}</h3>
-                    <a href="{{ $project->url }}" target="_blank">{{ $project->url }}</a>
-                    <p>{{ $project->description }}</p>
-
-                    <!-- Display edit and delete buttons only if user is the owner -->
-                    @if(auth()->check() && $project->patron_id === auth()->id())
-                       <div class="project-actions">
-                          <!-- Edit button -->
-                          <a href="{{ route('projects.edit', $project->id) }}" class="edit-btn">Edit</a>
-
-                          <!-- Delete button inside a form -->
-                          <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="delete-btn">Delete</button>
-                          </form>
-                        </div>
+        <!-- Projects Section -->
+        <section class="projects">
+            <div class="container">
+                <div class="section-title d-flex justify-content-between align-items-center mb-4">
+                    <h2>CURRENT RESEARCH PROJECTS</h2>
+                    @if(Route::currentRouteName() == '')
+                        <a href="{{ route('projects') }}" class="view-all-btn">
+                            VIEW ALL <span class="next-icon">▶</span>
+                        </a>
                     @endif
-                 </div>
                 </div>
-            @endforeach
 
+                <div class="card-grid">
+                    @foreach($projects as $project)
+                        <div class="project-card">
+                            <div class="card-image">
+                                @if($project->image)
+                                    <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
+                                @else
+                                    <img src="{{ asset('images/default-project.png') }}" alt="Default Image">
+                                @endif
+                            </div>
+                            <div class="card-content">
+                                <h3>{{ $project->title }}</h3>
+                                <a href="{{ $project->url }}" target="_blank">{{ $project->url }}</a>
+                                <p>{{ $project->description }}</p>
 
-        </div>
-
-        <div class="pagination-container">
-             <!-- Pagination Container -->
-             @if(isset($projects) && $projects instanceof \Illuminate\Pagination\LengthAwarePaginator)
-               <div class="flex justify-center mt-6">
-                 <div class="pagination bg-white shadow-md rounded-lg p-4">
-                   {{ $projects->links() }}
-                 </div>
-               </div>
-              @endif
-        </div>
-       
-
-
-                </div><a href="{{ url('/') }}" class="back-to-home-btn">Back to Home</a>
-
-            </div>
-    </section>
- 
-
-
-    <!-- Add this section before the footer -->
-    <section class="news-events-section">
-        <div class="news-events-container">
-            <!-- Left Column - Featured Event -->
-            <div class="featured-event">
-                <h2>News & Upcoming Events</h2>
-                <img src="{{ asset('assets/images/calculator-image.png') }}" alt="SQL OR DEATH" class="featured-image">
-                <div class="date">January 30, 2025</div>
-                <h3>SQL OR DEATH SEMINAR SERIES – SPRING 2025</h3>
-                <p>Pittsburgh, PA — The Carnegie Mellon University Database Research Group is pleased to announce the
-                    spring semester of our database systems seminar series...</p>
-                <a href="#" class="read-more">READ MORE ›</a>
-            </div>
-
-            <!-- Right Column - News and Events Lists -->
-            <div class="news-events-lists">
-                <!-- Recent News Section -->
-                <div class="news-section">
-                    <div class="section-header">
-                        <h2>Recent News</h2>
-                        <div class="view-all">
-                            <a href="#" class="nav-arrow">◀</a>
-                            <a href="#" class="nav-arrow">▶</a>
-
+                                @if(auth()->check() && $project->patron_id === auth()->id())
+                                    <div class="project-actions">
+                                        <a href="{{ route('projects.edit', $project->id) }}" class="edit-btn">Edit</a>
+                                        <form action="{{ route('projects.destroy', $project->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="delete-btn">Delete</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
+
+                @if(isset($projects) && $projects instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                    <div class="pagination-container">
+                        {{ $projects->links() }}
+                    </div>
+                @endif
             </div>
         </section>
 
@@ -378,7 +354,7 @@
                 </div>
             </div>
         </section>
-   
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
