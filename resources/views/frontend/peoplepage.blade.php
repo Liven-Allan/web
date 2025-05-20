@@ -82,99 +82,49 @@
         .navbar-toggler-icon {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
-
-        .card {
-            border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            border-radius: 0.5rem;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .card-text {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .btn-outline-primary {
-            color: #28a745;
-            border-color: #28a745;
-            padding: 0.5rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .btn-outline-primary:hover {
-            background-color: #28a745;
-            color: white;
-            transform: translateY(-2px);
-        }
-        .content-wrapper {
-            margin-bottom: 10px;
-        }
     </style>
 </head>
-<bod>
+
+<body>
     @include('components.navbar')
 
     <div class="content-wrapper">
         <div class="projectshero">
-            <span class="text-white p-2 px-sm-3 py-sm-2 page-banner-name rounded text-uppercase fw-bolder">News</span>
+            <span class="text-white p-2 px-sm-3 py-sm-2 page-banner-name rounded text-uppercase fw-bolder">People</span>
         </div>
 
+
         <!-- Projects Section -->
-        <div class="container py-5 mt-5">
+        <div class="container py-5">
+            <h1 class="text-center mb-5">Our Research Team</h1>
+
             <div class="row">
-                @if($news->isEmpty())
-                    <div class="col-12">
-                        <p class="text-center text-muted">No news available at the moment.</p>
-                    </div>
-                @else
-                    @foreach($news as $item)
-                        <div class="col-12 mb-5">
-                            <div class="card h-100 shadow-sm">
-                                <div class="row g-0">
-                                    <div class="col-md-4">
-                                        <img src="{{ $item->image ? asset('storage/' . $item->image) : asset('images/default-news.jpg') }}"
-                                            class="img-fluid rounded-start h-100" alt="{{ $item->title }}"
-                                            style="object-fit: cover;">
+                @foreach($users as $user)
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="{{ $user->profile_picture }}" alt="{{ $user->name }}"
+                                        class="rounded-circle me-3" style="width: 100px; height: 100px; object-fit: cover;">
+                                    <div>
+                                        <h5 class="card-title mb-1">Name : {{ $user->name }}</h5>
+                                        <p class="card-text mb-1">Email : {{ $user->email }}</p>
+                                        <p class="card-text mb-1">Role : {{ $user->role }}</p>
+                                        @if($user->contact)
+                                            <p class="card-text mb-0"><small class="text-muted">Contact:
+                                                    {{ $user->contact }}</small></p>
+                                        @endif
                                     </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body p-4">
-                                            <h5 class="card-title mb-2">{{ $item->title }}</h5>
-                                            <small class="text-muted d-block mb-3">{{ $item->date->format('F d, Y') }}</small>
-                                            <p class="card-text mb-4">{{ $item->description }}</p>
-                                            @if($item->url)
-                                                <a href="{{ $item->url }}" class="btn btn-outline-primary" target="_blank">Read More</a>
-                                            @endif
-                                        </div>
-                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <p class="card-text">{{ $user->about ?? 'No information available.' }}</p>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                @endif
+                    </div>
+                @endforeach
             </div>
-
-            @if(isset($news) && $news instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                <div class="d-flex justify-content-center mt-4">
-                    {{ $news->links() }}
-                </div>
-            @endif
         </div>
-    </div>
-
 
         <footer class="footer">
             <div class="footer-container">

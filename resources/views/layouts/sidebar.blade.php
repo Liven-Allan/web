@@ -111,15 +111,15 @@
     @if(auth()->user()->hasRole('admin'))
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.editDescription') }}">
-            <i class="fas fa-fw fa-tasks"></i>
-            <span>Edit Page Description</span>
+            <i class="fas fa-scroll"></i>
+            <span>HomePageDescription</span>
         </a>
     </li>
 @elseif(auth()->user()->hasRole('patron'))
     <li class="nav-item">
         <a class="nav-link" href="{{ route('patron.editDescription') }}">
-            <i class="fas fa-fw fa-tasks"></i>
-            <span>Edit Page Description</span>
+            <i class="fas fa-scroll"></i>
+            <span>Home Page Description</span>
         </a>
     </li>
 
@@ -136,8 +136,27 @@
             </a>
         </li>
     @endif
- <!--return to home   -->
- <li class="nav-item">
+ 
+
+    <!-- add news  -->
+    @if(auth()->user()->hasRole('admin'))
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('news.create') }}">
+            <i class="fas fa-newspapers"></i>
+            <span>News</span>
+        </a>
+    </li>
+@elseif(auth()->user()->hasRole('patron'))
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('news.create') }}">
+            <i class="fas fa-newspaper"></i>
+            <span>News</span>
+        </a>
+    </li>
+        @endif
+
+<!--return to home   -->
+<li class="nav-item">
         @if(auth()->user()->hasRole('admin'))
             <a class="nav-link" href="{{ route('home') }}">
               <i class="fas fa-sign-out-alt me-2"></i>
@@ -155,9 +174,6 @@
             </a>
         @endif
     </li>
-
-
-
 
 </ul>
 

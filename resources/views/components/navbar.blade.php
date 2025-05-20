@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('people') ? 'active' : '' }}" href="{{ route('people') }}">
+                    <a class="nav-link {{ request()->routeIs('peoplepage') ? 'active' : '' }}" href="{{ route('peoplepage') }}">
                         People
                     </a>
                 </li>
@@ -34,14 +34,9 @@
                         Publications
                     </a>
                 </li>
+               
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('courses') ? 'active' : '' }}"
-                        href="{{ route('courses') }}">
-                        Courses
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('news') ? 'active' : '' }}" href="{{ route('news') }}">
+                    <a class="nav-link {{ request()->routeIs('newz') ? 'active' : '' }}" href="{{ route('newz') }}">
                         News
                     </a>
                 </li>

@@ -49,11 +49,21 @@
                                 @enderror
                             </div>
 
+            
+
+
                             <div class="form-group">
                                 <label for="email">{{ __('Email') }}</label>
                                 <input id="email" name="email" type="email" class="form-control"
                                     value="{{ old('email', $user->email) }}" required>
                                 @error('email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                                            <div class="form-group">
+                                <label for="about">{{ __('About') }}</label>
+                                <textarea id="about" name="about" class="form-control" rows="4">{{ old('about', $user->About) }}</textarea>
+                                @error('about')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>

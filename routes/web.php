@@ -8,6 +8,7 @@ use App\Mail\ParticipantNotification;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AllProjectsController;
+use App\Http\Controllers\NewsController;
 
 
 /*
@@ -27,11 +28,18 @@ use App\Http\Controllers\AllProjectsController;
 
 //Route::get('/',[TemplateController::class,'index']);
 Route::get('/', [TemplateController::class, 'index'])->name('home');
-Route::get('/people', [TemplateController::class, 'people'])->name('people');
+//Route::get('/people', [TemplateController::class, 'people'])->name('people');
+Route::get('/peoplepage', [TemplateController::class, 'peoplepage'])->name('peoplepage');
+
 Route::get('/Allprojects', [PatronController::class, 'Allprojects'])->name('Allprojects');
 Route::get('/publications', [TemplateController::class, 'publications'])->name('publications');
 Route::get('/courses', [TemplateController::class, 'courses'])->name('courses');
-Route::get('/news', [TemplateController::class, 'news'])->name('news');
+Route::get('/newz', [NewsController::class, 'index'])->name('newz');
+Route::get('/news', [NewsController::class, 'create'])->name('news.create');
+Route::get('/news', [NewsController::class, 'edit'])->name('news.edit');
+Route::get('/news', [NewsController::class, 'store'])->name('news.store');
+
+
 Route::get('/events', [TemplateController::class, 'events'])->name('events');
 Route::get('/description', [PatronController::class, 'showDescription'])->name('description');
 Route::get('/projectDetails', [TemplateController::class, 'displayProjectdetails']);
@@ -105,15 +113,15 @@ Route::middleware(['auth', 'role:patron'])->group(function () {
 
     Route::get('/projects', [PatronController::class, 'projects'])->name('projects');
 
-   // Show edit form for a project
-Route::get('projects/{project}/edit', [PatronController::class, 'edit'])->name('projects.edit');
+    // Show edit form for a project
+    Route::get('projects/{project}/edit', [PatronController::class, 'edit'])->name('projects.edit');
 
-// Update project
-Route::put('projects/{project}', [PatronController::class, 'update'])->name('projects.update');
+    // Update project
+    Route::put('projects/{project}', [PatronController::class, 'update'])->name('projects.update');
 
-// Delete project
-Route::delete('projects/{project}', [PatronController::class, 'destroy'])->name('projects.destroy');
-//Route::get('/projects', [PatronController::class, 'index'])->name('projects.index');
+    // Delete project
+    Route::delete('projects/{project}', [PatronController::class, 'destroy'])->name('projects.destroy');
+    //Route::get('/projects', [PatronController::class, 'index'])->name('projects.index');
 
     Route::get('/patron/update-description', function () {
         return view('patron.editDescription'); // Ensure this file exists in resources/views/patron/
@@ -155,5 +163,7 @@ Route::middleware(['auth', 'role:research_assistant'])->group(function () {
     Route::post('/research-assistant/change-password', [ResearchAssistantController::class, 'changePassword'])->name('research-assistant.change-password');
 
 });
+
+Route::resource('news', NewsController::class);
 
 require __DIR__ . '/auth.php';

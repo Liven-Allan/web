@@ -337,12 +337,13 @@ class TemplateController extends Controller
         }
     }
 
-    public function people()
+   
+    public function peoplepage()
     {
-        $users = User::where('role', 'research_assistant')->get();
-        return view('frontend.people', compact('users'));
+        $users = User::orderByRaw("FIELD(role, 'admin', 'patron', 'research_assistant')")->get();
+        return view('frontend.peoplepage', compact('users'));
     }
-
+    
     public function publications()
     {
         return view('frontend.publications');
