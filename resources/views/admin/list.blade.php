@@ -54,10 +54,12 @@
         <a href="{{ route('admin.register_user') }}" class="btn btn-primary btn-lg btn-register"> <i class="fas fa-fw fa-user-plus"></i>
         <span>Register Users</span></a>
     </div>
-    <table class="table table-bordered">
+    <div class="table-responsive">
+        <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Name</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Email</th>
                 <th>Contact</th>
                 <th>Profile Picture</th>
@@ -69,7 +71,8 @@
         <tbody>
             @foreach($users as $user)
                 <tr>
-                    <td>{{ $user->name }}</td>
+                    <td>{{ $user->first_name }}</td>
+                    <td>{{ $user->last_name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->contact }}</td>
                     <td class="text-center">
@@ -80,15 +83,15 @@
                     </td>
                     <td>{{ ucfirst($user->role) }}</td>
                     <td>{{ ucfirst($user->status ?? 'active') }}</td>
-                    <td>
-                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <td style="white-space: nowrap;">
+                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
                         @if(($user->status ?? 'active') === 'active')
-                            <form action="{{ route('admin.users.disable', $user->id) }}" method="POST" class="d-inline">
+                            <form action="{{ route('admin.users.disable', $user->id) }}" method="POST" class="d-inline me-2">
                                 @csrf
                                 <button type="submit" class="btn btn-secondary btn-sm">Disable</button>
                             </form>
                         @else
-                            <form action="{{ route('admin.users.enable', $user->id) }}" method="POST" class="d-inline">
+                            <form action="{{ route('admin.users.enable', $user->id) }}" method="POST" class="d-inline me-2">
                                 @csrf
                                 <button type="submit" class="btn btn-success btn-sm">Enable</button>
                             </form>
@@ -98,7 +101,8 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+        </table>
+    </div>
 </div>
 
 <!-- Delete Confirmation Modal -->
@@ -126,7 +130,7 @@
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
         const deleteButtons = document.querySelectorAll('.delete-btn');
         const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        const cancelBtn = document.querySelector('.btn-secondary'); // This is the cancel button
+        const cancelBtn = document.querySelector('#deleteConfirmationModal .btn-secondary'); // This is the cancel button
         const userNameSpan = document.getElementById('user-name');
 
         deleteButtons.forEach(btn => {
@@ -150,9 +154,11 @@
         });
 
         // Handle the cancel button click event to hide the modal
-        cancelBtn.addEventListener('click', function () {
-            deleteModal.hide();
-        });
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function () {
+                deleteModal.hide();
+            });
+        }
     });
 
      // Function to hide success and error messages after a few seconds

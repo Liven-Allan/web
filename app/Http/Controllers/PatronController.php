@@ -188,7 +188,8 @@ public function destroy(Project $project)
     {
         try {
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
                 'role' => 'required|in:admin,patron,research_assistant',
                 'password' => 'required|string|min:6', // Add password validation
@@ -199,7 +200,9 @@ public function destroy(Project $project)
 
             // Create new user
             $user = new User();
-            $user->name = $validated['name'];
+            $user->name = trim($validated['first_name'] . ' ' . $validated['last_name']);
+            $user->first_name = $validated['first_name'];
+            $user->last_name = $validated['last_name'];
             $user->email = $validated['email'];
             $user->password = Hash::make($randomPassword); // Hash the generated password
             $user->role = $validated['role'];
@@ -321,7 +324,9 @@ public function destroy(Project $project)
             'contact' => 'nullable|string|max:255',
         ]);
 
-        $user->name = $validated['name'];
+        $user->name = trim((string) $request->input('first_name') . ' ' . (string) $request->input('last_name'));
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
         $user->email = $validated['email'];
         $user->role = $validated['role'];
         $user->contact = $validated['contact'] ?? $user->contact;

@@ -16,6 +16,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $contact
  * @property string $password
  * @property string $status
+ * @property string|null $first_name
+ * @property string|null $last_name
  */
 class User extends Authenticatable
 {
@@ -35,6 +37,8 @@ class User extends Authenticatable
         'password_changed',
         'about',
         'status',
+        'first_name',
+        'last_name',
     ];
 
     /**
@@ -56,6 +60,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getFullNameAttribute(): string
+    {
+        $first = trim((string) $this->first_name);
+        $last = trim((string) $this->last_name);
+        if ($first === '' && $last === '') {
+            return (string) $this->name;
+        }
+        return trim($first . ' ' . $last);
+    }
 
     public function hasRole(string $role): bool
     {
