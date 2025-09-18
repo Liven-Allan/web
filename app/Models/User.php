@@ -8,6 +8,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $role
+ * @property string|null $contact
+ * @property string $password
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -52,8 +60,14 @@ class User extends Authenticatable
         return $this->role === $role;
     }
 
-    public function roles(): BelongsToMany
+    /**
+     * Relation to roles via pivot table. Kept for compatibility.
+     * Uses string-based model reference to avoid hard dependency.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+        return $this->belongsToMany('App\\Models\\Role', 'role_user', 'user_id', 'role_id');
     }
 }

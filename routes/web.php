@@ -75,6 +75,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // View Users
     Route::get('/admin/users', [AdminController::class, 'listUsers'])->name('admin.users.list');
     Route::delete('/admin/users/{id}/delete', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
+    // Edit/Update Users
+    Route::get('/admin/users/{id}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
+    Route::put('/admin/users/{id}', [AdminController::class, 'updateUser'])->name('admin.users.update');
 
     // View Active Tasks for Admin
     Route::get('/admin/active-tasks', [TemplateController::class, 'listAdminActiveTasks'])->name('admin.active_tasks');
@@ -141,6 +144,9 @@ Route::middleware(['auth', 'role:patron'])->group(function () {
     // View Users
     Route::get('/patron/users', [PatronController::class, 'listUsers'])->name('patron.users.list');
     Route::delete('/patron/users/{id}/delete', [PatronController::class, 'deleteUser'])->name('patron.users.delete');
+    // Edit/Update Users (limited)
+    Route::get('/patron/users/{id}/edit', [PatronController::class, 'editUser'])->name('patron.users.edit');
+    Route::put('/patron/users/{id}', [PatronController::class, 'updateUser'])->name('patron.users.update');
 
     // View Active Tasks for Patron
     Route::get('/patron/active-tasks', [TemplateController::class, 'listPatronActiveTasks'])->name('patron.active_tasks');

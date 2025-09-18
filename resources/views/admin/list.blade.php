@@ -79,7 +79,7 @@
                     </td>
                     <td>{{ ucfirst($user->role) }}</td>
                     <td>
-                        <!-- Delete Button with Modal Trigger -->
+                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $user->id }}" data-name="{{ $user->name }}">Delete</button>
                     </td>
                 </tr>

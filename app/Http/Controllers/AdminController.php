@@ -97,16 +97,49 @@ public function updateDescription(Request $request)
         'content' => 'required|string',
     ]);
 
-    $user = Auth::user();
+    $userId = Auth::id();
     
     // Check if the user already has a hero text entry
     DescriptionText::updateOrCreate(
-        ['user_id' => $user->id],
-        ['content' => $request->content]
+        ['user_id' => $userId],
+        ['content' => $request->input('content')]
     );
 
     
     return redirect()->back()->with('success', 'Text updated successfully!');
 }
+    
+    public function editUser($id)
+    {
+        $user = User::findOrFail($id);
+        $roles = ['admin', 'patron', 'research_assistant'];
+        return view('admin.edit_user', compact('user', 'roles'));
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role' => 'required|in:admin,patron,research_assistant',
+            'password' => 'nullable|string|min:6',
+            'contact' => 'nullable|string|max:255',
+        ]);
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->role = $validated['role'];
+        $user->contact = $validated['contact'] ?? $user->contact;
+
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.users.list')->with('success', 'User updated successfully');
+    }
         
 }

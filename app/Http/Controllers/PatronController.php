@@ -237,12 +237,12 @@ public function destroy(Project $project)
             'content' => 'required|string',
         ]);
 
-        $user = Auth::user();
+        $userId = Auth::id();
 
         // Check if the user already has a hero text entry
         DescriptionText::updateOrCreate(
-            ['user_id' => $user->id],
-            ['content' => $request->content]
+            ['user_id' => $userId],
+            ['content' => $request->input('content')]
         );
 
 
@@ -264,5 +264,44 @@ public function destroy(Project $project)
         $user->delete();
 
         return redirect()->route('patron.users.list')->with('success', 'User deleted successfully.');
+    }
+
+    public function editUser($id)
+    {
+        $user = User::findOrFail($id);
+        if ($user->role === 'admin') {
+            return redirect()->route('patron.users.list')->with('error', 'Not authorized to edit admin users.');
+        }
+        $roles = ['patron', 'research_assistant'];
+        return view('patron.edit_user', compact('user', 'roles'));
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        if ($user->role === 'admin') {
+            return redirect()->route('patron.users.list')->with('error', 'Not authorized to edit admin users.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role' => 'required|in:patron,research_assistant',
+            'password' => 'nullable|string|min:6',
+            'contact' => 'nullable|string|max:255',
+        ]);
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->role = $validated['role'];
+        $user->contact = $validated['contact'] ?? $user->contact;
+
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('patron.users.list')->with('success', 'User updated successfully.');
     }
 }
