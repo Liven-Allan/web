@@ -85,10 +85,29 @@ public function deleteUser($id)
         return redirect()->route('admin.users.list')->with('error', 'You cannot delete your own account.');
     }
 
-    // Delete the user
+    // Hard delete
     $user->delete();
 
     return redirect()->route('admin.users.list')->with('success', 'User deleted successfully');
+}
+
+public function disableUser($id)
+{
+    $user = User::findOrFail($id);
+    if ($user->id == auth()->id()) {
+        return redirect()->route('admin.users.list')->with('error', 'You cannot disable your own account.');
+    }
+    $user->status = 'disabled';
+    $user->save();
+    return redirect()->route('admin.users.list')->with('success', 'User disabled');
+}
+
+public function enableUser($id)
+{
+    $user = User::findOrFail($id);
+    $user->status = 'active';
+    $user->save();
+    return redirect()->route('admin.users.list')->with('success', 'User enabled');
 }
 
 public function updateDescription(Request $request)

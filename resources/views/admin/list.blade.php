@@ -62,6 +62,7 @@
                 <th>Contact</th>
                 <th>Profile Picture</th>
                 <th>Role</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -78,8 +79,20 @@
                              width="50" height="50">
                     </td>
                     <td>{{ ucfirst($user->role) }}</td>
+                    <td>{{ ucfirst($user->status ?? 'active') }}</td>
                     <td>
                         <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        @if(($user->status ?? 'active') === 'active')
+                            <form action="{{ route('admin.users.disable', $user->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-secondary btn-sm">Disable</button>
+                            </form>
+                        @else
+                            <form action="{{ route('admin.users.enable', $user->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-success btn-sm">Enable</button>
+                            </form>
+                        @endif
                         <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $user->id }}" data-name="{{ $user->name }}">Delete</button>
                     </td>
                 </tr>

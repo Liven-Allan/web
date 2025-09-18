@@ -255,15 +255,45 @@ public function destroy(Project $project)
     {
         $user = User::findOrFail($id);
 
-        // Ensure patrons cannot delete other users
+        // Ensure patrons cannot delete themselves
         if ($user->id == auth()->id()) {
             return redirect()->route('patron.users.list')->with('error', 'You cannot delete your own account.');
         }
 
-        // Delete the user
+        // Prevent deleting admin users
+        if ($user->role === 'admin') {
+            return redirect()->route('patron.users.list')->with('error', 'Not authorized to delete admin users.');
+        }
+
+        // Hard delete
         $user->delete();
 
         return redirect()->route('patron.users.list')->with('success', 'User deleted successfully.');
+    }
+
+    public function disableUser($id)
+    {
+        $user = User::findOrFail($id);
+        if ($user->id == auth()->id()) {
+            return redirect()->route('patron.users.list')->with('error', 'You cannot disable your own account.');
+        }
+        if ($user->role === 'admin') {
+            return redirect()->route('patron.users.list')->with('error', 'Not authorized to disable admin users.');
+        }
+        $user->status = 'disabled';
+        $user->save();
+        return redirect()->route('patron.users.list')->with('success', 'User disabled');
+    }
+
+    public function enableUser($id)
+    {
+        $user = User::findOrFail($id);
+        if ($user->role === 'admin') {
+            return redirect()->route('patron.users.list')->with('error', 'Not authorized to enable admin users.');
+        }
+        $user->status = 'active';
+        $user->save();
+        return redirect()->route('patron.users.list')->with('success', 'User enabled');
     }
 
     public function editUser($id)
