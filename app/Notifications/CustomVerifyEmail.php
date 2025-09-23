@@ -44,12 +44,11 @@ class CustomVerifyEmail extends Notification implements ShouldQueue
         $verificationUrl = $this->verificationUrl($notifiable);
 
         return (new MailMessage)
-            ->subject(Lang::get('Verify Your Email'))
+            ->subject('Big Data Lab - Verify Your Email')
             ->markdown('emails.verify-email', [
                 'name' => $notifiable->name,
                 'email' => $notifiable->email,
                 'url' => $verificationUrl,
-                'registered_by' => $this->registeredBy,
             ]);
     }
 }

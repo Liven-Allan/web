@@ -37,12 +37,12 @@
 <body>
     <div class="container">
         <p>Hello {{ $name }},</p>
-        <p>An account has been created for you by {{ $registered_by }}.</p>
-        <p>Your email: {{ $email }}</p>
-        <p>Please click the button below to verify your email address. You will then be prompted to set your password.</p>
+        <p>Welcome to <strong>Big Data Lab</strong>. An account has been created for you.</p>
+        <p><strong>Email:</strong> {{ $email }}</p>
+        <p>To activate your account, please verify your email address using the button below. You will be prompted to set your password.</p>
         <a href="{{ $url }}" class="button">Verify Email Address</a>
         <p>This link will expire in {{ config('auth.verification.expire', 60) }} minutes.</p>
-        <p>If you did not create an account, no further action is required.</p>
+        <p>If you did not expect this email, you can safely ignore it.</p>
     </div>
 </body>
 </html>
