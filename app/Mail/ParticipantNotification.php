@@ -12,15 +12,24 @@ class ParticipantNotification extends Mailable
 
     public $emailData;
 
+    /**
+     * Create a new message instance.
+     */
     public function __construct($emailData)
     {
         $this->emailData = $emailData;
     }
 
+    /**
+     * Build the message.
+     */
     public function build()
     {
-        return $this->subject('Set Up Your Account')
-                    ->view('emails.participant_notification') // Assume you have this view
-                    ->with(['emailData' => $this->emailData]);
+        return $this->subject('Welcome to the System')
+                    ->view('emails.registration-notification')
+                    ->with(['emailData' => $this->emailData]); // Ensure it's passed correctly
+
+                    
     }
+    
 }

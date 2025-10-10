@@ -180,7 +180,8 @@ public function destroy(Project $project)
     public function showRegisterUserForm()
     {
         $roles = ['patron', 'research_assistant'];
-        return view('patron.register_user', compact('roles'));
+        $randomPassword = Str::random(10); // Generate a random 10-character password
+        return view('patron.register_user', compact('roles', 'randomPassword'));
     }
 
     public function registerUser(Request $request)
@@ -190,21 +191,35 @@ public function destroy(Project $project)
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
-                'role' => 'required|in:patron,research_assistant',
+                'role' => 'required|in:admin,patron,research_assistant',
+                'password' => 'required|string|min:6', // Add password validation
             ]);
 
+            // Use the password from the form (already generated)
+            $randomPassword = $validated['password'];
+
+            // Create new user
             $user = new User();
             $user->name = trim($validated['first_name'] . ' ' . $validated['last_name']);
             $user->first_name = $validated['first_name'];
             $user->last_name = $validated['last_name'];
             $user->email = $validated['email'];
+            $user->password = Hash::make($randomPassword); // Hash the generated password
             $user->role = $validated['role'];
             $user->save();
 
-            // Send verification email
-            $user->notify(new \App\Notifications\CustomVerifyEmail(auth()->user()->name ?? 'Patron'));
+            // Prepare email data
+            $emailData = [
+                'name' => $user->name,
+                'email' => $user->email,
+                'password' => $randomPassword, // Send the plain password via email
+                'registered_by' => auth()->user()->name,
+            ];
 
-            return redirect()->route('patron.users.list')->with('success', 'User registered successfully. Verification email sent.');
+            // Send the password via email
+            Mail::to($user->email)->send(new ParticipantNotification($emailData));
+
+            return redirect()->route('patron.users.list')->with('success', 'User registered successfully. Password sent via email.');
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -229,9 +244,8 @@ public function destroy(Project $project)
 
         // Check if the user already has a hero text entry
         DescriptionText::updateOrCreate(
-            // ['user_id' => $user->id],
-              ['user_id' => $userId],
-             ['content' => $request->input('content')]
+            ['user_id' => $userId],
+            ['content' => $request->input('content')]
         );
 
 

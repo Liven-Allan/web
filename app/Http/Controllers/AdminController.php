@@ -8,8 +8,6 @@ use App\Models\User;
 use App\Mail\ParticipantNotification;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Password;
-use App\Notifications\CustomVerifyEmail;
 use App\Models\DescriptionText;
 use Illuminate\Support\Facades\Auth;
 class AdminController extends Controller
@@ -23,11 +21,13 @@ class AdminController extends Controller
           return view('task.create'); 
       }  
 
-  public function showRegisterUserForm()
-    {
-        $roles = ['admin', 'patron', 'research_assistant'];
-        return view('admin.register_user', ['roles' => $roles]);
-    }
+      public function showRegisterUserForm()
+      {
+          $roles = ['patron', 'research_assistant'];
+          $randomPassword = Str::random(10); // Generate a random 10-character password
+          return view('admin.register_user', compact('roles', 'randomPassword'));
+      }
+      
 
       public function registerUser(Request $request)
       {
