@@ -7,12 +7,6 @@ use App\Http\Controllers\ResearchAssistantController;
 use App\Mail\ParticipantNotification;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 use App\Http\Controllers\AllProjectsController;
 use App\Http\Controllers\NewsController;
 
@@ -81,6 +75,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // View Users
     Route::get('/admin/users', [AdminController::class, 'listUsers'])->name('admin.users.list');
     Route::delete('/admin/users/{id}/delete', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
+    Route::post('/admin/users/{id}/disable', [AdminController::class, 'disableUser'])->name('admin.users.disable');
+    Route::post('/admin/users/{id}/enable', [AdminController::class, 'enableUser'])->name('admin.users.enable');
+    // Edit/Update Users
+    Route::get('/admin/users/{id}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
+    Route::put('/admin/users/{id}', [AdminController::class, 'updateUser'])->name('admin.users.update');
 
     // View Active Tasks for Admin
     Route::get('/admin/active-tasks', [TemplateController::class, 'listAdminActiveTasks'])->name('admin.active_tasks');
@@ -147,6 +146,11 @@ Route::middleware(['auth', 'role:patron'])->group(function () {
     // View Users
     Route::get('/patron/users', [PatronController::class, 'listUsers'])->name('patron.users.list');
     Route::delete('/patron/users/{id}/delete', [PatronController::class, 'deleteUser'])->name('patron.users.delete');
+    Route::post('/patron/users/{id}/disable', [PatronController::class, 'disableUser'])->name('patron.users.disable');
+    Route::post('/patron/users/{id}/enable', [PatronController::class, 'enableUser'])->name('patron.users.enable');
+    // Edit/Update Users (limited)
+    Route::get('/patron/users/{id}/edit', [PatronController::class, 'editUser'])->name('patron.users.edit');
+    Route::put('/patron/users/{id}', [PatronController::class, 'updateUser'])->name('patron.users.update');
 
     // View Active Tasks for Patron
     Route::get('/patron/active-tasks', [TemplateController::class, 'listPatronActiveTasks'])->name('patron.active_tasks');
@@ -169,58 +173,6 @@ Route::middleware(['auth', 'role:research_assistant'])->group(function () {
     Route::post('/research-assistant/change-password', [ResearchAssistantController::class, 'changePassword'])->name('research-assistant.change-password');
 
 });
-
-// universal routes
-// Forgot Password Routes (optional for users, but useful)
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->middleware('guest')->name('password.request');
-
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
-
-    $status = Password::sendResetLink($request->only('email'));
-
-    return $status === Password::RESET_LINK_SENT
-        ? back()->with('status', __($status))
-        : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')->name('password.email');
-
-// Reset Password Routes
-Route::get('/reset-password/{token}', function (string $token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
-
-Route::post('/reset-password', function (Request $request) {
-    $request->validate([
-        'token' => 'required',
-        'email' => 'required|email',
-        'password' => 'required|string|min:6|confirmed', // Adjust min:6 to your policy, e.g., min:8
-    ]);
-
-    $status = Password::reset(
-        $request->only('email', 'password', 'password_confirmation', 'token'),
-        function (User $user, string $password) {
-            $user->forceFill([
-                'password' => Hash::make($password)
-            ])->setRememberToken(Str::random(60));
-
-            // Mark email as verified (implicit verification via link click)
-            if ($user->email_verified_at === null) {
-                $user->email_verified_at = now();
-                $user->save();
-            }
-
-            $user->save();
-
-            event(new PasswordReset($user));
-        }
-    );
-
-    return $status === Password::PASSWORD_RESET
-        ? redirect()->route('login')->with('status', __($status)) // Adjust 'login' to your login route
-        : back()->withErrors(['email' => [__($status)]]);
-})->middleware('guest')->name('password.update');
 
 Route::resource('news', NewsController::class);
 

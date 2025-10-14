@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use App\Models\User;
 
 class LoginRequest extends FormRequest
 {
@@ -42,42 +41,11 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        // Provide friendly validation for users who haven't verified or set a password yet
-        $user = User::where('email', $this->input('email'))->first();
-
-        if ($user) {
-            // If password is null/empty (invited user who hasn't set password yet)
-            if (empty($user->password)) {
-                RateLimiter::hit($this->throttleKey());
-
-                throw ValidationException::withMessages([
-                    'email' => 'Your account is not activated yet. Please verify your email to set your password.',
-                ]);
-            }
-
-            // If email is not verified
-            if (is_null($user->email_verified_at)) {
-                RateLimiter::hit($this->throttleKey());
-
-                throw ValidationException::withMessages([
-                    'email' => 'Please verify your email before logging in. Check your inbox for the verification link.',
-                ]);
-            }
-        }
-
-        try {
-            if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-                RateLimiter::hit($this->throttleKey());
-
-                throw ValidationException::withMessages([
-                    'email' => trans('auth.failed'),
-                ]);
-            }
-        } catch (\RuntimeException $e) {
-            // Handle cases like invalid/unsupported hash algorithm on stored password
+        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+
             throw ValidationException::withMessages([
-                'email' => 'Unable to sign in with the provided credentials. If you just received an invite, please verify your email to set your password.',
+                'email' => trans('auth.failed'),
             ]);
         }
 

@@ -180,28 +180,46 @@ public function destroy(Project $project)
     public function showRegisterUserForm()
     {
         $roles = ['patron', 'research_assistant'];
-        return view('patron.register_user', compact('roles'));
+        $randomPassword = Str::random(10); // Generate a random 10-character password
+        return view('patron.register_user', compact('roles', 'randomPassword'));
     }
 
     public function registerUser(Request $request)
     {
         try {
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
-                'role' => 'required|in:patron,research_assistant',
+                'role' => 'required|in:admin,patron,research_assistant',
+                'password' => 'required|string|min:6', // Add password validation
             ]);
 
+            // Use the password from the form (already generated)
+            $randomPassword = $validated['password'];
+
+            // Create new user
             $user = new User();
-            $user->name = $validated['name'];
+            $user->name = trim($validated['first_name'] . ' ' . $validated['last_name']);
+            $user->first_name = $validated['first_name'];
+            $user->last_name = $validated['last_name'];
             $user->email = $validated['email'];
+            $user->password = Hash::make($randomPassword); // Hash the generated password
             $user->role = $validated['role'];
             $user->save();
 
-            // Send verification email
-            $user->notify(new \App\Notifications\CustomVerifyEmail(auth()->user()->name ?? 'Patron'));
+            // Prepare email data
+            $emailData = [
+                'name' => $user->name,
+                'email' => $user->email,
+                'password' => $randomPassword, // Send the plain password via email
+                'registered_by' => auth()->user()->name,
+            ];
 
-            return redirect()->route('patron.users.list')->with('success', 'User registered successfully. Verification email sent.');
+            // Send the password via email
+            Mail::to($user->email)->send(new ParticipantNotification($emailData));
+
+            return redirect()->route('patron.users.list')->with('success', 'User registered successfully. Password sent via email.');
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -222,11 +240,11 @@ public function destroy(Project $project)
             'content' => 'required|string',
         ]);
 
-        $user = Auth::user();
+        $userId = Auth::id();
 
         // Check if the user already has a hero text entry
         DescriptionText::updateOrCreate(
-            ['user_id' => $user->id],
+            ['user_id' => $userId],
             ['content' => $request->input('content')]
         );
 
@@ -240,14 +258,85 @@ public function destroy(Project $project)
     {
         $user = User::findOrFail($id);
 
-        // Ensure patrons cannot delete other users
+        // Ensure patrons cannot delete themselves
         if ($user->id == auth()->id()) {
             return redirect()->route('patron.users.list')->with('error', 'You cannot delete your own account.');
         }
 
-        // Delete the user
+        // Prevent deleting admin users
+        if ($user->role === 'admin') {
+            return redirect()->route('patron.users.list')->with('error', 'Not authorized to delete admin users.');
+        }
+
+        // Hard delete
         $user->delete();
 
         return redirect()->route('patron.users.list')->with('success', 'User deleted successfully.');
+    }
+
+    public function disableUser($id)
+    {
+        $user = User::findOrFail($id);
+        if ($user->id == auth()->id()) {
+            return redirect()->route('patron.users.list')->with('error', 'You cannot disable your own account.');
+        }
+        if ($user->role === 'admin') {
+            return redirect()->route('patron.users.list')->with('error', 'Not authorized to disable admin users.');
+        }
+        $user->status = 'disabled';
+        $user->save();
+        return redirect()->route('patron.users.list')->with('success', 'User disabled');
+    }
+
+    public function enableUser($id)
+    {
+        $user = User::findOrFail($id);
+        if ($user->role === 'admin') {
+            return redirect()->route('patron.users.list')->with('error', 'Not authorized to enable admin users.');
+        }
+        $user->status = 'active';
+        $user->save();
+        return redirect()->route('patron.users.list')->with('success', 'User enabled');
+    }
+
+    public function editUser($id)
+    {
+        $user = User::findOrFail($id);
+        if ($user->role === 'admin') {
+            return redirect()->route('patron.users.list')->with('error', 'Not authorized to edit admin users.');
+        }
+        $roles = ['patron', 'research_assistant'];
+        return view('patron.edit_user', compact('user', 'roles'));
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        if ($user->role === 'admin') {
+            return redirect()->route('patron.users.list')->with('error', 'Not authorized to edit admin users.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role' => 'required|in:patron,research_assistant',
+            'password' => 'nullable|string|min:6',
+            'contact' => 'nullable|string|max:255',
+        ]);
+
+        $user->name = trim((string) $request->input('first_name') . ' ' . (string) $request->input('last_name'));
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
+        $user->email = $validated['email'];
+        $user->role = $validated['role'];
+        $user->contact = $validated['contact'] ?? $user->contact;
+
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('patron.users.list')->with('success', 'User updated successfully.');
     }
 }
