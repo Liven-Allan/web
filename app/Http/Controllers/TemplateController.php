@@ -104,8 +104,8 @@ class TemplateController extends Controller
             return redirect()->route('patron.task.list')->with('success', 'Task created successfully!');
         }
 
-        // Fallback redirect if role is unrecognized (optional)
-        return redirect()->route('task.list')->with('success', 'Task created successfully!');
+    // Fallback redirect if role is unrecognized (optional)
+    return redirect()->route('home')->with('success', 'Task created successfully!');
     }
 
     public function listTasks()
@@ -341,27 +341,57 @@ class TemplateController extends Controller
     public function peoplepage()
     {
         $users = User::orderByRaw("FIELD(role, 'admin', 'patron', 'research_assistant')")->get();
-        return view('frontend.peoplepage', compact('users'));
+        $descriptionText = DescriptionText::latest()->first();
+        $projects = Project::orderBy('priority', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get();
+
+        return view('frontend.peoplepage', compact('users', 'descriptionText', 'projects'));
     }
     
     public function publications()
     {
-        return view('frontend.publications');
+        $descriptionText = DescriptionText::latest()->first();
+        $projects = Project::orderBy('priority', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get();
+
+        return view('frontend.publications', compact('descriptionText', 'projects'));
     }
 
     public function courses()
     {
-        return view('frontend.courses');
+        $descriptionText = DescriptionText::latest()->first();
+        $projects = Project::orderBy('priority', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get();
+
+        return view('frontend.courses', compact('descriptionText', 'projects'));
     }
 
     public function news()
     {
-        return view('frontend.news');
+        $descriptionText = DescriptionText::latest()->first();
+        $projects = Project::orderBy('priority', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get();
+
+        return view('frontend.news', compact('descriptionText', 'projects'));
     }
 
     public function events()
     {
-        return view('frontend.events');
+        $descriptionText = DescriptionText::latest()->first();
+        $projects = Project::orderBy('priority', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get();
+
+        return view('frontend.events', compact('descriptionText', 'projects'));
     }
 
 }
