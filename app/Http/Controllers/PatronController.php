@@ -10,21 +10,59 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\DescriptionText;
 use Illuminate\Support\Facades\Auth; // ✅ Import Authuse Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-
 use Illuminate\Support\Facades\Log;
+use App\Models\Task;
+use App\Models\ActiveTask;
+use App\Models\CompletedTask;
 
 
 class PatronController extends Controller
 {
     public function dashboard()
     {
+        $userId = auth()->id();
+        
         // Retrieve projects from the database
         $projects = Project::orderBy('priority', 'desc')->get();
         
+        // Calculate dashboard statistics
+        $myProjectsCount = Project::where('patron_id', $userId)->count();
+        
+        // Completed tasks: tasks assigned by this patron that are in completed_tasks table
+        $completedTasksCount = CompletedTask::whereHas('task', function($query) use ($userId) {
+            $query->where('assigned_by', $userId);
+        })->count();
+        
+        // Get completed task IDs to exclude from active count
+        $completedTaskIds = CompletedTask::whereHas('task', function($query) use ($userId) {
+            $query->where('assigned_by', $userId);
+        })->pluck('task_id');
+        
+        // Active tasks: tasks assigned by this patron that are in active_tasks table but NOT completed
+        $activeTasksCount = ActiveTask::whereHas('task', function($query) use ($userId) {
+            $query->where('assigned_by', $userId);
+        })->whereNotIn('task_id', $completedTaskIds)->count();
+        
+        // Research assistants count
+        $researchAssistantsCount = User::where('role', 'research_assistant')->count();
 
-        // Pass projects data to the view
-        return view('patron.dashboard', compact('projects'));
+        // Debug logging to help troubleshoot
+        \Log::info('Patron dashboard counts for user ' . $userId, [
+            'my_projects' => $myProjectsCount,
+            'active_tasks' => $activeTasksCount,
+            'completed_tasks' => $completedTasksCount,
+            'research_assistants' => $researchAssistantsCount,
+            'completed_task_ids' => $completedTaskIds->toArray()
+        ]);
 
+        // Pass data to the view
+        return view('patron.dashboard', compact(
+            'projects',
+            'myProjectsCount',
+            'activeTasksCount',
+            'completedTasksCount',
+            'researchAssistantsCount'
+        ));
     }
 
 

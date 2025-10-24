@@ -2,106 +2,128 @@
 
 @section('title', 'Active Tasks')
 
-<style>
-    body, .table th, .table td {
-        color: black !important;
-    }
-
-    /* Set the background color of the table headers to blue */
-    .table th {
-        background-color: #007bff; /* Blue color */
-        color: white !important; /* Ensure text is white */
-    }
-
-    /* Optional: Change hover effect for the table headers */
-    .table th:hover {
-        background-color: #0056b3; /* Darker blue on hover */
-    }
-
-    .table td {
-        background-color: white;
-    }
-
-    /* Style for the progress bar */
-    .progress-bar {
-        height: 20px;
-        background-color: #007bff;
-        border-radius: 5px;
-        transition: width 0.3s ease;
-    }
-
-    .progress-container {
-        width: 100%;
-        background-color: #e9ecef;
-        border-radius: 5px;
-        overflow: hidden;
-    }
-</style>
-
 @section('content')
-    <h1>Active Tasks</h1>
+    <!-- Page Header -->
+    <div class="bdal-header">
+        <h1 class="h3 mb-2">
+            <i class="fas fa-play-circle mr-2"></i>
+            My Active Tasks
+        </h1>
+        <p class="mb-0">Track and update progress on your assigned tasks</p>
+    </div>
 
+    <!-- Alerts -->
     @if(session('success'))
-        <div id="success-message" class="alert alert-success">
+        <div id="success-message" class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle mr-2"></i>
             {{ session('success') }}
-        </div>
-    @endif
-    @if(session('error'))
-        <div id="error-message" class="alert alert-danger">
-            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
         </div>
     @endif
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Task</th>
-                <th>Assigned To</th>
-                <th>Assigned By</th>
-                <th>Progress</th>
-                <th>Comment</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-    @forelse ($activeTasks as $activeTask)
-        <tr>
-            <td>{{ $activeTask->task->title }}</td>
-            <td>{{ $activeTask->assignedTo->name }}</td>
-            <td>{{ $activeTask->assignedBy->name }}</td>
-            <td>
-    <div class="progress" style="height: 30px;"> <!-- Adjust container height -->
-        <div 
-            class="progress-bar" 
-            role="progressbar" 
-            style="width: {{ $activeTask->progress }}%; height: 30px;" 
-            aria-valuenow="{{ $activeTask->progress }}" 
-            aria-valuemin="0" 
-            aria-valuemax="100">
-            {{ $activeTask->progress }}%
+    @if(session('error'))
+        <div id="error-message" class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+        </div>
+    @endif
+
+    <!-- Active Tasks Table Card -->
+    <div class="card bdal-card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-play-circle mr-2"></i>
+                My Active Tasks ({{ $activeTasks->count() }})
+            </h6>
+            <div class="d-flex gap-2">
+                <span class="badge badge-info">{{ $activeTasks->where('progress', '<', 50)->count() }} Pending</span>
+                <span class="badge badge-warning">{{ $activeTasks->where('progress', '>=', 50)->where('progress', '<', 100)->count() }} In Progress</span>
+                <span class="badge badge-success">{{ $activeTasks->where('progress', 100)->count() }} Completed</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th><i class="fas fa-tasks mr-1"></i>Task</th>
+                            <th><i class="fas fa-user mr-1"></i>Assigned To</th>
+                            <th><i class="fas fa-user-tie mr-1"></i>Assigned By</th>
+                            <th><i class="fas fa-chart-line mr-1"></i>Progress</th>
+                            <th><i class="fas fa-comments mr-1"></i>Comment</th>
+                            <th><i class="fas fa-cogs mr-1"></i>Update Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($activeTasks as $activeTask)
+                            <tr>
+                                <td class="font-weight-bold">{{ $activeTask->task->title }}</td>
+                                <td>{{ $activeTask->assignedTo->name }}</td>
+                                <td>{{ $activeTask->assignedBy->name }}</td>
+                                <td>
+                                    <div class="progress" style="height: 25px;">
+                                        <div class="progress-bar 
+                                            @if($activeTask->progress < 50) bg-info
+                                            @elseif($activeTask->progress < 100) bg-warning
+                                            @else bg-success
+                                            @endif" 
+                                            role="progressbar" 
+                                            style="width: {{ $activeTask->progress }}%;" 
+                                            aria-valuenow="{{ $activeTask->progress }}" 
+                                            aria-valuemin="0" 
+                                            aria-valuemax="100">
+                                            {{ $activeTask->progress }}%
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if($activeTask->comment)
+                                        <span class="text-muted">{{ Str::limit($activeTask->comment, 30) }}</span>
+                                    @else
+                                        <span class="text-muted font-italic">No comments</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <form action="{{ route('research_assistant.task.update_progress', $activeTask->id) }}" method="POST" class="d-flex align-items-center">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div class="input-group input-group-sm" style="max-width: 120px;">
+                                            <input type="number" 
+                                                   name="progress" 
+                                                   min="0" 
+                                                   max="100" 
+                                                   class="form-control" 
+                                                   placeholder="0-100"
+                                                   value="{{ $activeTask->progress }}"
+                                                   title="Enter progress percentage">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm ml-2" title="Update Progress">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center py-4">
+                                    <i class="fas fa-play-circle fa-3x text-gray-300 mb-3"></i>
+                                    <p class="text-muted">No active tasks assigned to you.</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</td>
-
-<td>{!! nl2br(e($activeTask->comment ?? 'No comments')) !!}</td>
-            <td>
-            <form action="{{ route('research_assistant.task.update_progress', $activeTask->id) }}" method="POST">
-
-                    @csrf
-                    @method('PATCH')
-                    <input type="number" name="progress" min="0" max="100" class="form-control" placeholder="Enter progress">
-                    <button type="submit" class="btn btn-primary btn-sm mt-2">Record Progress</button>
-                </form>
-            </td>
-        </tr>
-    @empty
-        <tr>
-            <td colspan="5" class="text-center">No active tasks found.</td>
-        </tr>
-    @endforelse
-</tbody>
-
-    </table>
 <script>
      // Function to hide success and error messages after a few seconds
      window.onload = function() {

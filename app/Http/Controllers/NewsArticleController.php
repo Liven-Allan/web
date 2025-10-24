@@ -3,22 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use App\Models\Project;
+use App\Models\DescriptionText;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class NewsController extends Controller
+class NewsArticleController extends Controller
 {
     /**
-     * Display a listing of the news.
+     * Display a listing of the news articles.
      */
     public function index()
     {
         $news = News::latest('date')->paginate(10);
-        return view('frontend.news', compact('news'));
+        
+        // Get projects and description for the master layout
+        $projects = Project::latest()->take(4)->get();
+        $descriptionText = DescriptionText::latest()->first();
+        
+        return view('frontend.news', compact('news', 'projects', 'descriptionText'));
     }
 
     /**
-     * Show the form for creating a new news item.
+     * Show the form for creating a new news article.
      */
     public function create()
     {
@@ -26,7 +33,7 @@ class NewsController extends Controller
     }
 
     /**
-     * Store a newly created news item in storage.
+     * Store a newly created news article in storage.
      */
     public function store(Request $request)
     {
@@ -46,11 +53,11 @@ class NewsController extends Controller
         News::create($validated);
 
         return redirect()->route('news.index')
-            ->with('success', 'News item created successfully.');
+            ->with('success', 'News article created successfully.');
     }
 
     /**
-     * Show the form for editing the specified news item.
+     * Show the form for editing the specified news article.
      */
     public function edit(News $news)
     {
@@ -58,7 +65,7 @@ class NewsController extends Controller
     }
 
     /**
-     * Update the specified news item in storage.
+     * Update the specified news article in storage.
      */
     public function update(Request $request, News $news)
     {
@@ -82,11 +89,11 @@ class NewsController extends Controller
         $news->update($validated);
 
         return redirect()->route('news.index')
-            ->with('success', 'News item updated successfully.');
+            ->with('success', 'News article updated successfully.');
     }
 
     /**
-     * Remove the specified news item from storage.
+     * Remove the specified news article from storage.
      */
     public function destroy(News $news)
     {
@@ -98,6 +105,6 @@ class NewsController extends Controller
         $news->delete();
 
         return redirect()->route('news.index')
-            ->with('success', 'News item deleted successfully.');
+            ->with('success', 'News article deleted successfully.');
     }
 }

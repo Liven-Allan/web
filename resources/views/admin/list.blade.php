@@ -2,48 +2,36 @@
 
 @section('title', 'User List')
 
-<style>
-    body, .table th, .table td {
-        color: black !important;
-    }
 
-    .table th {
-        background-color: #007bff;
-        color: white !important;
-    }
-
-    .table th:hover {
-        background-color: #0056b3;
-    }
-
-    .table td {
-        background-color: white;
-    }
-
-    .btn-register {
-        width: 200px;
-        font-size: 18px;
-        background-color: #007bff;  /* Custom blue background */
-        color: white;
-    }
-
-    .btn-register:hover {
-        background-color: #0056b3;  /* Darker shade for hover effect */
-    }
-</style>
 
 @section('content')
+    <!-- Page Header -->
+    <div class="bdal-header">
+        <h1 class="h3 mb-2">
+            <i class="fas fa-users mr-2"></i>
+            User Management
+        </h1>
+        <p class="mb-0">Manage system users and their roles</p>
+    </div>
 
-<div class="container">
+    <!-- Alerts -->
     @if(session('success'))
-        <div id="success-message" class="alert alert-success">
+        <div id="success-message" class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle mr-2"></i>
             {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
         </div>
     @endif
 
     @if(session('error'))
-        <div id="error-message" class="alert alert-danger">
+        <div id="error-message" class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-circle mr-2"></i>
             {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
         </div>
     @endif
 </div>

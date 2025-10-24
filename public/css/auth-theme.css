@@ -1,0 +1,1713 @@
+/* Big Data Analytics Lab - Authenticated Interface Theme */
+/* Consistent with landing page colors */
+
+:root {
+    --bdal-primary: #28a745;
+    --bdal-primary-dark: #218838;
+    --bdal-secondary: #009900;
+    --bdal-accent: #C41230;
+    --bdal-accent-dark: #a10e28;
+    --bdal-dark: #000000;
+    --bdal-light: #ffffff;
+    --bdal-gray-light: #f8f9fa;
+    --bdal-gray: #6c757d;
+    --bdal-gray-dark: #343a40;
+}
+
+/* Override default Laravel navigation colors */
+.bg-white {
+    background-color: var(--bdal-primary) !important;
+}
+
+.dark\:bg-gray-800 {
+    background-color: var(--bdal-primary) !important;
+}
+
+.border-gray-100 {
+    border-color: var(--bdal-primary-dark) !important;
+}
+
+.dark\:border-gray-700 {
+    border-color: var(--bdal-primary-dark) !important;
+}
+
+/* Navigation text colors */
+.text-gray-500,
+.dark\:text-gray-400 {
+    color: var(--bdal-light) !important;
+}
+
+.text-gray-800,
+.dark\:text-gray-200 {
+    color: var(--bdal-light) !important;
+}
+
+.hover\:text-gray-700:hover,
+.dark\:hover\:text-gray-300:hover {
+    color: var(--bdal-gray-light) !important;
+}
+
+/* Dropdown and button styling */
+.bg-gray-800,
+.dark\:bg-gray-800 {
+    background-color: var(--bdal-primary-dark) !important;
+}
+
+.hover\:text-gray-700:hover {
+    color: var(--bdal-light) !important;
+}
+
+/* Dashboard content area */
+.bg-gray-100 {
+    background-color: var(--bdal-gray-light) !important;
+}
+
+.dark\:bg-gray-900 {
+    background-color: var(--bdal-gray-light) !important;
+}
+
+/* Card backgrounds */
+.bg-white.dark\:bg-gray-800 {
+    background-color: var(--bdal-light) !important;
+    border: 1px solid #e9ecef;
+}
+
+/* Text colors in content */
+.text-gray-900,
+.dark\:text-gray-100 {
+    color: var(--bdal-gray-dark) !important;
+}
+
+/* Header styling */
+.bg-white.dark\:bg-gray-800.shadow {
+    background-color: var(--bdal-light) !important;
+    border-bottom: 3px solid var(--bdal-primary);
+}
+
+/* Focus states */
+.focus\:outline-red-500:focus {
+    outline-color: var(--bdal-primary) !important;
+}
+
+/* Admin sidebar styling */
+.bg-gradient-primary {
+    background: linear-gradient(180deg, var(--bdal-primary) 10%, var(--bdal-primary-dark) 100%) !important;
+}
+
+.sidebar-dark .nav-item .nav-link {
+    color: var(--bdal-light) !important;
+}
+
+.sidebar-dark .nav-item .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--bdal-light) !important;
+}
+
+.sidebar-dark .nav-item .nav-link.active {
+    background-color: var(--bdal-accent) !important;
+    color: var(--bdal-light) !important;
+}
+
+/* Topbar styling */
+.topbar {
+    background-color: var(--bdal-light) !important;
+    border-bottom: 2px solid var(--bdal-primary);
+}
+
+.topbar .nav-link {
+    color: var(--bdal-gray-dark) !important;
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: var(--bdal-primary) !important;
+    border-color: var(--bdal-primary) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--bdal-primary-dark) !important;
+    border-color: var(--bdal-primary-dark) !important;
+}
+
+.btn-secondary {
+    background-color: var(--bdal-gray) !important;
+    border-color: var(--bdal-gray) !important;
+}
+
+.btn-danger {
+    background-color: var(--bdal-accent) !important;
+    border-color: var(--bdal-accent) !important;
+}
+
+.btn-danger:hover {
+    background-color: var(--bdal-accent-dark) !important;
+    border-color: var(--bdal-accent-dark) !important;
+}
+
+/* Form controls */
+.form-control:focus {
+    border-color: var(--bdal-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+/* Links */
+a {
+    color: var(--bdal-primary) !important;
+}
+
+a:hover {
+    color: var(--bdal-primary-dark) !important;
+}
+
+/* Tables */
+.table-hover tbody tr:hover {
+    background-color: rgba(40, 167, 69, 0.075) !important;
+}
+
+/* Alerts */
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.1) !important;
+    border-color: var(--bdal-primary) !important;
+    color: var(--bdal-primary-dark) !important;
+}
+
+.alert-danger {
+    background-color: rgba(196, 18, 48, 0.1) !important;
+    border-color: var(--bdal-accent) !important;
+    color: var(--bdal-accent-dark) !important;
+}
+
+/* Custom components */
+.bdal-header {
+    background: linear-gradient(135deg, var(--bdal-primary) 0%, var(--bdal-primary-dark) 100%);
+    color: var(--bdal-light);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.bdal-card {
+    border: 1px solid #e9ecef;
+    border-top: 3px solid var(--bdal-primary);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.bdal-badge {
+    background-color: var(--bdal-primary);
+    color: var(--bdal-light);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        background: linear-gradient(180deg, var(--bdal-primary) 10%, var(--bdal-primary-dark) 100%) !important;
+    }
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+    .bg-gray-100 {
+        background-color: var(--bdal-gray-dark) !important;
+    }
+
+    .bg-white {
+        background-color: var(--bdal-gray-dark) !important;
+    }
+
+    .text-gray-900 {
+        color: var(--bdal-light) !important;
+    }
+}
+
+/* Additional styling for better consistency */
+
+/* Table styling */
+.table thead th {
+    background-color: var(--bdal-primary) !important;
+    color: var(--bdal-light) !important;
+    border-color: var(--bdal-primary-dark) !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(40, 167, 69, 0.075) !important;
+}
+
+/* Badge styling */
+.badge-primary {
+    background-color: var(--bdal-primary) !important;
+}
+
+.badge-success {
+    background-color: var(--bdal-primary) !important;
+}
+
+.badge-danger {
+    background-color: var(--bdal-accent) !important;
+}
+
+/* Card border colors */
+.border-left-primary {
+    border-left-color: var(--bdal-primary) !important;
+}
+
+.border-left-success {
+    border-left-color: var(--bdal-primary) !important;
+}
+
+.border-left-info {
+    border-left-color: var(--bdal-primary-dark) !important;
+}
+
+.border-left-warning {
+    border-left-color: var(--bdal-accent) !important;
+}
+
+/* Text colors */
+.text-primary {
+    color: var(--bdal-primary) !important;
+}
+
+.text-success {
+    color: var(--bdal-primary) !important;
+}
+
+/* Modal styling */
+.modal-header {
+    background-color: var(--bdal-primary);
+    color: var(--bdal-light);
+}
+
+.modal-header .close {
+    color: var(--bdal-light);
+}
+
+/* Form focus states */
+.form-control:focus {
+    border-color: var(--bdal-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+    border-color: var(--bdal-primary);
+}
+
+.dropdown-item:hover {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--bdal-primary-dark);
+}
+
+/* Pagination styling */
+.page-link {
+    color: var(--bdal-primary) !important;
+}
+
+.page-link:hover {
+    color: var(--bdal-primary-dark) !important;
+    background-color: rgba(40, 167, 69, 0.1) !important;
+    border-color: var(--bdal-primary) !important;
+}
+
+.page-item.active .page-link {
+    background-color: var(--bdal-primary) !important;
+    border-color: var(--bdal-primary) !important;
+}
+
+/* Progress bars */
+.progress-bar {
+    background-color: var(--bdal-primary) !important;
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Guest/Auth Pages Styling Fixes */
+/* Fix for login, register, forgot password pages */
+
+/* Ensure text is visible on auth forms */
+.text-gray-600,
+.dark\:text-gray-400 {
+    color: #6b7280 !important;
+}
+
+.text-gray-900,
+.dark\:text-gray-100 {
+    color: #111827 !important;
+}
+
+/* Hover states for auth links */
+.hover\:text-gray-900:hover,
+.dark\:hover\:text-gray-100:hover {
+    color: #111827 !important;
+}
+
+/* Remember me checkbox label */
+label .text-sm.text-gray-600 {
+    color: #6b7280 !important;
+}
+
+/* Forgot password link */
+a.text-gray-600 {
+    color: var(--bdal-primary) !important;
+}
+
+a.text-gray-600:hover {
+    color: var(--bdal-primary-dark) !important;
+}
+
+/* Auth form specific styling */
+.bg-white.dark\:bg-gray-800.shadow-md {
+    background-color: white !important;
+    color: #111827 !important;
+}
+
+/* Input labels */
+.block.text-sm.font-medium.text-gray-700 {
+    color: #374151 !important;
+}
+
+/* Form inputs */
+.border-gray-300 {
+    border-color: #d1d5db !important;
+}
+
+.focus\:border-indigo-500:focus {
+    border-color: var(--bdal-primary) !important;
+}
+
+.focus\:ring-indigo-500:focus {
+    --tw-ring-color: rgba(40, 167, 69, 0.5) !important;
+}
+
+/* Checkbox styling */
+.text-indigo-600 {
+    color: var(--bdal-primary) !important;
+}
+
+/* Auth page background */
+.bg-gray-100.dark\:bg-gray-900 {
+    background-color: #f3f4f6 !important;
+}
+
+/* Ensure all auth page text is readable */
+.min-h-screen .text-gray-600 {
+    color: #6b7280 !important;
+}
+
+.min-h-screen .text-gray-900 {
+    color: #111827 !important;
+}
+
+/* Specific fixes for auth forms */
+form label {
+    color: #374151 !important;
+}
+
+form a {
+    color: var(--bdal-primary) !important;
+}
+
+form a:hover {
+    color: var(--bdal-primary-dark) !important;
+}
+
+/* Remember me checkbox and label */
+input[type="checkbox"]+span {
+    color: #6b7280 !important;
+}
+
+/* Error messages */
+.text-red-600 {
+    color: #dc2626 !important;
+}
+
+/* Success messages */
+.text-green-600 {
+    color: #16a34a !important;
+}
+
+/* Mor
+e specific fixes for login page visibility */
+
+/* Remember me text */
+span.ms-2.text-sm.text-gray-600.dark\:text-gray-400 {
+    color: #6b7280 !important;
+}
+
+/* Forgot password link */
+a.underline.text-sm.text-gray-600.dark\:text-gray-400 {
+    color: var(--bdal-primary) !important;
+    text-decoration: underline;
+}
+
+a.underline.text-sm.text-gray-600.dark\:text-gray-400:hover {
+    color: var(--bdal-primary-dark) !important;
+}
+
+/* Override any conflicting styles for auth pages */
+.min-h-screen form label span {
+    color: #6b7280 !important;
+}
+
+.min-h-screen form a {
+    color: var(--bdal-primary) !important;
+}
+
+/* Ensure checkbox text is visible */
+label[for="remember_me"] span {
+    color: #6b7280 !important;
+}
+
+/* Make sure all text in auth forms is readable */
+.bg-white form * {
+    color: inherit;
+}
+
+.bg-white form label {
+    color: #374151 !important;
+}
+
+.bg-white form a {
+    color: var(--bdal-primary) !important;
+}
+
+.bg-white form span.text-gray-600 {
+    color: #6b7280 !important;
+}
+
+/* Additional safety net for all auth page text */
+.sm\:rounded-lg * {
+    color: #374151;
+}
+
+.sm\:rounded-lg a {
+    color: var(--bdal-primary) !important;
+}
+
+.sm\:rounded-lg label {
+    color: #374151 !important;
+}
+
+/* Fin
+al targeted fixes for auth components */
+
+/* Input labels */
+label.block.font-medium.text-sm.text-gray-700.dark\:text-gray-300 {
+    color: #374151 !important;
+}
+
+/* Text inputs */
+input.border-gray-300 {
+    border-color: #d1d5db !important;
+    background-color: white !important;
+    color: #111827 !important;
+}
+
+input.border-gray-300:focus {
+    border-color: var(--bdal-primary) !important;
+    box-shadow: 0 0 0 1px var(--bdal-primary) !important;
+}
+
+/* Override dark mode styles for auth pages */
+.dark\:text-gray-300 {
+    color: #374151 !important;
+}
+
+.dark\:text-gray-400 {
+    color: #6b7280 !important;
+}
+
+.dark\:bg-gray-900 {
+    background-color: white !important;
+}
+
+.dark\:border-gray-700 {
+    border-color: #d1d5db !important;
+}
+
+/* Ensure proper contrast for all auth page elements */
+.min-h-screen .text-gray-700 {
+    color: #374151 !important;
+}
+
+.min-h-screen .text-gray-600 {
+    color: #6b7280 !important;
+}
+
+.min-h-screen .text-gray-400 {
+    color: #9ca3af !important;
+}
+
+.sidebar-brand-text {
+    color: var(--bdal-light) !important;
+    font-weight: bold !important;
+    font-size: 1.1rem !important;
+}
+
+.sidebar-brand {
+    color: var(--bdal-light) !important;
+}
+
+.sidebar-brand:hover {
+    color: var(--bdal-light) !important;
+    text-decoration: none !important;
+}
+
+/* Fix sidebar navigation text */
+.sidebar .nav-item .nav-link {
+    color: var(--bdal-light) !important;
+}
+
+.sidebar .nav-item .nav-link:hover {
+    color: var(--bdal-light) !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.sidebar .nav-item .nav-link.active {
+    color: var(--bdal-light) !important;
+    background-color: var(--bdal-accent) !important;
+}
+
+/* Fix table header button text visibility */
+.card-header .btn {
+    color: var(--bdal-light) !important;
+    background-color: var(--bdal-primary) !important;
+    border-color: var(--bdal-primary) !important;
+}
+
+.card-header .btn:hover {
+    color: var(--bdal-light) !important;
+    background-color: var(--bdal-primary-dark) !important;
+    border-color: var(--bdal-primary-dark) !important;
+}
+
+/* Fix card header text */
+.card-header h6 {
+    color: var(--bdal-primary) !important;
+}
+
+.card-header .font-weight-bold {
+    color: var(--bdal-primary) !important;
+}
+
+/* Fix table header text */
+.table thead th {
+    color: var(--bdal-light) !important;
+    background-color: var(--bdal-primary) !important;
+}
+
+/* Fix button text in tables and cards */
+.btn-primary {
+    color: var(--bdal-light) !important;
+    background-color: var(--bdal-primary) !important;
+    border-color: var(--bdal-primary) !important;
+}
+
+.btn-primary:hover {
+    color: var(--bdal-light) !important;
+    background-color: var(--bdal-primary-dark) !important;
+    border-color: var(--bdal-primary-dark) !important;
+}
+
+.btn-success {
+    color: var(--bdal-light) !important;
+    background-color: var(--bdal-primary) !important;
+    border-color: var(--bdal-primary) !important;
+}
+
+.btn-success:hover {
+    color: var(--bdal-light) !important;
+    background-color: var(--bdal-primary-dark) !important;
+    border-color: var(--bdal-primary-dark) !important;
+}
+
+.btn-info {
+    color: var(--bdal-light) !important;
+    background-color: var(--bdal-primary-dark) !important;
+    border-color: var(--bdal-primary-dark) !important;
+}
+
+.btn-info:hover {
+    color: var(--bdal-light) !important;
+    background-color: var(--bdal-primary) !important;
+    border-color: var(--bdal-primary) !important;
+}
+
+.btn-warning {
+    color: var(--bdal-dark) !important;
+    background-color: var(--bdal-accent) !important;
+    border-color: var(--bdal-accent) !important;
+}
+
+.btn-warning:hover {
+    color: var(--bdal-light) !important;
+    background-color: var(--bdal-accent-dark) !important;
+    border-color: var(--bdal-accent-dark) !important;
+}
+
+/* Fix sidebar divider */
+.sidebar-divider {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Ensure all sidebar text is visible */
+.sidebar * {
+    color: var(--bdal-light) !important;
+}
+
+.sidebar .nav-link span {
+    color: var(--bdal-light) !important;
+}
+
+.sidebar .nav-link i {
+    color: var(--bdal-light) !important;
+}
+
+/* Fix any remaining button text issues */
+.btn {
+    font-weight: 500 !important;
+}
+
+.btn i {
+    color: inherit !important;
+}
+
+/* Fix dropdown menu in sidebar if any */
+.sidebar .dropdown-menu {
+    background-color: var(--bdal-primary-dark) !important;
+}
+
+.sidebar .dropdown-item {
+    color: var(--bdal-light) !important;
+}
+
+.sidebar .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--bdal-light) !important;
+}
+
+/* Fix any text that might be hidden in cards */
+.card-body .text-primary {
+    color: var(--bdal-primary) !important;
+}
+
+.card-body .text-success {
+    color: var(--bdal-primary) !important;
+}
+
+.card-body .text-info {
+    color: var(--bdal-primary-dark) !important;
+}
+
+.card-body .text-warning {
+    color: var(--bdal-accent) !important;
+}
+
+/* Ensure proper contrast for all interactive elements */
+.btn-sm {
+    font-size: 0.875rem !important;
+    padding: 0.375rem 0.75rem !important;
+}
+
+/* Fix any remaining visibility issues */
+.navbar-nav .nav-link {
+    color: var(--bdal-light) !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--bdal-gray-light) !important;
+}
+
+/* More
+ specific fixes for visibility issues */
+
+/* Sidebar brand text - very specific targeting */
+.sidebar-brand .sidebar-brand-text {
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 1rem !important;
+    text-decoration: none !important;
+}
+
+.sidebar-brand:hover .sidebar-brand-text {
+    color: white !important;
+}
+
+/* Sidebar navigation items - very specific */
+.sidebar .nav-item .nav-link span {
+    color: white !important;
+    font-weight: 500 !important;
+}
+
+.sidebar .nav-item .nav-link i {
+    color: white !important;
+}
+
+/* Card header buttons - very specific */
+.card-header .btn.btn-primary {
+    background-color: var(--bdal-primary) !important;
+    border-color: var(--bdal-primary) !important;
+    color: white !important;
+}
+
+.card-header .btn.btn-primary:hover {
+    background-color: var(--bdal-primary-dark) !important;
+    border-color: var(--bdal-primary-dark) !important;
+    color: white !important;
+}
+
+.card-header .btn.btn-primary i {
+    color: white !important;
+}
+
+/* Table header buttons */
+.table thead th .btn {
+    color: white !important;
+}
+
+/* Override any Bootstrap defaults that might be interfering */
+.bg-gradient-primary .sidebar-brand-text {
+    color: white !important;
+}
+
+.bg-gradient-primary .nav-link {
+    color: white !important;
+}
+
+.bg-gradient-primary .nav-link span {
+    color: white !important;
+}
+
+.bg-gradient-primary .nav-link i {
+    color: white !important;
+}
+
+/* Force visibility for all sidebar text */
+#accordionSidebar * {
+    color: white !important;
+}
+
+#accordionSidebar .nav-link {
+    color: white !important;
+}
+
+#accordionSidebar .sidebar-brand-text {
+    color: white !important;
+}
+
+/* Force button text visibility */
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    color: white !important;
+}
+
+.btn-success,
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+    color: white !important;
+}
+
+.btn-info,
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active {
+    color: white !important;
+}
+
+.btn-warning,
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active {
+    color: var(--bdal-dark) !important;
+}
+
+.btn-danger,
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+    color: white !important;
+}
+
+/* Ensure button icons are visible */
+.btn i {
+    color: inherit !important;
+}
+
+/* Additional safety net for sidebar */
+.sidebar-dark .nav-item .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.sidebar-dark .nav-item .nav-link:hover {
+    color: white !important;
+}
+
+.sidebar-dark .sidebar-brand .sidebar-brand-text {
+    color: white !important;
+}
+
+/* Hig
+h-priority overrides to ensure visibility */
+
+/* Force sidebar brand visibility with highest specificity */
+body #wrapper #accordionSidebar.sidebar .sidebar-brand .sidebar-brand-text.mx-3 {
+    color: white !important;
+    font-weight: bold !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Force sidebar navigation text visibility */
+body #wrapper #accordionSidebar.sidebar .nav-item .nav-link span {
+    color: white !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+body #wrapper #accordionSidebar.sidebar .nav-item .nav-link i {
+    color: white !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Force button text visibility in card headers */
+body .card .card-header .btn.btn-primary {
+    color: white !important;
+    background-color: var(--bdal-primary) !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+body .card .card-header .btn.btn-primary i {
+    color: white !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Force table header text visibility */
+body .table thead th {
+    color: white !important;
+    background-color: var(--bdal-primary) !important;
+}
+
+body .table thead th i {
+    color: white !important;
+}
+
+/* Emergency override for any hidden text */
+.sidebar * {
+    text-shadow: none !important;
+}
+
+.card-header * {
+    text-shadow: none !important;
+}
+
+/* Ensure no transparent or hidden elements */
+.sidebar .sidebar-brand-text {
+    background: none !important;
+    text-indent: 0 !important;
+    font-size: 1rem !important;
+    line-height: 1.2 !important;
+}
+
+/* Debug helper - remove after testing */
+.sidebar-brand-text {
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    padding: 5px !important;
+}
+
+.card-header .btn {
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 
+AGGRESSIVE FIXES for sidebar brand text visibility */
+
+/* Nuclear option - force all sidebar text to be visible */
+.sidebar-brand-text,
+.sidebar-brand-text *,
+div.sidebar-brand-text,
+.sidebar .sidebar-brand-text,
+#accordionSidebar .sidebar-brand-text,
+.bg-gradient-primary .sidebar-brand-text {
+    color: white !important;
+    background-color: transparent !important;
+    text-shadow: none !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 9999 !important;
+    position: relative !important;
+    text-indent: 0 !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.2 !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    border: 2px solid yellow !important;
+    /* Temporary debug border */
+    padding: 10px !important;
+    margin: 5px !important;
+    background-color: rgba(255, 0, 0, 0.3) !important;
+    /* Temporary debug background */
+}
+
+/* Force the parent container to be visible */
+.sidebar-brand,
+a.sidebar-brand,
+.sidebar .sidebar-brand {
+    color: white !important;
+    background-color: transparent !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    text-decoration: none !important;
+    border: 2px solid lime !important;
+    /* Temporary debug border */
+    padding: 5px !important;
+}
+
+/* Override any potential hiding styles */
+.sidebar-brand:hover .sidebar-brand-text,
+.sidebar-brand:focus .sidebar-brand-text,
+.sidebar-brand:active .sidebar-brand-text {
+    color: white !important;
+    text-decoration: none !important;
+}
+
+/* Force all sidebar content to be visible */
+#accordionSidebar,
+#accordionSidebar * {
+    color: white !important;
+}
+
+/* Specific targeting for the exact HTML structure */
+ul.navbar-nav.bg-gradient-primary.sidebar.sidebar-dark.accordion a.sidebar-brand div.sidebar-brand-text.mx-3 {
+    color: white !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    background-color: rgba(0, 255, 0, 0.3) !important;
+    /* Temporary debug */
+    border: 3px solid red !important;
+    /* Temporary debug */
+    padding: 15px !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+    /* Add shadow for contrast */
+}
+
+/* Alternative approach - use CSS content if text is hidden */
+.sidebar-brand-text.mx-3:after {
+    content: "BIG DATA ANALYTICS LAB" !important;
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 14px !important;
+    display: block !important;
+    background-color: rgba(255, 0, 0, 0.5) !important;
+    padding: 10px !important;
+    border: 2px solid white !important;
+}
+
+/* Force override any Bootstrap or SB Admin styles */
+.sidebar-dark .sidebar-brand .sidebar-brand-text {
+    color: #fff !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05rem !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background-color: rgba(255, 255, 0, 0.3) !important;
+    /* Debug background */
+    border: 2px solid cyan !important;
+    /* Debug border */
+    padding: 8px !important;
+}
+
+/* Emergency fallback - create visible text */
+.sidebar-brand:before {
+    content: "🔬 BIG DATA ANALYTICS LAB" !important;
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 12px !important;
+    display: block !important;
+    text-align: center !important;
+    background-color: var(--bdal-primary) !important;
+    padding: 10px !important;
+    border: 2px solid white !important;
+    margin: 5px !important;
+}
+
+/* Clea
+n up and finalize sidebar brand styling */
+
+/* Remove debug borders and backgrounds for production */
+.sidebar-brand-text {
+    border: none !important;
+    background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Ensure the backup brand is properly styled */
+.sidebar div[style*="background-color: #28a745"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Final override for sidebar brand visibility */
+.sidebar-brand .sidebar-brand-text,
+.sidebar-brand div {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: white !important;
+}
+
+/* Ensure sidebar links are also visible */
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.sidebar .nav-link:hover {
+    color: white !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.sidebar .nav-link span,
+.sidebar .nav-link i {
+    color: inherit !important;
+}
+
+/* Cl
+ean sidebar brand header styling */
+
+.sidebar-brand-header {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.sidebar-brand-header h4 {
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 16px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    line-height: 1.3 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+    text-align: center !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Remove any conflicting styles from previous attempts */
+.sidebar-brand-text:after,
+.sidebar-brand:before {
+    display: none !important;
+    content: none !important;
+}
+
+/* Clean up debug styles */
+.sidebar-brand-text {
+    border: none !important;
+    background-color: transparent !important;
+}
+
+/* Ensure sidebar navigation is still properly styled */
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    padding: 0.75rem 1rem !important;
+}
+
+.sidebar .nav-link:hover {
+    color: white !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.sidebar .nav-link span,
+.sidebar .nav-link i {
+    color: inherit !important;
+}
+
+
+/* Ensure all large buttons in card headers have consistent styling */
+.card-header .btn-lg,
+.btn-register {
+    font-size: 16px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 500 !important;
+    min-width: 180px !important;
+    text-align: center !important;
+}
+
+/* Specific styling for admin action buttons */
+.card-header .btn-primary.btn-lg {
+    background-color: var(--bdal-primary) !important;
+    border-color: var(--bdal-primary) !important;
+    color: white !important;
+    font-size: 16px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 500 !important;
+}
+
+.card-header .btn-primary.btn-lg:hover {
+    background-color: var(--bdal-primary-dark) !important;
+    border-color: var(--bdal-primary-dark) !important;
+    color: white !important;
+}
+
+/* Ensure icons in large buttons are properly spaced */
+.btn-lg i {
+    margin-right: 0.5rem !important;
+    font-size: 1rem !important;
+}
+
+/* Override any conflicting styles from task list page */
+.btn-register {
+    background-color: var(--bdal-primary) !important;
+    border-color: var(--bdal-primary) !important;
+    color: white !important;
+}
+
+.btn-register:hover {
+    background-color: var(--bdal-primary-dark) !important;
+    border-color: var(--bdal-primary-dark) !important;
+    color: white !important;
+}
+
+/* Progre
+ss bar styling for active tasks */
+.progress-bar.bg-info {
+    background-color: var(--bdal-primary-dark) !important;
+}
+
+.progress-bar.bg-warning {
+    background-color: var(--bdal-accent) !important;
+}
+
+.progress-bar.bg-success {
+    background-color: var(--bdal-primary) !important;
+}
+
+/* Badge styling for task status */
+.badge-info {
+    background-color: var(--bdal-primary-dark) !important;
+    color: white !important;
+}
+
+.badge-warning {
+    background-color: var(--bdal-accent) !important;
+    color: white !important;
+}
+
+.badge-success {
+    background-color: var(--bdal-primary) !important;
+    color: white !important;
+}
+
+/* Task priority badges */
+.badge-danger {
+    background-color: var(--bdal-accent) !important;
+    color: white !important;
+}
+
+/* Ensure proper spacing for action buttons in tables */
+.table td .btn {
+    margin-right: 0.25rem !important;
+}
+
+.table td .btn:last-child {
+    margin-right: 0 !important;
+}
+
+/* Enhanced table styling */
+.table-hover tbody tr:hover {
+    background-color: rgba(40, 167, 69, 0.05) !important;
+}
+
+/* Progress bar container styling */
+.progress {
+    background-color: #e9ecef !important;
+    border-radius: 0.375rem !important;
+    overflow: hidden !important;
+}
+
+/* Card header badge spacing */
+.card-header .badge {
+    margin-left: 0.5rem !important;
+}
+
+.card-header .d-flex.gap-2 .badge {
+    margin-left: 0 !important;
+    margin-right: 0.5rem !important;
+}
+
+/*
+ Research Assistant specific styling */
+
+/* Progress input form styling */
+.input-group-sm .form-control {
+    font-size: 0.875rem !important;
+    padding: 0.25rem 0.5rem !important;
+}
+
+.input-group-sm .input-group-text {
+    font-size: 0.875rem !important;
+    padding: 0.25rem 0.5rem !important;
+    background-color: var(--bdal-primary) !important;
+    color: white !important;
+    border-color: var(--bdal-primary) !important;
+}
+
+/* Progress update form alignment */
+.table td form.d-flex {
+    margin: 0 !important;
+    gap: 0.5rem !important;
+}
+
+.table td .input-group {
+    flex: 0 0 auto !important;
+}
+
+/* Enhanced progress input styling */
+.table td input[type="number"] {
+    text-align: center !important;
+}
+
+.table td input[type="number"]:focus {
+    border-color: var(--bdal-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+/* Button styling in progress forms */
+.table td .btn-primary.btn-sm {
+    padding: 0.375rem 0.75rem !important;
+    font-size: 0.875rem !important;
+}
+
+/* Responsive adjustments for progress forms */
+@media (max-width: 768px) {
+    .table td form.d-flex {
+        flex-direction: column !important;
+        gap: 0.25rem !important;
+    }
+
+    .table td .input-group {
+        max-width: 100% !important;
+    }
+}
+
+/* Status badge spacing in card headers */
+.card-header .d-flex.gap-2 {
+    gap: 0.5rem !important;
+}
+
+.card-header .badge {
+    font-size: 0.75rem !important;
+    padding: 0.375rem 0.75rem !important;
+}
+
+/* Ensure proper table cell alignment */
+.table td form {
+    margin-bottom: 0 !important;
+}
+
+.table td .d-flex.align-items-center {
+    justify-content: flex-start !important;
+}
+
+/* 
+Authenticated Navbar Integration */
+
+/* Ensure content doesn't overlap with fixed navbar */
+body {
+    padding-top: 76px !important;
+}
+
+/* Remove sidebar-related margins since we're using top navbar now */
+#content-wrapper {
+    margin-left: 0 !important;
+}
+
+#content {
+    padding-top: 1rem !important;
+}
+
+/* Navbar brand styling */
+.navbar-brand span {
+    font-size: 1.25rem !important;
+    font-weight: bold !important;
+}
+
+/* Navigation link styling */
+.navbar-nav .nav-link {
+    font-weight: 500 !important;
+    padding: 0.5rem 0.75rem !important;
+    margin: 0 0.25rem !important;
+    border-radius: 0.375rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transform: translateY(-1px) !important;
+}
+
+.navbar-nav .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    font-weight: 600 !important;
+}
+
+/* User dropdown styling */
+.dropdown-toggle::after {
+    margin-left: 0.5rem !important;
+}
+
+.dropdown-menu {
+    border-radius: 0.5rem !important;
+    border: none !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    margin-top: 0.5rem !important;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem !important;
+    border-radius: 0.375rem !important;
+    margin: 0.125rem 0.5rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(40, 167, 69, 0.1) !important;
+    transform: translateX(4px) !important;
+}
+
+.dropdown-header {
+    background-color: #f8f9fa !important;
+    border-radius: 0.375rem !important;
+    margin: 0.5rem !important;
+    padding: 0.75rem !important;
+}
+
+/* Profile image styling */
+.dropdown img.rounded-circle {
+    border: 2px solid #e9ecef !important;
+}
+
+/* Mobile navbar adjustments */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background-color: rgba(40, 167, 69, 0.95) !important;
+        border-radius: 0.5rem !important;
+        margin-top: 0.5rem !important;
+        padding: 1rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        margin: 0.25rem 0 !important;
+        padding: 0.75rem 1rem !important;
+    }
+
+    .nav-item:last-child {
+        border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+        margin-top: 1rem !important;
+        padding-top: 1rem !important;
+    }
+}
+
+/* Ensure proper spacing for page content */
+.container-fluid {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+
+@media (max-width: 768px) {
+    .container-fluid {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+}
+
+/* Fix any layout issues with the new navbar */
+.bdal-header {
+    margin-top: 0 !important;
+}
+
+/* Ensure cards and content have proper spacing */
+.card {
+    margin-bottom: 1.5rem !important;
+}
+
+/* Remove any conflicting sidebar styles */
+.sidebar {
+    display: none !important;
+}
+
+.topbar {
+    display: none !important;
+}
+
+/* Navbar logo styling */
+.navbar-brand img {
+    filter: brightness(1.1) !important;
+}
+
+/* Active state for navigation */
+.navbar-nav .nav-link i {
+    width: 1.25rem !important;
+    text-align: center !important;
+}
+
+/* Dropdown animation */
+.dropdown-menu {
+    animation: dropdownFadeIn 0.2s ease-out !important;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/*
+ Fix dropdown menu issues */
+
+/* Ensure dropdown menu is properly positioned and visible */
+.navbar .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    left: auto !important;
+    z-index: 1050 !important;
+    display: none !important;
+    min-width: 200px !important;
+    background-color: white !important;
+    border: 1px solid rgba(0, 0, 0, .15) !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    padding: 0.5rem 0 !important;
+    margin-top: 0.125rem !important;
+}
+
+.navbar .dropdown-menu.show {
+    display: block !important;
+}
+
+.navbar .dropdown {
+    position: relative !important;
+}
+
+/* Ensure dropdown button is clickable */
+.navbar .dropdown-toggle {
+    cursor: pointer !important;
+    user-select: none !important;
+}
+
+.navbar .dropdown-toggle:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Dropdown items styling */
+.navbar .dropdown-item {
+    display: block !important;
+    width: 100% !important;
+    padding: 0.5rem 1rem !important;
+    clear: both !important;
+    font-weight: 400 !important;
+    color: #212529 !important;
+    text-align: inherit !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    border-radius: 0.375rem !important;
+    margin: 0.125rem 0.5rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus {
+    color: #1e2125 !important;
+    background-color: rgba(40, 167, 69, 0.1) !important;
+    transform: translateX(4px) !important;
+}
+
+.navbar .dropdown-header {
+    display: block !important;
+    padding: 0.75rem 1rem !important;
+    margin-bottom: 0 !important;
+    font-size: 0.875rem !important;
+    color: #6c757d !important;
+    white-space: nowrap !important;
+    background-color: #f8f9fa !important;
+    border-radius: 0.375rem !important;
+    margin: 0.5rem !important;
+}
+
+.navbar .dropdown-divider {
+    height: 0 !important;
+    margin: 0.5rem 0 !important;
+    overflow: hidden !important;
+    border-top: 1px solid rgba(0, 0, 0, .15) !important;
+}
+
+/* Fix any z-index issues */
+.navbar {
+    z-index: 1030 !important;
+}
+
+.navbar .dropdown-menu {
+    z-index: 1050 !important;
+}
+
+/* Ensure proper button styling */
+.navbar .btn-outline-light {
+    color: rgba(255, 255, 255, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.navbar .btn-outline-light:hover {
+    color: #28a745 !important;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Profile image in dropdown */
+.navbar .dropdown img.rounded-circle {
+    border: 2px solid #e9ecef !important;
+    object-fit: cover !important;
+}
+
+/* Task acti
+vation status styling */
+
+/* Activated task button styling */
+.btn.btn-success.activated-task {
+    background-color: var(--bdal-primary) !important;
+    border-color: var(--bdal-primary) !important;
+    color: white !important;
+    cursor: default !important;
+    opacity: 0.8 !important;
+}
+
+.btn.btn-success.activated-task:hover {
+    background-color: var(--bdal-primary) !important;
+    border-color: var(--bdal-primary) !important;
+    color: white !important;
+    transform: none !important;
+}
+
+/* Task status indicators */
+.task-status-activated {
+    background-color: var(--bdal-primary) !important;
+    color: white !important;
+    border: none !important;
+    cursor: default !important;
+    pointer-events: none !important;
+}
+
+.task-status-pending {
+    background-color: var(--bdal-primary) !important;
+    color: white !important;
+    border-color: var(--bdal-primary) !important;
+}
+
+.task-status-pending:hover {
+    background-color: var(--bdal-primary-dark) !important;
+    border-color: var(--bdal-primary-dark) !important;
+    color: white !important;
+}
+
+/* Icon styling for task status */
+.task-status-activated i {
+    color: white !important;
+}
+
+.task-status-pending i {
+    color: white !important;
+}
+
+/* Ensure proper spacing in task action buttons */
+.table td .btn.btn-sm {
+    font-size: 0.875rem !important;
+    padding: 0.375rem 0.75rem !important;
+    margin-right: 0.25rem !important;
+}
+
+/* Task activation feedback */
+.task-activated-feedback {
+    animation: taskActivated 0.3s ease-in-out;
+}
+
+@keyframes taskActivated {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.bdal-card .h5 {
+    color: #000000 !important;
+    font-weight: bold !important;
+    font-size: 2rem !important;
+}
+
+/* Specific colors for different card types */
+.border-left-primary .h5 {
+    color: #000000 !important;
+}
+
+.border-left-success .h5 {
+    color: #28a745 !important;
+}
+
+.border-left-info .h5 {
+    color: #17a2b8 !important;
+}
+
+/* Override any conflicting text-gray classes in cards */
+.bdal-card .text-gray-800,
+.bdal-card .font-weight-bold {
+    color: inherit !important;
+}

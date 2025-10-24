@@ -43,6 +43,16 @@ class ActiveTask extends Model
 
     protected static function booted()
     {
+        static::created(function ($activeTask) {
+            // When an active task is created, update the main task status to pending
+            $task = $activeTask->task;
+            if ($task) {
+                $task->status = 'pending';
+                $task->save();
+                \Log::info("Task ID {$task->id} activated and status set to pending");
+            }
+        });
+
         static::updated(function ($activeTask) {
             $task = $activeTask->task;
     
