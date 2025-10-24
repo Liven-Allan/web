@@ -1,66 +1,275 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# BigData Research Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A comprehensive web-based platform for managing research projects, tasks, and collaboration between patrons, research assistants, and administrators.
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Multi-Role System
+- **Admin**: Complete system management, user oversight, and task coordination
+- **Patron**: Project creation, task assignment, and research assistant management
+- **Research Assistant**: Task execution, progress tracking, and collaboration
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Core Functionality
+- **Project Management**: Create, edit, and manage research projects with priorities
+- **Task Management**: Assign tasks, track progress, and manage completion status
+- **User Management**: Register users, manage roles, and handle permissions
+- **Dashboard Analytics**: Real-time statistics and progress tracking
+- **News & Publications**: Content management for research updates
+- **Password Reset**: Secure password recovery system
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠️ Technology Stack
 
-## Learning Laravel
+- **Framework**: Laravel 10.x
+- **Frontend**: Blade Templates, Bootstrap 5, FontAwesome
+- **Database**: MySQL/MariaDB
+- **Authentication**: Laravel Breeze
+- **Styling**: Custom CSS with consistent theming
+- **Icons**: FontAwesome 6.x
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📋 Prerequisites
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Before you begin, ensure you have the following installed:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **PHP** >= 8.1
+- **Composer** >= 2.0
+- **Node.js** >= 16.x
+- **NPM** or **Yarn**
+- **MySQL** >= 8.0 or **MariaDB** >= 10.3
+- **Git**
 
-## Laravel Sponsors
+## 🔧 Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/bigdata-research-system.git
+cd bigdata-research-system
+```
 
-### Premium Partners
+### 2. Install PHP Dependencies
+```bash
+composer install
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 3. Install Node Dependencies
+```bash
+npm install
+# or
+yarn install
+```
 
-## Contributing
+### 4. Environment Configuration
+```bash
+# Copy the environment file
+cp .env.example .env
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Generate application key
+php artisan key:generate
+```
 
-## Code of Conduct
+### 5. Database Setup
+Edit your `.env` file with your database credentials:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=bigdata_research
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 6. Run Migrations
+```bash
+# Create database tables
+php artisan migrate
 
-## Security Vulnerabilities
+# (Optional) Seed with sample data
+php artisan db:seed
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 7. Build Assets
+```bash
+# Compile CSS and JS assets
+npm run build
+# or for development
+npm run dev
+```
 
-## License
+### 8. Storage Link
+```bash
+# Create symbolic link for file storage
+php artisan storage:link
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 9. Start the Application
+```bash
+# Start the development server
+php artisan serve
+```
+
+Visit `http://localhost:8000` to access the application.
+
+## 👥 User Roles & Permissions
+
+### Admin
+- **Dashboard**: System-wide statistics and management
+- **User Management**: Create, edit, disable/enable users
+- **Task Oversight**: View and manage all tasks across the system
+- **Content Management**: Manage news articles and site content
+
+### Patron
+- **Project Management**: Create and manage research projects
+- **Task Assignment**: Create and assign tasks to research assistants
+- **Team Management**: Register and manage research assistants
+- **Progress Monitoring**: Track task completion and add comments
+
+### Research Assistant
+- **Task Management**: View assigned tasks and activate them
+- **Progress Tracking**: Update task progress and completion status
+- **Dashboard**: Personal statistics and recent task overview
+
+## 🗂️ Project Structure
+
+```
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── AdminController.php
+│   │   ├── PatronController.php
+│   │   ├── ResearchAssistantController.php
+│   │   ├── TemplateController.php
+│   │   └── NewsArticleController.php
+│   ├── Models/
+│   │   ├── User.php
+│   │   ├── Project.php
+│   │   ├── Task.php
+│   │   ├── ActiveTask.php
+│   │   └── CompletedTask.php
+│   └── Middleware/
+│       └── Role.php
+├── resources/
+│   ├── views/
+│   │   ├── admin/
+│   │   ├── patron/
+│   │   ├── research_assistant/
+│   │   └── layouts/
+│   └── css/
+├── public/
+│   └── css/
+│       └── auth-theme.css
+├── routes/
+│   └── web.php
+└── database/
+    └── migrations/
+```
+
+## 🎨 Theming & Customization
+
+The application uses a custom theme system with consistent colors and styling:
+
+- **Primary Color**: Green (#28a745)
+- **Theme File**: `public/css/auth-theme.css`
+- **Components**: Reusable Blade components in `resources/views/components/`
+
+### Customizing Colors
+Edit the CSS variables in `public/css/auth-theme.css`:
+```css
+:root {
+    --bdal-primary: #your-color;
+    --bdal-primary-dark: #your-dark-color;
+    /* ... other variables */
+}
+```
+
+## 📊 Database Schema
+
+### Key Tables
+- **users**: User accounts with role-based access
+- **projects**: Research projects with priorities and metadata
+- **tasks**: Task assignments with status tracking
+- **active_tasks**: Currently active tasks with progress
+- **completed_tasks**: Finished tasks archive
+
+## 🔐 Authentication & Security
+
+- **Role-based Access Control**: Middleware-protected routes
+- **Password Security**: Hashed passwords with reset functionality
+- **CSRF Protection**: Built-in Laravel CSRF protection
+- **Email Verification**: Optional email verification system
+
+## 🚀 Deployment
+
+### Production Setup
+1. **Server Requirements**: Apache/Nginx with PHP 8.1+
+2. **Environment**: Set `APP_ENV=production` in `.env`
+3. **Optimization**: Run `php artisan optimize`
+4. **Assets**: Build with `npm run build`
+5. **Permissions**: Set proper file permissions for storage and cache
+
+### Environment Variables
+```env
+APP_NAME="BigData Research System"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://your-domain.com
+
+# Database
+DB_CONNECTION=mysql
+DB_HOST=your-db-host
+DB_DATABASE=your-db-name
+DB_USERNAME=your-db-user
+DB_PASSWORD=your-db-password
+
+# Mail Configuration
+MAIL_MAILER=smtp
+MAIL_HOST=your-smtp-host
+MAIL_PORT=587
+MAIL_USERNAME=your-email
+MAIL_PASSWORD=your-password
+```
+
+## 🧪 Testing
+
+```bash
+# Run PHP tests
+php artisan test
+
+# Run with coverage
+php artisan test --coverage
+```
+
+## 📝 API Documentation
+
+The system includes RESTful routes for:
+- User management (`/admin/users`, `/patron/users`)
+- Task management (`/admin/tasks`, `/patron/tasks`)
+- Project management (`/projects`)
+- News management (`/news`)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📞 Support
+
+For support and questions:
+- Create an issue in the GitHub repository
+- Check the documentation in the `/docs` folder
+- Review the code comments for implementation details
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Laravel Framework for the robust foundation
+- Bootstrap for responsive UI components
+- FontAwesome for comprehensive iconography
+- The open-source community for inspiration and tools
+
+---
+
+**Happy Researching! 🔬📊**
