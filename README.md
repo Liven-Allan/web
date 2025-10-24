@@ -41,7 +41,7 @@ Before you begin, ensure you have the following installed:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/bigdata-research-system.git
+git clone https://github.com/Liven-Allan/web.git
 cd bigdata-research-system
 ```
 
@@ -72,7 +72,7 @@ Edit your `.env` file with your database credentials:
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=bigdata_research
+DB_DATABASE=big_data_lab
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
 ```
