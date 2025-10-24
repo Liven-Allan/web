@@ -8,7 +8,13 @@ use App\Mail\ParticipantNotification;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AllProjectsController;
-use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NewsArticleController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
 
 
 /*
@@ -34,10 +40,7 @@ Route::get('/peoplepage', [TemplateController::class, 'peoplepage'])->name('peop
 Route::get('/Allprojects', [PatronController::class, 'Allprojects'])->name('Allprojects');
 Route::get('/publications', [TemplateController::class, 'publications'])->name('publications');
 Route::get('/courses', [TemplateController::class, 'courses'])->name('courses');
-Route::get('/newz', [NewsController::class, 'index'])->name('newz');
-Route::get('/news', [NewsController::class, 'create'])->name('news.create');
-Route::get('/news', [NewsController::class, 'edit'])->name('news.edit');
-Route::get('/news', [NewsController::class, 'store'])->name('news.store');
+Route::get('/newz', [NewsArticleController::class, 'index'])->name('newz');
 
 
 Route::get('/events', [TemplateController::class, 'events'])->name('events');
@@ -174,6 +177,59 @@ Route::middleware(['auth', 'role:research_assistant'])->group(function () {
 
 });
 
-Route::resource('news', NewsController::class);
+// universal routes
+// Forgot Password Routes (optional for users, but useful)
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+})->middleware('guest')->name('password.request');
+
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+
+    $status = Password::sendResetLink($request->only('email'));
+
+    return $status === Password::RESET_LINK_SENT
+        ? back()->with('status', __($status))
+        : back()->withErrors(['email' => __($status)]);
+})->middleware('guest')->name('password.email');
+
+// Reset Password Routes
+Route::get('/reset-password/{token}', function (string $token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', function (Request $request) {
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|string|min:6|confirmed', // Adjust min:6 to your policy, e.g., min:8
+    ]);
+
+    $status = Password::reset(
+        $request->only(['email', 'password', 'password_confirmation', 'token']),
+        function (User $user, string $password) {
+            $user->forceFill([
+                'password' => Hash::make($password)
+            ])->setRememberToken(Str::random(60));
+
+            // Mark email as verified (implicit verification via link click)
+            if ($user->email_verified_at === null) {
+                $user->email_verified_at = now();
+                $user->save();
+            }
+
+            $user->save();
+
+            event(new PasswordReset($user));
+        }
+    );
+
+    return $status === Password::PASSWORD_RESET
+        ? redirect()->route('login')->with('status', __($status)) // Adjust 'login' to your login route
+        : back()->withErrors(['email' => [__($status)]]);
+})->middleware('guest')->name('password.update');
+
+Route::resource('news', NewsArticleController::class);
+
 
 require __DIR__ . '/auth.php';

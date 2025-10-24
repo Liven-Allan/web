@@ -1,19 +1,12 @@
-<style>.back-to-home-btn {
-    background-color: transparent;
-    color: white;
-    border: 1px solid white;
-}
-
-.back-to-home-btn:hover {
-    background-color: white;
-    color: black;
-}</style><ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
     style="position: fixed; top: 0; left: 0; width: 250px; height: 100vh; overflow-y: auto; overflow-x: hidden; z-index: 1050;">
 
-    <!-- Sidebar content here -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#" >
-        <div class="sidebar-brand-text mx-3">Big Data Lab</div>
-    </a>
+    <!-- Sidebar Brand Text (Not a link) -->
+    <div class="sidebar-brand-header" style="padding: 20px 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <h4 style="color: white; font-weight: bold; font-size: 16px; margin: 0; text-transform: uppercase; letter-spacing: 1px; line-height: 1.3; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
+            BIG DATA ANALYTICS LAB
+        </h4>
+    </div>
     <hr class="sidebar-divider my-0">
     <!-- Dashboard Link -->
     

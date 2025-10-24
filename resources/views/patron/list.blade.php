@@ -2,57 +2,97 @@
 
 @section('title', 'User List')
 
-<style>
-    body, .table th, .table td {
-        color: black !important;
-    }
-
-    .table th {
-        background-color: #007bff;
-        color: white !important;
-    }
-
-    .table th:hover {
-        background-color: #0056b3;
-    }
-
-    .table td {
-        background-color: white;
-    }
-
-    .btn-register {
-        width: 200px;
-        font-size: 18px;
-        background-color: #007bff;  /* Custom blue background */
-        color: white;
-    }
-
-    .btn-register:hover {
-        background-color: #0056b3;  /* Darker shade for hover effect */
-    }
-</style>
-
 @section('content')
+    <!-- Page Header -->
+    <div class="bdal-header">
+        <h1 class="h3 mb-2">
+            <i class="fas fa-users mr-2"></i>
+            User Management
+        </h1>
+        <p class="mb-0">Manage system users and their roles</p>
+    </div>
 
-<div class="container">
+    <!-- Alerts -->
     @if(session('success'))
-        <div id="success-message" class="alert alert-success">
+        <div id="success-message" class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle mr-2"></i>
             {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
         </div>
     @endif
 
     @if(session('error'))
-        <div id="error-message" class="alert alert-danger">
+        <div id="error-message" class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-circle mr-2"></i>
             {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
         </div>
     @endif
-</div>
 
-<div class="container">
-<div class="d-flex justify-content-between mb-4">
-        <h1>Users</h1>
-        <a href="{{ route('patron.register_user') }}" class="btn btn-primary btn-lg btn-register"> <i class="fas fa-fw fa-user-plus"></i>
-        <span>Register Users</span></a>
+    <!-- Users Table Card -->
+    <div class="card bdal-card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-users mr-2"></i>
+                All Users ({{ $users->count() }})
+            </h6>
+            <a href="{{ route('patron.register_user') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-user-plus mr-2"></i>Register New User
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th><i class="fas fa-user mr-1"></i>Name</th>
+                            <th><i class="fas fa-envelope mr-1"></i>Email</th>
+                            <th><i class="fas fa-phone mr-1"></i>Contact</th>
+                            <th><i class="fas fa-image mr-1"></i>Profile</th>
+                            <th><i class="fas fa-user-tag mr-1"></i>Role</th>
+                            <th><i class="fas fa-cogs mr-1"></i>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($users as $user)
+                            <tr>
+                                <td class="font-weight-bold">{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->contact ?? 'N/A' }}</td>
+                                <td class="text-center">
+                                    <img src="{{ $user->profile_picture ? asset($user->profile_picture) : asset('img/undraw_profile.svg') }}" 
+                                         alt="Profile Picture" 
+                                         class="rounded-circle border" 
+                                         width="40" height="40">
+                                </td>
+                                <td>
+                                    <span class="badge bdal-badge">{{ ucfirst($user->role) }}</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm delete-btn" 
+                                            data-id="{{ $user->id }}" 
+                                            data-name="{{ $user->name }}"
+                                            title="Delete User">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center py-4">
+                                    <i class="fas fa-users fa-3x text-gray-300 mb-3"></i>
+                                    <p class="text-muted">No users found.</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table table-bordered">

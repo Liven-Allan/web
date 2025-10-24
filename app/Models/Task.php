@@ -41,47 +41,27 @@ class Task extends Model
         return $this->hasOne(ActiveTask::class, 'task_id');
     }
 
-    public function status(): Attribute
+    // Get the computed status based on active task progress
+    public function getComputedStatusAttribute()
     {
-        return Attribute::get(function () {
-            $activeTask = $this->activeTask;
+        $activeTask = $this->activeTask;
 
-            if (!$activeTask) {
-                return 'Not Started'; // Default if no active task
-            }
-
-            $progress = $activeTask->progress;
-
-            if ($progress >= 0 && $progress <= 49) {
-                return 'Pending';
-            } elseif ($progress >= 50 && $progress <= 94) {
-                return 'In_Progress';
-            } elseif ($progress >= 95 && $progress <= 100) {
-                return 'Completed';
-            }
-
-            return 'Unknown'; // Fallback
-        });
-    }
-
-    protected static function booted()
-{
-    static::saving(function ($task) {
-        $activeTask = $task->activeTask;
-
-        if ($activeTask) {
-            $progress = $activeTask->progress;
-
-            if ($progress >= 0 && $progress <= 49) {
-                $task->status = 'Pending';
-            } elseif ($progress >= 50 && $progress <= 94) {
-                $task->status = 'In_Progress';
-            } elseif ($progress >= 95 && $progress <= 100) {
-                $task->status = 'Completed';
-            }
+        if (!$activeTask) {
+            return 'not_started'; // Default if no active task
         }
-    });
-}
+
+        $progress = $activeTask->progress;
+
+        if ($progress >= 0 && $progress <= 49) {
+            return 'pending';
+        } elseif ($progress >= 50 && $progress <= 94) {
+            return 'in_progress';
+        } elseif ($progress >= 95 && $progress <= 100) {
+            return 'completed';
+        }
+
+        return 'unknown'; // Fallback
+    }
 
 
 }

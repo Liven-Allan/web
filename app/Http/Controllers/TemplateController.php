@@ -181,30 +181,81 @@ class TemplateController extends Controller
     // Research assistant task activation
     public function activateTask(Request $request, Task $task)
     {
-        // Ensure the task is assigned to the currently authenticated research assistant
-        if ($task->assigned_to !== auth()->user()->id) {
-            return back()->with('error', 'You are not authorized to activate this task.');
+        try {
+            // Log the activation attempt for debugging
+            \Log::info('Task activation attempt', [
+                'task_id' => $task->id,
+                'user_id' => auth()->user()->id,
+                'task_assigned_to' => $task->assigned_to,
+                'request_method' => $request->method(),
+                'request_url' => $request->url()
+            ]);
+
+            // Ensure the task is assigned to the currently authenticated research assistant
+            if ($task->assigned_to !== auth()->user()->id) {
+                \Log::warning('Unauthorized task activation attempt', [
+                    'task_id' => $task->id,
+                    'user_id' => auth()->user()->id,
+                    'task_assigned_to' => $task->assigned_to
+                ]);
+                return back()->with('error', 'You are not authorized to activate this task.');
+            }
+
+            // Check if the task is already activated
+            $existingActiveTask = ActiveTask::where('task_id', $task->id)
+                ->where('assigned_to', $task->assigned_to)
+                ->first();
+
+            if ($existingActiveTask) {
+                \Log::info('Task already activated', ['task_id' => $task->id]);
+                return back()->with('error', 'Task already activated.');
+            }
+
+            // Create a new ActiveTask record
+            $activeTask = ActiveTask::create([
+                'task_id' => $task->id,
+                'assigned_to' => $task->assigned_to,
+                'assigned_by' => $task->assigned_by,
+                'progress' => 0, // Default progress as 0%
+            ]);
+
+            \Log::info('Task activated successfully', [
+                'task_id' => $task->id,
+                'active_task_id' => $activeTask->id
+            ]);
+
+            // Return JSON response for AJAX requests, otherwise redirect
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Task activated successfully!',
+                    'active_task_id' => $activeTask->id
+                ]);
+            }
+
+            return back()->with('success', 'Task activated successfully!');
+            
+        } catch (\Exception $e) {
+            \Log::error('Task activation failed', [
+                'task_id' => $task->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // Return JSON response for AJAX requests, otherwise redirect
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to activate task. Please try again.',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+            
+            return back()->with('error', 'Failed to activate task. Please try again.');
         }
-
-        // Check if the task is already activated
-        $existingActiveTask = ActiveTask::where('task_id', $task->id)
-            ->where('assigned_to', $task->assigned_to)
-            ->first();
-
-        if ($existingActiveTask) {
-            return back()->with('error', 'Task already activated.');
-        }
-
-        // Create a new ActiveTask record
-        ActiveTask::create([
-            'task_id' => $task->id,
-            'assigned_to' => $task->assigned_to,
-            'assigned_by' => $task->assigned_by,
-            'progress' => 0, // Default progress as 0%
-        ]);
-
-        return back()->with('success', 'Task activated successfully!');
     }
+
+
 
     // Research assistant active tasks
     public function listActiveTasks()
@@ -243,9 +294,9 @@ class TemplateController extends Controller
         $activeTask->save();
 
         // Check the role of the user and redirect accordingly
-        if (auth()->user()->hasRole('admin')) {
+        if (auth()->user()->role === 'admin') {
             return redirect()->route('admin.active_tasks')->with('success', 'Comment added successfully!');
-        } elseif (auth()->user()->hasRole('patron')) {
+        } elseif (auth()->user()->role === 'patron') {
             return redirect()->route('patron.active_tasks')->with('success', 'Comment added successfully!');
         }
 
@@ -300,7 +351,7 @@ class TemplateController extends Controller
 
             if ($completedTask) {
                 // If the task is already marked as completed, show an error message
-                $route = auth()->user()->hasRole('admin') ? 'admin.active_tasks' : 'patron.active_tasks';
+                $route = auth()->user()->role === 'admin' ? 'admin.active_tasks' : 'patron.active_tasks';
                 return redirect()->route($route)->with('error', 'This task has already been marked as completed.');
             }
 
@@ -319,12 +370,12 @@ class TemplateController extends Controller
                 DB::commit();
 
                 // Redirect back with success message
-                $route = auth()->user()->hasRole('admin') ? 'admin.active_tasks' : 'patron.active_tasks';
+                $route = auth()->user()->role === 'admin' ? 'admin.active_tasks' : 'patron.active_tasks';
                 return redirect()->route($route)->with('success', 'Task marked as completed and saved.');
             }
 
             // If the task status is not "completed"
-            $route = auth()->user()->hasRole('admin') ? 'admin.active_tasks' : 'patron.active_tasks';
+            $route = auth()->user()->role === 'admin' ? 'admin.active_tasks' : 'patron.active_tasks';
             return redirect()->route($route)->with('error', 'The task is not marked as completed.');
 
         } catch (\Exception $e) {
@@ -332,7 +383,7 @@ class TemplateController extends Controller
             DB::rollBack();
 
             // Log the exception or return a failure message
-            $route = auth()->user()->hasRole('admin') ? 'admin.active_tasks' : 'patron.active_tasks';
+            $route = auth()->user()->role === 'admin' ? 'admin.active_tasks' : 'patron.active_tasks';
             return redirect()->route($route)->with('error', 'Something went wrong. Please try again later.');
         }
     }
@@ -341,27 +392,50 @@ class TemplateController extends Controller
     public function peoplepage()
     {
         $users = User::orderByRaw("FIELD(role, 'admin', 'patron', 'research_assistant')")->get();
-        return view('frontend.peoplepage', compact('users'));
+        
+        // Get projects and description for the master layout
+        $projects = Project::latest()->take(4)->get();
+        $descriptionText = DescriptionText::latest()->first();
+        
+        return view('frontend.peoplepage', compact('users', 'projects', 'descriptionText'));
     }
     
     public function publications()
     {
-        return view('frontend.publications');
+        // Get projects for the master layout
+        $projects = Project::latest()->take(4)->get();
+        
+        // Get description text for the master layout
+        $descriptionText = DescriptionText::latest()->first();
+        
+        return view('frontend.publications', compact('projects', 'descriptionText'));
     }
 
     public function courses()
     {
-        return view('frontend.courses');
+        // Get projects and description for the master layout
+        $projects = Project::latest()->take(4)->get();
+        $descriptionText = DescriptionText::latest()->first();
+        
+        return view('frontend.courses', compact('projects', 'descriptionText'));
     }
 
     public function news()
     {
-        return view('frontend.news');
+        // Get projects and description for the master layout
+        $projects = Project::latest()->take(4)->get();
+        $descriptionText = DescriptionText::latest()->first();
+        
+        return view('frontend.news', compact('projects', 'descriptionText'));
     }
 
     public function events()
     {
-        return view('frontend.events');
+        // Get projects and description for the master layout
+        $projects = Project::latest()->take(4)->get();
+        $descriptionText = DescriptionText::latest()->first();
+        
+        return view('frontend.events', compact('projects', 'descriptionText'));
     }
 
 }
