@@ -46,21 +46,24 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                <table id="usersTable" class="table table-bordered table-hover" width="100%" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
-                            <th><i class="fas fa-user mr-1"></i>Name</th>
+                            <th><i class="fas fa-user mr-1"></i>First Name</th>
+                            <th><i class="fas fa-user mr-1"></i>Last Name</th>
                             <th><i class="fas fa-envelope mr-1"></i>Email</th>
                             <th><i class="fas fa-phone mr-1"></i>Contact</th>
                             <th><i class="fas fa-image mr-1"></i>Profile</th>
                             <th><i class="fas fa-user-tag mr-1"></i>Role</th>
+                            <th><i class="fas fa-toggle-on mr-1"></i>Status</th>
                             <th><i class="fas fa-cogs mr-1"></i>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($users as $user)
                             <tr>
-                                <td class="font-weight-bold">{{ $user->name }}</td>
+                                <td class="font-weight-bold">{{ $user->first_name ?? 'N/A' }}</td>
+                                <td class="font-weight-bold">{{ $user->last_name ?? 'N/A' }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->contact ?? 'N/A' }}</td>
                                 <td class="text-center">
@@ -70,12 +73,61 @@
                                          width="40" height="40">
                                 </td>
                                 <td>
-                                    <span class="badge bdal-badge">{{ ucfirst($user->role) }}</span>
+                                    <span class="badge 
+                                        @if($user->role === 'admin') badge-danger
+                                        @elseif($user->role === 'patron') badge-primary
+                                        @else badge-success
+                                        @endif">
+                                        {{ ucfirst(str_replace('_', ' ', $user->role)) }}
+                                    </span>
                                 </td>
                                 <td>
+                                    @if(($user->status ?? 'active') === 'active')
+                                        <span class="badge badge-success">Active</span>
+                                    @else
+                                        <span class="badge badge-secondary">Disabled</span>
+                                    @endif
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    @if(Route::has('patron.users.edit'))
+                                        <a href="{{ route('patron.users.edit', $user->id) }}" 
+                                           class="btn btn-warning btn-sm" 
+                                           title="Edit User">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    @endif
+                                    
+                                    @if(($user->status ?? 'active') === 'active')
+                                        @if(Route::has('patron.users.disable'))
+                                            <form action="{{ route('patron.users.disable', $user->id) }}" 
+                                                  method="POST" 
+                                                  class="d-inline">
+                                                @csrf
+                                                <button type="submit" 
+                                                        class="btn btn-secondary btn-sm" 
+                                                        title="Disable User">
+                                                    <i class="fas fa-ban"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @else
+                                        @if(Route::has('patron.users.enable'))
+                                            <form action="{{ route('patron.users.enable', $user->id) }}" 
+                                                  method="POST" 
+                                                  class="d-inline">
+                                                @csrf
+                                                <button type="submit" 
+                                                        class="btn btn-success btn-sm" 
+                                                        title="Enable User">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @endif
+                                    
                                     <button class="btn btn-danger btn-sm delete-btn" 
                                             data-id="{{ $user->id }}" 
-                                            data-name="{{ $user->name }}"
+                                            data-name="{{ ($user->first_name ?? '') . ' ' . ($user->last_name ?? $user->name ?? 'User') }}"
                                             title="Delete User">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -83,7 +135,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center py-4">
+                                <td colspan="8" class="text-center py-4">
                                     <i class="fas fa-users fa-3x text-gray-300 mb-3"></i>
                                     <p class="text-muted">No users found.</p>
                                 </td>
@@ -94,56 +146,6 @@
             </div>
         </div>
     </div>
-    <div class="table-responsive">
-        <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Contact</th>
-                <th>Profile Picture</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($users as $user)
-                <tr>
-                    <td>{{ $user->first_name }}</td>
-                    <td>{{ $user->last_name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->contact }}</td>
-                    <td class="text-center">
-                        <img src="{{ $user->profile_picture ? asset($user->profile_picture) : asset('img/undraw_profile.svg') }}" 
-                             alt="Profile Picture" 
-                             class="rounded-circle" 
-                             width="50" height="50">
-                    </td>
-                    <td>{{ ucfirst($user->role) }}</td>
-                    <td>{{ ucfirst($user->status ?? 'active') }}</td>
-                    <td style="white-space: nowrap;">
-                        <a href="{{ route('patron.users.edit', $user->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
-                        @if(($user->status ?? 'active') === 'active')
-                            <form action="{{ route('patron.users.disable', $user->id) }}" method="POST" class="d-inline me-2">
-                                @csrf
-                                <button type="submit" class="btn btn-secondary btn-sm">Disable</button>
-                            </form>
-                        @else
-                            <form action="{{ route('patron.users.enable', $user->id) }}" method="POST" class="d-inline me-2">
-                                @csrf
-                                <button type="submit" class="btn btn-success btn-sm">Enable</button>
-                            </form>
-                        @endif
-                        <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $user->id }}" data-name="{{ $user->name }}">Delete</button>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-        </table>
-    </div>
-</div>
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
@@ -164,61 +166,98 @@
     </div>
 </div>
 
+@endsection
+
+@section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let userId = null;
-        const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
-        const deleteButtons = document.querySelectorAll('.delete-btn');
-        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        const cancelBtn = document.querySelector('#deleteConfirmationModal .btn-secondary'); // This is the cancel button
-        const userNameSpan = document.getElementById('user-name');
-
-        deleteButtons.forEach(btn => {
-            btn.addEventListener('click', function () {
-                userId = btn.getAttribute('data-id');
-                const userName = btn.getAttribute('data-name');
-                userNameSpan.textContent = userName;
-                deleteModal.show();
-            });
-        });
-
-        confirmDeleteBtn.addEventListener('click', function () {
-            if (userId) {
-                const form = document.createElement('form');
-                form.action = `/patron/users/${userId}/delete`;  // Change the route according to your route setup
-                form.method = 'POST';
-                form.innerHTML = '@csrf @method("DELETE")';
-                document.body.appendChild(form);
-                form.submit();
+$(document).ready(function() {
+    console.log('Patron Users: Initializing DataTables and functionality');
+    
+    // Initialize DataTables
+    $('#usersTable').DataTable({
+        responsive: true,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        order: [[0, 'asc']], // Sort by first name by default
+        columnDefs: [
+            {
+                targets: [4, 7], // Profile picture and Actions columns
+                orderable: false,
+                searchable: false
+            },
+            {
+                targets: [5, 6], // Role and Status columns
+                className: 'text-center'
+            },
+            {
+                targets: [4], // Profile picture column
+                className: 'text-center'
             }
-        });
+        ],
+        language: {
+            search: "Search users:",
+            lengthMenu: "Show _MENU_ users per page",
+            info: "Showing _START_ to _END_ of _TOTAL_ users",
+            infoEmpty: "No users available",
+            infoFiltered: "(filtered from _MAX_ total users)",
+            paginate: {
+                first: "First",
+                last: "Last",
+                next: "Next",
+                previous: "Previous"
+            }
+        },
+        dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+             '<"row"<"col-sm-12"tr>>' +
+             '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+    });
 
-        // Handle the cancel button click event to hide the modal
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', function () {
-                deleteModal.hide();
-            });
+    // Delete functionality (using event delegation for DataTables)
+    let userId = null;
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+    const userNameSpan = document.getElementById('user-name');
+
+    // Handle delete button clicks
+    $('#usersTable').on('click', '.delete-btn', function() {
+        userId = $(this).data('id');
+        const userName = $(this).data('name');
+        userNameSpan.textContent = userName;
+        deleteModal.show();
+    });
+
+    // Confirm delete
+    $('#confirmDeleteBtn').on('click', function() {
+        if (userId) {
+            const form = $('<form>', {
+                'action': `/patron/users/${userId}/delete`,
+                'method': 'POST'
+            }).append('@csrf @method("DELETE")');
+            
+            $('body').append(form);
+            form.submit();
         }
     });
-     // Function to hide success and error messages after a few seconds
-     window.onload = function() {
-        // Success message
-        const successMessage = document.getElementById('success-message');
-        if (successMessage) {
-            setTimeout(function() {
-                successMessage.style.display = 'none';
-            }, 3000); // Hide after 3 seconds
-        }
 
-        // Error message
-        const errorMessage = document.getElementById('error-message');
-        if (errorMessage) {
-            setTimeout(function() {
-                errorMessage.style.display = 'none';
-            }, 3000); // Hide after 3 seconds
-        }
-    }
+    // Handle enable/disable form submissions (using event delegation for DataTables)
+    $('#usersTable').on('submit', 'form[action*="disable"], form[action*="enable"]', function(e) {
+        const form = $(this);
+        const submitBtn = form.find('button[type="submit"]');
+        const originalText = submitBtn.html();
+        const action = form.attr('action').includes('disable') ? 'Disabling' : 'Enabling';
+        
+        // Show loading state
+        submitBtn.html('<i class="fas fa-spinner fa-spin"></i>');
+        submitBtn.prop('disabled', true);
+        
+        // Form will submit normally
+    });
+
+    // Hide success and error messages after a few seconds
+    setTimeout(function() {
+        $('#success-message, #error-message').fadeOut('slow');
+    }, 5000);
+    
+    console.log('Patron Users: JavaScript initialization complete');
+});
 </script>
-
-
 @endsection

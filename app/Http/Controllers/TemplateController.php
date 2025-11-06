@@ -145,6 +145,34 @@ class TemplateController extends Controller
 
         try {
             $task->update($data);
+            
+            // Synchronize with ActiveTask progress when status changes
+            $activeTask = ActiveTask::where('task_id', $task->id)->first();
+            if ($activeTask) {
+                // Update progress based on status
+                switch ($data['status']) {
+                    case 'pending':
+                        $activeTask->progress = 0;
+                        break;
+                    case 'in_progress':
+                        // Only update to 50% if current progress is less than 50%
+                        if ($activeTask->progress < 50) {
+                            $activeTask->progress = 50;
+                        }
+                        break;
+                    case 'completed':
+                        $activeTask->progress = 100;
+                        break;
+                }
+                $activeTask->save();
+                
+                \Log::info('Task status updated and synchronized', [
+                    'task_id' => $task->id,
+                    'new_status' => $data['status'],
+                    'new_progress' => $activeTask->progress
+                ]);
+            }
+            
             // Get the role of the authenticated user
             $role = auth()->user()->role;
 
@@ -211,12 +239,26 @@ class TemplateController extends Controller
                 return back()->with('error', 'Task already activated.');
             }
 
+            // Set initial progress based on current task status
+            $initialProgress = 0;
+            switch ($task->status) {
+                case 'pending':
+                    $initialProgress = 0;
+                    break;
+                case 'in_progress':
+                    $initialProgress = 50;
+                    break;
+                case 'completed':
+                    $initialProgress = 100;
+                    break;
+            }
+
             // Create a new ActiveTask record
             $activeTask = ActiveTask::create([
                 'task_id' => $task->id,
                 'assigned_to' => $task->assigned_to,
                 'assigned_by' => $task->assigned_by,
-                'progress' => 0, // Default progress as 0%
+                'progress' => $initialProgress,
             ]);
 
             \Log::info('Task activated successfully', [
@@ -252,6 +294,49 @@ class TemplateController extends Controller
             }
             
             return back()->with('error', 'Failed to activate task. Please try again.');
+        }
+    }
+
+    // Method to synchronize all active tasks with their task statuses
+    public function synchronizeTaskProgress()
+    {
+        try {
+            $activeTasks = ActiveTask::with('task')->get();
+            $syncCount = 0;
+
+            foreach ($activeTasks as $activeTask) {
+                if ($activeTask->task) {
+                    $oldProgress = $activeTask->progress;
+                    $newProgress = $oldProgress;
+
+                    // Determine progress based on task status
+                    switch ($activeTask->task->status) {
+                        case 'pending':
+                            $newProgress = max(0, min($oldProgress, 49)); // Keep between 0-49
+                            break;
+                        case 'in_progress':
+                            $newProgress = max(50, min($oldProgress, 94)); // Keep between 50-94
+                            if ($oldProgress < 50) $newProgress = 50;
+                            break;
+                        case 'completed':
+                            $newProgress = 100;
+                            break;
+                    }
+
+                    if ($newProgress !== $oldProgress) {
+                        $activeTask->progress = $newProgress;
+                        $activeTask->save();
+                        $syncCount++;
+                    }
+                }
+            }
+
+            \Log::info("Synchronized {$syncCount} active tasks with their task statuses");
+            return response()->json(['message' => "Synchronized {$syncCount} tasks successfully"]);
+
+        } catch (\Exception $e) {
+            \Log::error('Task synchronization failed', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Synchronization failed'], 500);
         }
     }
 

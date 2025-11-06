@@ -58,20 +58,30 @@ class ActiveTask extends Model
     
             if ($task) {
                 $progress = $activeTask->progress;
+                $oldStatus = $task->status;
+                $newStatus = $oldStatus;
     
+                // Determine new status based on progress
                 if ($progress >= 0 && $progress <= 49) {
-                    $task->status = 'pending';
+                    $newStatus = 'pending';
                 } elseif ($progress >= 50 && $progress <= 94) {
-                    $task->status = 'in_progress';  
+                    $newStatus = 'in_progress';  
                 } elseif ($progress >= 95 && $progress <= 100) {
-                    $task->status = 'completed';
+                    $newStatus = 'completed';
                 }
     
-                // Debugging: Log the status before saving
-                \Log::info("Updating task ID {$task->id} status to: {$task->status}");
-    
-                // Save the task
-                $task->save();
+                // Only update if status actually changed
+                if ($newStatus !== $oldStatus) {
+                    $task->status = $newStatus;
+                    $task->save();
+                    
+                    \Log::info("Task status updated via progress change", [
+                        'task_id' => $task->id,
+                        'old_status' => $oldStatus,
+                        'new_status' => $newStatus,
+                        'progress' => $progress
+                    ]);
+                }
             }
         });
     }

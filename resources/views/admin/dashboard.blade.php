@@ -117,8 +117,58 @@
                             </a>
                         </div>
                     </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <hr>
+                            <h6 class="text-muted mb-3">System Maintenance</h6>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <button id="syncTasksBtn" class="btn btn-outline-primary btn-block">
+                                <i class="fas fa-sync mr-2"></i>Sync Task Progress
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+<script>
+$(document).ready(function() {
+    // Task synchronization button
+    $('#syncTasksBtn').on('click', function() {
+        const btn = $(this);
+        const originalText = btn.html();
+        
+        // Show loading state
+        btn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Syncing...');
+        btn.prop('disabled', true);
+        
+        // Make AJAX request
+        $.ajax({
+            url: '{{ route("admin.sync_task_progress") }}',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                alert('✅ ' + response.message);
+                // Optionally reload the page to show updated counts
+                location.reload();
+            },
+            error: function(xhr) {
+                const errorMsg = xhr.responseJSON?.error || 'Synchronization failed';
+                alert('❌ ' + errorMsg);
+            },
+            complete: function() {
+                // Reset button
+                btn.html(originalText);
+                btn.prop('disabled', false);
+            }
+        });
+    });
+});
+</script>
 @endsection
