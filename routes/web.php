@@ -93,8 +93,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         return view('admin.editDescription'); // Ensure this file exists in resources/views/patron/
     })->name('admin.editDescription');
     Route::post('/admin/update-description-text', [AdminController::class, 'updateDescription'])->name('admin.updateDescription');
-
-
+    
+    // Task synchronization route (for fixing inconsistencies)
+    Route::post('/admin/sync-task-progress', [TemplateController::class, 'synchronizeTaskProgress'])->name('admin.sync_task_progress');
 
 });
 

@@ -48,7 +48,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                <table id="activeTasksTable" class="table table-bordered table-hover" width="100%" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
                             <th><i class="fas fa-tasks mr-1"></i>Task</th>
@@ -163,12 +163,47 @@
 
 @section('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Patron Active Tasks: Initializing comment modals');
+$(document).ready(function() {
+    console.log('Patron Active Tasks: Initializing DataTables and modals');
     
+    // Initialize DataTables
+    $('#activeTasksTable').DataTable({
+        responsive: true,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        order: [[0, 'asc']], // Sort by task name by default
+        columnDefs: [
+            {
+                targets: [3, 5], // Progress and Actions columns
+                orderable: false,
+                searchable: false
+            },
+            {
+                targets: [3], // Progress column
+                className: 'text-center'
+            },
+
+        ],
+        language: {
+            search: "Search tasks:",
+            lengthMenu: "Show _MENU_ tasks per page",
+            info: "Showing _START_ to _END_ of _TOTAL_ active tasks",
+            infoEmpty: "No active tasks available",
+            infoFiltered: "(filtered from _MAX_ total tasks)",
+            paginate: {
+                first: "First",
+                last: "Last",
+                next: "Next",
+                previous: "Previous"
+            }
+        },
+        dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+             '<"row"<"col-sm-12"tr>>' +
+             '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+    });
+
     // Initialize Bootstrap modals
     if (typeof bootstrap !== 'undefined') {
-        // Initialize all modals
         var modalElements = document.querySelectorAll('.modal');
         modalElements.forEach(function(modalElement) {
             new bootstrap.Modal(modalElement);
@@ -176,35 +211,24 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Bootstrap modals initialized');
     }
     
-    // Handle comment form submissions
-    const commentForms = document.querySelectorAll('[id^="commentForm"]');
-    commentForms.forEach(function(form) {
-        form.addEventListener('submit', function(e) {
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            // Show loading state
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Saving...';
-            submitBtn.disabled = true;
-            
-            // Form will submit normally, no need to prevent default
-        });
+    // Handle comment form submissions (using event delegation for DataTables)
+    $('#activeTasksTable').on('submit', '[id^="commentForm"]', function(e) {
+        const submitBtn = $(this).find('button[type="submit"]');
+        const originalText = submitBtn.html();
+        
+        // Show loading state
+        submitBtn.html('<i class="fas fa-spinner fa-spin mr-1"></i>Saving...');
+        submitBtn.prop('disabled', true);
+        
+        // Form will submit normally
     });
-    
-    // Function to hide success and error messages after a few seconds
-    const successMessage = document.getElementById('success-message');
-    if (successMessage) {
-        setTimeout(function() {
-            successMessage.style.display = 'none';
-        }, 5000); // Hide after 5 seconds
-    }
 
-    const errorMessage = document.getElementById('error-message');
-    if (errorMessage) {
-        setTimeout(function() {
-            errorMessage.style.display = 'none';
-        }, 5000); // Hide after 5 seconds
-    }
+
+
+    // Hide success and error messages after a few seconds
+    setTimeout(function() {
+        $('#success-message, #error-message').fadeOut('slow');
+    }, 5000);
     
     console.log('Patron Active Tasks: JavaScript initialization complete');
 });

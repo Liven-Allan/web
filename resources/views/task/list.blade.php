@@ -42,7 +42,7 @@
                 <i class="fas fa-tasks mr-2"></i>
                 All Tasks ({{ $tasks->count() }})
             </h6>
-            @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('patron'))
+            @if(auth()->user()->role === 'admin' || auth()->user()->role === 'patron')
                 <a href="{{ route($role . '.task.create') }}" class="btn btn-primary btn-lg">
                     <i class="fas fa-plus mr-2"></i>Create New Task
                 </a>
@@ -50,7 +50,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                <table id="tasksTable" class="table table-bordered table-hover" width="100%" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
                             <th><i class="fas fa-heading mr-1"></i>Title</th>
@@ -68,27 +68,53 @@
                             <tr>
                                 <td class="font-weight-bold">{{ $task->title }}</td>
                                 <td>{{ Str::limit($task->description, 50) }}</td>
-                                <td>
+                                <td class="text-center">
                                     @if($task->priority == 'high')
-                                        <span class="badge badge-danger">{{ ucfirst($task->priority) }}</span>
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-exclamation-triangle mr-1"></i>{{ ucfirst($task->priority) }}
+                                        </span>
                                     @elseif($task->priority == 'medium')
-                                        <span class="badge badge-warning">{{ ucfirst($task->priority) }}</span>
+                                        <span class="badge badge-warning">
+                                            <i class="fas fa-minus-circle mr-1"></i>{{ ucfirst($task->priority) }}
+                                        </span>
                                     @else
-                                        <span class="badge badge-info">{{ ucfirst($task->priority) }}</span>
+                                        <span class="badge badge-info">
+                                            <i class="fas fa-info-circle mr-1"></i>{{ ucfirst($task->priority) }}
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if($task->status == 'completed')
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-check-circle mr-1"></i>Completed
+                                        </span>
+                                    @elseif($task->status == 'in_progress')
+                                        <span class="badge badge-primary">
+                                            <i class="fas fa-play-circle mr-1"></i>In Progress
+                                        </span>
+                                    @else
+                                        <span class="badge badge-secondary">
+                                            <i class="fas fa-clock mr-1"></i>{{ ucfirst(str_replace('_', ' ', $task->status)) }}
+                                        </span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if($task->status == 'completed')
-                                        <span class="badge badge-success">Completed</span>
-                                    @elseif($task->status == 'in_progress')
-                                        <span class="badge badge-primary">In Progress</span>
-                                    @else
-                                        <span class="badge badge-secondary">{{ ucfirst($task->status) }}</span>
-                                    @endif
+                                    <span class="text-muted">
+                                        <i class="fas fa-calendar-alt mr-1"></i>{{ $task->due_date->format('M d, Y') }}
+                                    </span>
                                 </td>
-                                <td>{{ $task->due_date->format('M d, Y') }}</td>
-                                <td>{{ $task->assignedTo->name }}</td>
-                                <td>{{ $task->assignedBy->name }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-user-circle mr-2 text-muted"></i>
+                                        <span>{{ $task->assignedTo->name }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-user-tie mr-2 text-muted"></i>
+                                        <span>{{ $task->assignedBy->name }}</span>
+                                    </div>
+                                </td>
                                 <td>
                                     @if ($role !== 'research_assistant')
                                         <a href="{{ route($role . '.task.edit', $task->id) }}" class="btn btn-warning btn-sm" title="Edit Task">
@@ -165,97 +191,120 @@
     </div>
 </div>
 
+@endsection
+
+@section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let taskId = null; // To store the ID of the task to be deleted
-        const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
-        const deleteButtons = document.querySelectorAll('.delete-btn');
-        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        const cancelBtn = document.querySelector('.btn-secondary'); // Cancel button
-        const modalBody = document.querySelector('#deleteConfirmationModal .modal-body');
-
-        // Attach click event listeners to delete buttons
-        deleteButtons.forEach(btn => {
-            btn.addEventListener('click', function (event) {
-                event.preventDefault(); // Prevent form submission for delete buttons
-                taskId = btn.getAttribute('data-id'); // Get the task ID
-                const taskName = btn.getAttribute('data-name'); // Get the task title
-                modalBody.innerHTML = `Are you sure you want to delete the task titled "<strong>${taskName}</strong>"?`;
-                deleteModal.show(); // Show the modal
-            });
-        });
-
-        // Attach click event listener to the confirm delete button
-        confirmDeleteBtn.addEventListener('click', function () {
-            if (taskId) {
-                const form = document.querySelector(`form[action$="${taskId}"]`); // Select the correct form for the task
-                if (form) {
-                    form.submit(); // Submit the form to delete the task
-                }
+$(document).ready(function() {
+    console.log('Tasks: Initializing DataTables and functionality');
+    
+    // Initialize DataTables
+    $('#tasksTable').DataTable({
+        responsive: true,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        order: [[0, 'asc']], // Sort by title by default
+        columnDefs: [
+            {
+                targets: [7], // Actions column
+                orderable: false,
+                searchable: false
+            },
+            {
+                targets: [2, 3], // Priority and Status columns
+                className: 'text-center'
+            },
+            {
+                targets: [4], // Due Date column
+                type: 'date'
             }
-        });
-
-        // Attach click event listener to the cancel button
-        cancelBtn.addEventListener('click', function () {
-            deleteModal.hide(); // Hide the modal when cancel is clicked
-        });
+        ],
+        language: {
+            search: "Search tasks:",
+            lengthMenu: "Show _MENU_ tasks per page",
+            info: "Showing _START_ to _END_ of _TOTAL_ tasks",
+            infoEmpty: "No tasks available",
+            infoFiltered: "(filtered from _MAX_ total tasks)",
+            paginate: {
+                first: "First",
+                last: "Last",
+                next: "Next",
+                previous: "Previous"
+            }
+        },
+        dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+             '<"row"<"col-sm-12"tr>>' +
+             '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
     });
 
-    // Function to hide success and error messages after a few seconds
-    window.onload = function () {
-        const successMessage = document.getElementById('success-message');
-        if (successMessage) {
-            setTimeout(function () {
-                successMessage.style.display = 'none';
-            }, 3000); // Hide after 3 seconds
-        }
+    // Delete functionality (using event delegation for DataTables)
+    let taskId = null;
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+    const modalBody = document.querySelector('#deleteConfirmationModal .modal-body');
 
-        const errorMessage = document.getElementById('error-message');
-        if (errorMessage) {
-            setTimeout(function () {
-                errorMessage.style.display = 'none';
-            }, 3000); // Hide after 3 seconds
-        }
-    }
+    // Handle delete button clicks
+    $('#tasksTable').on('click', '.delete-btn', function(event) {
+        event.preventDefault();
+        taskId = $(this).data('id');
+        const taskName = $(this).data('name');
+        modalBody.innerHTML = `Are you sure you want to delete the task titled "<strong>${taskName}</strong>"?`;
+        deleteModal.show();
+    });
 
-    // Task activation with loading feedback
-    document.addEventListener('DOMContentLoaded', function() {
-        const activateForms = document.querySelectorAll('form[action*="activate"]');
+    // Confirm delete
+    $('#confirmDeleteBtn').on('click', function() {
+        if (taskId) {
+            // Create and submit delete form
+            const form = $('<form>', {
+                'action': `{{ request()->route()->getPrefix() }}/task/${taskId}`,
+                'method': 'POST'
+            }).append('@csrf @method("DELETE")');
+            
+            $('body').append(form);
+            form.submit();
+        }
+    });
+
+    // Task activation with loading feedback (using event delegation)
+    $('#tasksTable').on('submit', 'form[action*="activate"]', function(e) {
+        const submitButton = $(this).find('.task-status-pending');
         
-        activateForms.forEach(form => {
-            form.addEventListener('submit', function(e) {
-                const submitButton = this.querySelector('.task-status-pending');
-                
-                if (!submitButton) return;
-                
-                // Prevent double submission
-                if (submitButton.disabled) {
-                    e.preventDefault();
-                    return false;
-                }
-                
-                // Add loading state
-                const originalContent = submitButton.innerHTML;
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Activating...';
-                submitButton.disabled = true;
-                submitButton.classList.add('task-activated-feedback');
-                
-                // Set a timeout to reset button if form doesn't complete
-                const timeoutId = setTimeout(() => {
-                    submitButton.innerHTML = originalContent;
-                    submitButton.disabled = false;
-                    submitButton.classList.remove('task-activated-feedback');
-                }, 10000);
-                
-                // Clear timeout if page unloads (successful submission)
-                window.addEventListener('beforeunload', function() {
-                    clearTimeout(timeoutId);
-                });
-                
-                return true;
-            });
+        if (submitButton.length === 0) return;
+        
+        // Prevent double submission
+        if (submitButton.prop('disabled')) {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Add loading state
+        const originalContent = submitButton.html();
+        submitButton.html('<i class="fas fa-spinner fa-spin"></i> Activating...');
+        submitButton.prop('disabled', true);
+        submitButton.addClass('task-activated-feedback');
+        
+        // Set a timeout to reset button if form doesn't complete
+        const timeoutId = setTimeout(() => {
+            submitButton.html(originalContent);
+            submitButton.prop('disabled', false);
+            submitButton.removeClass('task-activated-feedback');
+        }, 10000);
+        
+        // Clear timeout if page unloads (successful submission)
+        $(window).on('beforeunload', function() {
+            clearTimeout(timeoutId);
         });
+        
+        return true;
     });
+
+    // Hide success and error messages after a few seconds
+    setTimeout(function() {
+        $('#success-message, #error-message').fadeOut('slow');
+    }, 5000);
+    
+    console.log('Tasks: JavaScript initialization complete');
+});
 </script>
 
 
