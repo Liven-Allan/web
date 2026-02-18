@@ -64,10 +64,12 @@
         </select>
     </div>
 
+    @if(auth()->user()->role === 'patron')
     <div class="form-group">
         <label for="patron_id">Patron ID</label>
-        <input type="number" id="patron_id" name="patron_id" class="form-control" required>
+        <input type="number" id="patron_id" name="patron_id" class="form-control" value="{{ auth()->id() }}" readonly>
     </div>
+    @endif
 
 
     <button type="submit" class="btn btn-primary">Create</button>

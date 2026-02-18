@@ -25,10 +25,11 @@
         }
 
         .navbar-nav .nav-link {
-            font-size: 0.95rem;
-            padding: 0.5rem 0.75rem;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
             color: rgba(255, 255, 255, 0.9) !important;
             transition: all 0.2s ease;
+            font-weight: 400;
         }
 
         .navbar-nav .nav-link:hover {
@@ -46,8 +47,8 @@
         }
 
         .btn-primary {
-            padding: 0.375rem 1rem;
-            font-size: 0.95rem;
+            padding: 0.5rem 1.25rem;
+            font-size: 1.05rem;
             font-weight: 500;
         }
 
@@ -108,34 +109,55 @@
 
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
             justify-content: center;
             margin: 2rem auto;
-            max-width: 1400px;
+            max-width: 1200px;
         }
 
         .project-card {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
         }
 
         .project-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            background: transparent;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .card-image img {
             width: 100%;
-            height: 180px;
+            height: 100%;
             object-fit: cover;
+            object-position: center center;
+            display: block;
         }
 
         .card-content {
-            padding: 1.25rem;
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .card-content h3 {
@@ -162,7 +184,8 @@
         .project-actions {
             display: flex;
             gap: 1rem;
-            margin-top: 1rem;
+            margin-top: auto;
+            padding-top: 1rem;
         }
 
         .edit-btn,
@@ -172,13 +195,16 @@
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s ease;
+            flex: 1;
+            text-align: center;
         }
 
         .edit-btn {
             background: #28a745;
-            color: white;
+            color: white !important;
             border: none;
             text-decoration: none;
+            display: inline-block;
         }
 
         .delete-btn {
@@ -189,10 +215,26 @@
 
         .edit-btn:hover {
             background: #218838;
+            color: white !important;
         }
 
         .delete-btn:hover {
             background: #c82333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
         }
 
         .pagination-container {
@@ -275,16 +317,31 @@
         <!-- News & Events Section -->
         <section class="news-events-section">
             <div class="news-events-container">
-                <!-- Left Column - Featured Event -->
+                <!-- Left Column - Featured Section -->
                 <div class="featured-event">
                     <h2>News & Upcoming Events</h2>
-                    <img src="{{ asset('assets/images/calculator-image.png') }}" alt="SQL OR DEATH"
-                        class="featured-image">
-                    <div class="date">January 30, 2025</div>
-                    <h3>SQL OR DEATH SEMINAR SERIES – SPRING 2025</h3>
-                    <p>Pittsburgh, PA — The Carnegie Mellon University Database Research Group is pleased to announce
-                        the spring semester of our database systems seminar series...</p>
-                    <a href="#" class="read-more">READ MORE ›</a>
+                    
+                    @if(isset($recentNews) && $recentNews->count() > 0)
+                        @php $featuredNews = $recentNews->first(); @endphp
+                        @if($featuredNews->image)
+                            <img src="{{ asset('storage/' . $featuredNews->image) }}" alt="{{ $featuredNews->title }}" class="featured-image">
+                        @else
+                            <img src="{{ asset('assets/images/calculator-image.png') }}" alt="Featured" class="featured-image">
+                        @endif
+                        <div class="date">{{ $featuredNews->date ? \Carbon\Carbon::parse($featuredNews->date)->format('F d, Y') : 'Recent' }}</div>
+                        <h3>{{ $featuredNews->title }}</h3>
+                        <p>{{ $featuredNews->description }}</p>
+                        @if($featuredNews->url)
+                            <a href="{{ $featuredNews->url }}" target="_blank" class="read-more">READ MORE ›</a>
+                        @else
+                            <a href="{{ route('newz') }}" class="read-more">READ MORE ›</a>
+                        @endif
+                    @else
+                        <img src="{{ asset('assets/images/calculator-image.png') }}" alt="Featured" class="featured-image">
+                        <div class="date">Stay Connected</div>
+                        <h3>Latest Updates from Our Lab</h3>
+                        <p>Stay informed about our latest research findings, upcoming events, and lab activities. Check the Recent News and Upcoming Events sections for the most current information about our work and community engagement.</p>
+                    @endif
                 </div>
 
                 <!-- Right Column - News and Events Lists -->
@@ -294,29 +351,35 @@
                         <div class="section-header">
                             <h2>Recent News</h2>
                             <div class="view-all">
-                                <a href="#" class="nav-arrow">◀</a>
-                                <a href="#" class="nav-arrow">▶</a>
+                                <a href="{{ route('newz') }}" class="nav-arrow" title="View All News">→</a>
                             </div>
                         </div>
                         <ul class="news-list">
-                            <li class="news-item">
-                                <div class="item-date">
-                                    <div class="date-day">09</div>
-                                    <div class="date-month">Sep</div>
-                                </div>
-                                <div class="item-content">
-                                    <h3><a href="#">Announcing CMU's Database Industry Affiliates Program</a></h3>
-                                </div>
-                            </li>
-                            <li class="news-item">
-                                <div class="item-date">
-                                    <div class="date-day">15</div>
-                                    <div class="date-month">Aug</div>
-                                </div>
-                                <div class="item-content">
-                                    <h3><a href="#">ML/DB Seminar Series — Fall 2023</a></h3>
-                                </div>
-                            </li>
+                            @if(isset($recentNews) && $recentNews->count() > 0)
+                                @foreach($recentNews as $news)
+                                    <li class="news-item">
+                                        <div class="item-date">
+                                            <div class="date-day">{{ $news->date ? \Carbon\Carbon::parse($news->date)->format('d') : '--' }}</div>
+                                            <div class="date-month">{{ $news->date ? \Carbon\Carbon::parse($news->date)->format('M') : '--' }}</div>
+                                        </div>
+                                        <div class="item-content">
+                                            <h3>
+                                                @if($news->url)
+                                                    <a href="{{ $news->url }}" target="_blank">{{ $news->title }}</a>
+                                                @else
+                                                    <a href="{{ route('newz') }}">{{ $news->title }}</a>
+                                                @endif
+                                            </h3>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            @else
+                                <li class="event-item">
+                                    <div class="item-content" style="padding-left: 0;">
+                                        <p style="color: #999; font-size: 0.9rem;">No recent news available. Check back later for updates!</p>
+                                    </div>
+                                </li>
+                            @endif
                         </ul>
                     </div>
 
@@ -325,28 +388,18 @@
                         <div class="section-header">
                             <h2>Upcoming Events</h2>
                             <div class="view-all">
-                                <a href="#" class="nav-arrow">◀</a>
-                                <a href="#" class="nav-arrow">▶</a>
+                                <a href="{{ route('events') }}" class="nav-arrow" title="View All Events">→</a>
                             </div>
                         </div>
                         <ul class="events-list">
                             <li class="event-item">
                                 <div class="item-date">
-                                    <div class="date-day">31</div>
-                                    <div class="date-month">Jan</div>
+                                    <div class="date-day">--</div>
+                                    <div class="date-month">---</div>
                                 </div>
                                 <div class="item-content">
-                                    <h3><a href="#">[SQL Death] Larry Ellison was Right About TypeScript</a></h3>
-                                    <p>Signal Processing in the Modern Age</p>
-                                </div>
-                            </li>
-                            <li class="event-item">
-                                <div class="item-date">
-                                    <div class="date-day">17</div>
-                                    <div class="date-month">Feb</div>
-                                </div>
-                                <div class="item-content">
-                                    <h3><a href="#">[SQL Death] Towards Safety in Query Languages</a></h3>
+                                    <h3><a href="{{ route('events') }}">No upcoming events</a></h3>
+                                    <p>Visit our events page for future announcements</p>
                                 </div>
                             </li>
                         </ul>

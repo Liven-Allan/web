@@ -107,13 +107,20 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="{{ route('patron.createProject') }}" class="btn btn-info btn-block">
-                                <i class="fas fa-plus mr-2"></i>Create Project
+                            <a href="{{ route('admin.projects') }}" class="btn btn-info btn-block">
+                                <i class="fas fa-project-diagram mr-2"></i>Manage Projects
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
                             <a href="{{ route('news.create') }}" class="btn btn-warning btn-block">
                                 <i class="fas fa-newspaper mr-2"></i>Add News
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4 mb-3">
+                            <a href="{{ route('admin.editDescription') }}" class="btn btn-primary btn-block" style="background-color: #6f42c1; border-color: #6f42c1;">
+                                <i class="fas fa-edit mr-2"></i>Edit Homepage Description
                             </a>
                         </div>
                     </div>

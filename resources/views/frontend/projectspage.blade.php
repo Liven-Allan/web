@@ -125,38 +125,46 @@
 
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
             margin: 2rem auto;
         }
 
         .project-card {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             height: 100%;
             display: flex;
             flex-direction: column;
+            margin: 0;
+            padding: 0;
         }
 
         .project-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .card-image {
             position: relative;
             width: 100%;
-            height: 180px;
+            height: 220px;
             overflow: hidden;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .card-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center center;
+            display: block;
             transition: transform 0.3s ease;
         }
 
@@ -165,7 +173,7 @@
         }
 
         .card-content {
-            padding: 1.25rem;
+            padding: 1.5rem;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
@@ -220,22 +228,24 @@
 
         .edit-btn {
             background: #28a745;
-            color: white;
+            color: white !important;
             border: none;
         }
 
         .delete-btn {
             background: #dc3545;
-            color: white;
+            color: white !important;
             border: none;
         }
 
         .edit-btn:hover {
             background: #218838;
+            color: white !important;
         }
 
         .delete-btn:hover {
             background: #c82333;
+            color: white !important;
         }
 
         .pagination-container {
@@ -278,12 +288,18 @@
         @media (max-width: 992px) {
             .card-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
             }
         }
 
         @media (max-width: 576px) {
             .card-grid {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .card-image {
+                height: 200px;
             }
 
             .section-title {
