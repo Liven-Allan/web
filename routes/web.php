@@ -97,6 +97,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Task synchronization route (for fixing inconsistencies)
     Route::post('/admin/sync-task-progress', [TemplateController::class, 'synchronizeTaskProgress'])->name('admin.sync_task_progress');
 
+    // Admin Project Management Routes
+    Route::get('/admin/createprojects', [AdminController::class, 'createProject'])->name('admin.createProject');
+    Route::post('/admin/storeprojects', [AdminController::class, 'storeProject'])->name('admin.projects.store');
+    Route::get('/admin/projects', [AdminController::class, 'projects'])->name('admin.projects');
+    Route::get('/admin/projects/{project}/edit', [AdminController::class, 'editProject'])->name('admin.projects.edit');
+    Route::put('/admin/projects/{project}', [AdminController::class, 'updateProject'])->name('admin.projects.update');
+    Route::delete('/admin/projects/{project}', [AdminController::class, 'destroyProject'])->name('admin.projects.destroy');
+
 });
 
 //patron route

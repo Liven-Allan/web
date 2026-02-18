@@ -105,11 +105,10 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-3">
                                     <img src="{{ $user->profile_picture }}" alt="{{ $user->name }}"
-                                        class="rounded-circle me-3" style="width: 100px; height: 100px; object-fit: cover;">
+                                        class="me-3" style="width: 100px; height: 100px; object-fit: cover;">
                                     <div>
-                                        <h5 class="card-title mb-1">Name : {{ $user->name }}</h5>
-                                        <p class="card-text mb-1">Email : {{ $user->email }}</p>
-                                        <p class="card-text mb-1">Role : {{ $user->role }}</p>
+                                        <h5 class="card-title mb-1">{{ $user->name }}</h5>
+                                        <p class="card-text mb-1">{{ ucfirst(str_replace('_', ' ', $user->role)) }}</p>
                                         @if($user->contact)
                                             <p class="card-text mb-0"><small class="text-muted">Contact:
                                                     {{ $user->contact }}</small></p>

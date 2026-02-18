@@ -264,30 +264,27 @@ height: 100%;
 }
 
 .card-image {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: transparent;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
 
-    display: grid;
-    /* Enable Grid */
-    place-items: center;
-    /* Center both vertically and horizontally */
-    text-align: start;
-    /* Ensure text is centered */
-
-    width: 200px !important;
-    padding-left: 10px;
-    /* Increased width */
-    padding-top: 100px;
-    padding-right: 10px;
-    padding-bottom: 50px;
-    margin-left: 2px;
-    height: 300px;
-    /* padding-right: 25% ;   */
-    /* position: relative; */
-    background-color: rgb(163, 233, 148);
-    border-radius: 10px;
-    /* Added border radius */
-
-
-
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 /* .card-image img {
@@ -598,19 +595,6 @@ max-height: 60%;
     /* Centers the image horizontally */
 }
 
-.card-image {
-    padding-top: 10px;
-    /* Adjust this value to reduce the height at the top */
-    overflow: hidden;
-    /* Ensures the image doesn't overflow */
-}
-
-.card-image img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
 
 h3 {
     margin-bottom: 10px;

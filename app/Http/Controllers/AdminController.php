@@ -12,6 +12,7 @@ use App\Models\DescriptionText;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\CustomVerifyEmail;
+use App\Models\Project;
 class AdminController extends Controller
 {
     public function dashboard(){
@@ -170,6 +171,80 @@ public function updateDescription(Request $request)
         $user->save();
 
         return redirect()->route('admin.users.list')->with('success', 'User updated successfully');
+    }
+
+    // Project Management Methods
+    public function createProject()
+    {
+        return view('projects.create');
+    }
+
+    public function storeProject(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'url' => 'nullable|url',
+            'priority' => 'required|integer|in:1,2,3',
+        ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('projects', 'public');
+        }
+
+        $project = new Project();
+        $project->title = $validatedData['title'];
+        $project->description = $validatedData['description'] ?? null;
+        $project->image = $imagePath;
+        $project->url = $validatedData['url'] ?? null;
+        $project->priority = $validatedData['priority'];
+        $project->patron_id = auth()->id(); // Admin becomes the patron
+        $project->save();
+
+        return redirect()->route('admin.projects')->with('success', 'Project created successfully');
+    }
+
+    public function projects()
+    {
+        $projects = Project::orderBy('priority', 'desc')->get();
+        return view('admin.projects', compact('projects'));
+    }
+
+    public function editProject(Project $project)
+    {
+        return view('projects.edit', compact('project'));
+    }
+
+    public function updateProject(Request $request, Project $project)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'url' => 'nullable|url',
+            'priority' => 'required|integer|in:1,2,3',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('projects', 'public');
+            $project->image = $imagePath;
+        }
+
+        $project->title = $validatedData['title'];
+        $project->description = $validatedData['description'];
+        $project->url = $validatedData['url'] ?? null;
+        $project->priority = $validatedData['priority'];
+        $project->save();
+
+        return redirect()->route('admin.projects')->with('success', 'Project updated successfully');
+    }
+
+    public function destroyProject(Project $project)
+    {
+        $project->delete();
+        return redirect()->route('admin.projects')->with('success', 'Project deleted successfully');
     }
         
 }
