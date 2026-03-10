@@ -7,12 +7,11 @@
 
     <!-- CSS -->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
     <!-- Add Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- BDAL Theme -->
-    <link href="{{ asset('css/auth-theme.css') }}" rel="stylesheet">
+    <!-- BDAL Clean Professional Theme -->
+    <link href="{{ asset('css/auth-theme-clean.css') }}" rel="stylesheet">
     
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
